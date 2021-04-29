@@ -8,5 +8,18 @@ export default {
     width,
     height,
   },
-  isSmallDevice: width < 375,
+  isSmallDevice: width < 375
 };
+
+const basicSizes = {
+  small: 4,
+  normal: 8, 
+  large: 12,
+  veryLarge: 16
+}
+
+export const paddings = basicSizes
+
+export const margins = basicSizes
+
+export const borderRadiuses = basicSizes
