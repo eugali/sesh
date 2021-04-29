@@ -16,7 +16,9 @@ import {
 import {
   paddings,
   margins,
-  borderRadiuses
+  borderRadiuses,
+  screenWidth,
+  screenHeight
 } from '../constants/Layout'
 
 import { RootStackParamList } from '../types';
@@ -42,21 +44,31 @@ export default function HomeScreen({
           onPress={() => Alert.alert('Pressed')}
           buttonStyle={styles.joinButton}
         />
-
       </View>
+
+      <View style={styles.createNewRoomContainer}>
+        <Button 
+          title='Create New Room'
+          onPress={() => Alert.alert('Create room')}
+          buttonStyle={styles.createNewRoomButton}
+        />
+     </View>
 
       <View style={styles.availableRoomsContainer}>
 
  
-     </View>
-     <View style={styles.createNewRoomContainer}>
-
      </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  createNewRoomContainer: {
+    width: screenWidth,
+  },
+  createNewRoomButton: {
+    width: '100%'
+  },
   joinButton: {
     borderRadius: borderRadiuses.normal,
     width: 80,
@@ -92,7 +104,8 @@ const styles = StyleSheet.create({
     padding: paddings.normal
   },
   container: {
-    flex: 1,
+    width: screenWidth,
+    height: screenHeight,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
