@@ -26,16 +26,20 @@ import { RootStackParamList } from '../types';
 
 const mockData = [
   {
-    title: 'How might we ...'
+    title: 'How might we ...',
+    usersInTheRoom: 2
   },
   {
-    title: 'How might we ...'
+    title: 'How might we ...',
+    usersInTheRoom: 2
   },
   {
-    title: 'How might we ...'
+    title: 'How might we ...',
+    usersInTheRoom: 2
   },
   {
-    title: 'How might we ...'
+    title: 'How might we ...',
+    usersInTheRoom: 2
   },
 ]
 
@@ -43,7 +47,10 @@ const mockData = [
 const renderAvailableRoom = ({item}) => {
   return (
     <View style={styles.availableRoomRowContainer}>
+      <View style={styles.avaiableRoomRowInnerContainer}>
       <Text style={styles.availableRoomRowTitle}>{item.title}</Text>
+      <Text style={styles.availableRoomRowUsersCount}>{`${item.usersInTheRoom}/6`}</Text>
+      </View>
 
       <Button 
         title='Join'
@@ -62,19 +69,6 @@ export default function HomeScreen({
         <Text style={styles.logo}>Sesh</Text>
       </View>
 
-      <View style={styles.joinRoomContainer}>
-        <TextInput 
-          style={styles.joinRoomInputContainer}
-          placeholder={'Room ID'}
-        />
-
-        <Button 
-          title='Join'
-          onPress={() => Alert.alert('Pressed')}
-          buttonStyle={styles.joinButton}
-        />
-      </View>
-
       <View style={styles.createNewRoomContainer}>
         <Button 
           title='Create New Room'
@@ -82,6 +76,26 @@ export default function HomeScreen({
           buttonStyle={styles.createNewRoomButton}
         />
      </View>
+
+    <View style={styles.orLabelContainer}>
+      <Text style={styles.orLabel}>OR</Text>
+      </View>
+
+      <View style={styles.joinRoomContainer}>
+        <TextInput 
+          style={styles.joinRoomInputContainer}
+          placeholder={'Room Code'}
+        />
+
+        <Button 
+          title='Join Room'
+          onPress={() => Alert.alert('Pressed')}
+          buttonStyle={styles.joinButton}
+        />
+      </View>
+
+      <View style={styles.horizontalLineSeparator}>
+      </View>
 
       <View style={styles.availableRoomsContainer}>
 
@@ -96,6 +110,28 @@ export default function HomeScreen({
 }
 
 const styles = StyleSheet.create({
+  availableRoomRowUsersCount: {
+    color: 'grey'
+  },
+  avaiableRoomRowInnerContainer: {
+    flex: 1
+  },
+  horizontalLineSeparator: {
+    width: '80%',
+    height: 1,
+    backgroundColor: 'black',
+    marginTop: margins.veryLarge,
+    marginBottom: margins.veryLarge
+  },
+  orLabel: {
+    
+  },
+  orLabelContainer: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 60
+  },
   availableRoomRowTitle:{
     flex: 1
   },
@@ -103,8 +139,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    
+    justifyContent: 'center'
   },
   availableRoomsFlatList: {
     width: screenWidth,
@@ -123,7 +158,7 @@ const styles = StyleSheet.create({
   },
   joinButton: {
     borderRadius: borderRadiuses.normal,
-    width: 80,
+    width: 120,
     marginHorizontal: margins.small
   },
   logo: {
