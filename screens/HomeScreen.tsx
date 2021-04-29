@@ -44,6 +44,7 @@ export default function HomeScreen({
           onPress={() => Alert.alert('Pressed')}
           buttonStyle={styles.joinButton}
         />
+
       </View>
 
       <View style={styles.createNewRoomContainer}>
@@ -58,6 +59,10 @@ export default function HomeScreen({
 
  
      </View>
+     <View style={styles.createNewRoomContainer}>
+
+     </View>
+
     </SafeAreaView>
   );
 }
