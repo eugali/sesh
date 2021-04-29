@@ -7,7 +7,8 @@ import {
   View,
   SafeAreaView,
   Alert,
-  TextInput
+  TextInput,
+  FlatList
 } from 'react-native';
 import { 
   Button
@@ -23,10 +24,38 @@ import {
 
 import { RootStackParamList } from '../types';
 
+const mockData = [
+  {
+    title: 'How might we ...'
+  },
+  {
+    title: 'How might we ...'
+  },
+  {
+    title: 'How might we ...'
+  },
+  {
+    title: 'How might we ...'
+  },
+]
+
+
+const renderAvailableRoom = ({item}) => {
+  return (
+    <View style={styles.availableRoomRowContainer}>
+      <Text style={styles.availableRoomRowTitle}>{item.title}</Text>
+
+      <Button 
+        title='Join'
+      />
+    </View>
+  )
+}
 
 export default function HomeScreen({
   navigation,
 }: StackScreenProps<RootStackParamList, 'Home'>) {
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.logoContainer}>
@@ -44,7 +73,6 @@ export default function HomeScreen({
           onPress={() => Alert.alert('Pressed')}
           buttonStyle={styles.joinButton}
         />
-
       </View>
 
       <View style={styles.createNewRoomContainer}>
@@ -57,22 +85,41 @@ export default function HomeScreen({
 
       <View style={styles.availableRoomsContainer}>
 
- 
+      <FlatList 
+          data={mockData}
+          renderItem={renderAvailableRoom}
+          style={styles.availableRoomsFlatList}
+        />
      </View>
-     <View style={styles.createNewRoomContainer}>
-
-     </View>
-
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  createNewRoomContainer: {
+  availableRoomRowTitle:{
+    flex: 1
+  },
+  availableRoomRowContainer:{
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    
+  },
+  availableRoomsFlatList: {
     width: screenWidth,
+    height: '100%',
+    padding: paddings.small
+  },
+  availableRoomsContainer: {
+    display: 'flex',
+    flex: 1
+  },
+  createNewRoomContainer: {
+    width: '100%',
   },
   createNewRoomButton: {
-    width: '100%'
+    width: screenWidth * 0.8
   },
   joinButton: {
     borderRadius: borderRadiuses.normal,
@@ -86,8 +133,8 @@ const styles = StyleSheet.create({
   logoContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'red',
-    width: '100%'
+    width: '100%',
+    height: 50
   },
   joinRoomInputContainer: {
     flex: 1,
