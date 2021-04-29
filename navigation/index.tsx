@@ -10,6 +10,7 @@ import { ColorSchemeName } from 'react-native';
 
 import NotFoundScreen from '../screens/NotFoundScreen';
 import HomeScreen from '../screens/HomeScreen'
+import CreateRoomScreen from '../screens/CreateRoomScreen'
 import { RootStackParamList } from '../types';
 import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
@@ -33,7 +34,9 @@ function RootNavigator() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {/*<Stack.Screen name="Root" component={BottomTabNavigator} />*/}
       {/*<Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />*/}
+      <Stack.Screen name="CreateRoom" component={CreateRoomScreen}/>
       <Stack.Screen name="Home" component={HomeScreen}/>
+      
     </Stack.Navigator>
   );
 }
