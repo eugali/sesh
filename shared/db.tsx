@@ -1,15 +1,23 @@
-const hmwsCollectionName = "HMWs";
-const solutionsCollectionName = "Solutions";
-const participantsCollectionName = "Participants";
-const votesCollectionName = "Votes";
+import { max } from "react-native-reanimated";
 
-const db = (firestore, collection = hmwsCollectionName) => ({
+const hmwsCollectionName = "HMWs";
+const solutionsSubCollectionName = "Solutions";
+const participantsSubCollectionName = "Participants";
+const votesSubCollectionName = "Votes";
+const maxVoteCount = 4;
+
+const db = (
+  firestore,
+  collection = hmwsCollectionName,
+  maxVotes = maxVoteCount
+) => ({
   votes: {},
 
-  async createRoom(hmwText) {
+  async createRoom(hmwText, problemStatement = "", isPrivate = false) {
     let roomRef = await firestore.collection(collection).add({
       question: hmwText,
-      isPrivate: false,
+      problemStatement: problemStatement,
+      isPrivate: isPrivate,
       status: "waiting",
       startedAt: false,
     });
@@ -21,7 +29,7 @@ const db = (firestore, collection = hmwsCollectionName) => ({
     await firestore
       .collection(collection)
       .doc(roomID)
-      .collection(participantsCollectionName)
+      .collection(participantsSubCollectionName)
       .add({});
   },
 
@@ -29,7 +37,7 @@ const db = (firestore, collection = hmwsCollectionName) => ({
     let solutionRef = await firestore
       .collection(collection)
       .doc(roomID)
-      .collection(solutionsCollectionName)
+      .collection(solutionsSubCollectionName)
       .add({
         text: solutionText,
       });
@@ -38,21 +46,21 @@ const db = (firestore, collection = hmwsCollectionName) => ({
 
   async upvote(roomID, solutionID) {
     if (!(roomID in this.votes)) {
-      this.votes[roomID] = new Set();
+      this.votes[roomID] = 0;
     }
 
-    if (this.votes[roomID].has(solutionID)) {
-      // already voted
+    if (this.votes[roomID] >= maxVotes) {
+      // already voted max times
       return false;
     } else {
-      let res = await firestore
+      await firestore
         .collection(collection)
         .doc(roomID)
-        .collection(solutionsCollectionName)
+        .collection(solutionsSubCollectionName)
         .doc(solutionID)
-        .collection(votesCollectionName)
+        .collection(votesSubCollectionName)
         .add({});
-      this.votes[roomID].add(solutionID);
+      this.votes[roomID] += 1;
       return true;
     }
   },
@@ -66,7 +74,7 @@ const db = (firestore, collection = hmwsCollectionName) => ({
     let solutions = await firestore
       .collection(collection)
       .doc(roomID)
-      .collection(solutionsCollectionName)
+      .collection(solutionsSubCollectionName)
       .get();
     return solutions.docs.map((s) => s.data());
   },

@@ -21,6 +21,7 @@ test("Creates new room given valid HMW", async () => {
   expect(room).toStrictEqual({
     isPrivate: false,
     question: "How might we test the DB?",
+    problemStatement: "",
     status: "waiting",
     startedAt: false,
   });
@@ -32,7 +33,10 @@ test("Creates new solution for HMW given valid solution", async () => {
   expect(solutions).toStrictEqual([{ text: "Very carefully" }]);
 });
 
-test("Allows exactly one upvote", async () => {
+test("Allows no more than 4 upvotes on one post in one room", async () => {
+  expect(await testDB.upvote(testRoomID, testSolutionID)).toBe(true);
+  expect(await testDB.upvote(testRoomID, testSolutionID)).toBe(true);
+  expect(await testDB.upvote(testRoomID, testSolutionID)).toBe(true);
   expect(await testDB.upvote(testRoomID, testSolutionID)).toBe(true);
   expect(await testDB.upvote(testRoomID, testSolutionID)).toBe(false);
 });
