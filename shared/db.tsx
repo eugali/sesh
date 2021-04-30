@@ -38,7 +38,6 @@ const db = (firestore, collection = hmwsCollectionName) => ({
 
   async upvote(roomID, solutionID) {
     if (!(roomID in this.votes)) {
-      console.log("init");
       this.votes[roomID] = new Set();
     }
 
