@@ -31,22 +31,22 @@ import {
   white80,
 } from "../constants/Colors";
 import { defaultScreenPadding } from "../constants/Layout";
-import dbInstance from '../shared/dbInstance'
+import dbInstance from "../shared/dbInstance";
 
 export default function CreateRoomScreen({
   navigation,
 }: StackScreenProps<RootStackParamList, "CreateRoom">) {
   const goHome = () => navigation.navigate("Home");
   const [isNewRoomPublic, setIsNewRoomPublic] = useState<boolean>(false);
-  const [HMWStatement, setHMWStatement] = useState<string>('')
-  const [problemDescription, setProblemDescription] = useState<string>('')
-  const [roomId, setRoomId] = useState<string>('')
+  const [HMWStatement, setHMWStatement] = useState<string>("");
+  const [problemDescription, setProblemDescription] = useState<string>("");
+  const [roomId, setRoomId] = useState<string>("");
 
   const createRoom = async () => {
-    const roomId = await dbInstance.createRoom(HMWStatement)
-    setRoomId(roomId)
-    console.log(roomId)
-  }
+    const roomId = await dbInstance.createRoom(HMWStatement);
+    setRoomId(roomId);
+    console.log(roomId);
+  };
 
   return (
     <SafeAreaView style={styles.container}>

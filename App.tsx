@@ -20,7 +20,6 @@ import {
 //firebase.initializeApp(firebaseConfig);
 //const DBContext = React.createContext(db(firebase.firestore()))
 
-
 export default function App() {
   useFonts({
     Nunito_400Regular,
