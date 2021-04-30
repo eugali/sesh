@@ -1,7 +1,7 @@
 const hmwsCollectionName = "HMWs";
-const solutionsCollectionName = "Solutions";
-const participantsCollectionName = "Participants";
-const votesCollectionName = "Votes";
+const solutionsSubCollectionName = "Solutions";
+const participantsSubCollectionName = "Participants";
+const votesSubCollectionName = "Votes";
 
 const db = (firestore, collection = hmwsCollectionName) => ({
   votes: {},
@@ -21,7 +21,7 @@ const db = (firestore, collection = hmwsCollectionName) => ({
     await firestore
       .collection(collection)
       .doc(roomID)
-      .collection(participantsCollectionName)
+      .collection(participantsSubCollectionName)
       .add({});
   },
 
@@ -29,7 +29,7 @@ const db = (firestore, collection = hmwsCollectionName) => ({
     let solutionRef = await firestore
       .collection(collection)
       .doc(roomID)
-      .collection(solutionsCollectionName)
+      .collection(solutionsSubCollectionName)
       .add({
         text: solutionText,
       });
@@ -48,9 +48,9 @@ const db = (firestore, collection = hmwsCollectionName) => ({
       let res = await firestore
         .collection(collection)
         .doc(roomID)
-        .collection(solutionsCollectionName)
+        .collection(solutionsSubCollectionName)
         .doc(solutionID)
-        .collection(votesCollectionName)
+        .collection(votesSubCollectionName)
         .add({});
       this.votes[roomID].add(solutionID);
       return true;
@@ -66,7 +66,7 @@ const db = (firestore, collection = hmwsCollectionName) => ({
     let solutions = await firestore
       .collection(collection)
       .doc(roomID)
-      .collection(solutionsCollectionName)
+      .collection(solutionsSubCollectionName)
       .get();
     return solutions.docs.map((s) => s.data());
   },
