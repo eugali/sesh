@@ -52,7 +52,7 @@ const db = (
       // already voted max times
       return false;
     } else {
-      let res = await firestore
+      await firestore
         .collection(collection)
         .doc(roomID)
         .collection(solutionsSubCollectionName)
