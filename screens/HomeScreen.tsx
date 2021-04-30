@@ -236,7 +236,8 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "flex-start",
     justifyContent: "center",
-    padding: paddings.veryLarge,
+    marginTop: 20,
+    marginBottom: 20,
   },
   header: {
     color: lighterWhite,
