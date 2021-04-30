@@ -56,7 +56,14 @@ export default function HomeScreen({
 }: StackScreenProps<RootStackParamList, "Home">) {
   const [currentTab, setCurrentTab] = useState(HomeTabs.JoinRoom);
   const [isNewRoomPublic, setIsNewRoomPublic] = useState(true);
-  const joinRoom = () => navigation.navigate("WaitingRoom");
+
+  //yJEBZxgLYO86RFblJuLC room id to test
+  const [joinRoomID, setJoinRoomId] = useState<string>("");
+  const joinRoom = () => {
+    if (joinRoomID.length === 0) return;
+
+    navigation.navigate("WaitingRoom", { joinRoomID });
+  };
   const createRoom = () => navigation.navigate("CreateRoom");
 
   const renderAvailableRoom = ({ item }) => {
@@ -108,6 +115,8 @@ export default function HomeScreen({
           <TextInput
             style={styles.joinRoomInputContainer}
             placeholder={"Type room code here"}
+            value={joinRoomID}
+            onChangeText={setJoinRoomId}
           />
 
           <Icon

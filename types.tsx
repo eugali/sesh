@@ -8,7 +8,9 @@ export type RootStackParamList = {
   NotFound: undefined;
   Home: undefined;
   CreateRoom: undefined;
-  WaitingRoom: undefined;
+  WaitingRoom: {
+    joinRoomID: string;
+  };
   Room: undefined;
 };
 
