@@ -28,6 +28,9 @@ import {
 } from '../constants/Layout'
 
 import { RootStackParamList } from '../types';
+import { blueBackground, white50, white30 } from '../constants/Colors';
+import { defaultScreenPadding } from '../constants/Layout';
+import BailButton from '../components/BailButton'
 
 
 export default function WaitingRoomScreen({
@@ -43,8 +46,21 @@ export default function WaitingRoomScreen({
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
-        <Text style={styles.header}>Waiting Room</Text>
-        <Text style={styles.participantsHeader}>{`${participantsCount} participants`}</Text>
+          <BailButton
+            onPress={goBackHome}
+            participantsCount={participantsCount}
+          />
+
+          <Icon
+            type='material-community'  
+            name='music'
+            color={white50}
+            style={styles.musicIcon}
+          />
+      </View>
+
+      <View style={styles.screenTitleContainer}>
+        <Text style={styles.screenTitle}>Waiting Room: GSKL</Text>
       </View>
 
       <View style={styles.hmwTitleContainer}>
@@ -64,42 +80,58 @@ export default function WaitingRoomScreen({
       <View style={styles.bottomButtonContainer}>
         <Button 
           title={'Copy Link'}
-          buttonStyle={styles.bottomButton}
+          buttonStyle={styles.copyLinkBottomButton}
+          titleStyle={styles.copyLinkBottomButtonTitle}
           onPress={() => console.log('copy link')}
         />
       </View>
 
       <View style={styles.bottomButtonContainer}>
         <Button 
-          title={'Start'}
-          buttonStyle={styles.bottomButton}
+          title={'Start Room'}
+          buttonStyle={styles.startRoomBottomButton}
+          titleStyle={styles.startRoomBottomButtonTitle}
           onPress={() => console.log('start the room')}
         />
       </View>
 
-      <View style={styles.bottomButtonContainer}>
-        <Button 
-          title={'Back'}
-          buttonStyle={styles.bottomButton}
-          onPress={goBackHome}
-        />
-      </View>
-
+      <View style={styles.bottomSpace}/>
 
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  bottomSpace: {
+    width: '100%',
+    height: 30
+  },
+  musicIcon: {
+    marginLeft: 16
+  },
+  screenTitleContainer: {
+    width: '100%',
+    alignItems: 'flex-start',
+    justifyContent: 'center'
+  },
+  screenTitle: {
+    fontFamily: 'Nunito_700Bold',
+    fontSize: 16,
+    color: white50
+  },
   hmwContentContainer: {
     width: '100%',
-
+    flex: 1
   },
   hmwContent: {
-
+    fontFamily: 'Nunito_400Regular',
+    fontSize: 16,
+    color: 'white'
   },
   theProblemLabel: {
-
+    fontFamily: 'Nunito_700Bold',
+    fontSize: 16,
+    color: white50
   },
   theProblemLabelContainer: {
     width: '100%',
@@ -110,26 +142,50 @@ const styles = StyleSheet.create({
   },
   bottomButtonContainer: {
     width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
     marginTop: 5,
     marginBottom: 5
   },
   bottomButton: {
-    width: 250
+    width: '100%',
+    fontFamily: 'Nunito_700Bold',
+    fontSize: 16
+  },
+  copyLinkBottomButton: {
+    width: '100%',
+    backgroundColor: white30
+  },
+  copyLinkBottomButtonTitle:{
+    fontFamily: 'Nunito_700Bold',
+    fontSize: 16,
+    color: 'white',
+  },
+  startRoomBottomButton: {
+    width: '100%',
+    backgroundColor: 'white'
+  },
+  startRoomBottomButtonTitle: {
+    fontFamily: 'Nunito_700Bold',
+    fontSize: 16,
+    color: blueBackground
   },
   hmwTitleContainer: {
     width: '100%',
-    marginTop: 20,
-    marginBottom: 20,
-    alignItems: 'center',
+    marginTop: 15,
+    marginBottom: 25,
+    alignItems: 'flex-start',
     justifyContent: 'center'
   },
-  hmwTitle: {},
+  hmwTitle: {
+    fontFamily: 'Nunito_700Bold',
+    fontSize: 23, 
+    color: 'white'
+  },
   headerContainer: {
     width: '100%',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'flex-start',
+    marginBottom: 30,
+    flexDirection: 'row'
   },
   header: {
     fontSize: 24,
@@ -141,9 +197,12 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     height: '100%',
-    backgroundColor: 'white',
     alignItems: 'center',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
+    backgroundColor: blueBackground,
+    paddingRight: defaultScreenPadding,
+    paddingLeft: defaultScreenPadding,
+    paddingTop: defaultScreenPadding
   }
 });
 

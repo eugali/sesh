@@ -27,6 +27,7 @@ import {
   screenWidth,
   screenHeight
 } from '../constants/Layout'
+import BailButton from '../components/BailButton'
 
 import { RootStackParamList } from '../types';
 import { blueBackground } from '../constants/Colors';
@@ -115,24 +116,6 @@ export default function RoomScreen({
           </View>
         </View>
       </View>
-    )
-  }
-
-  const BailButton = () => {
-    return (
-      <Pressable onPress={() => console.log('bail')}>
-        <View style={styles.bailButton}>
-          <Text style={styles.bailButtonTitle}>✌Bail</Text>
-          <Icon
-            type='material-community'
-            name='account-outline'
-            color={blueBackground}
-          />
-          <Text style={styles.bailButtonParticipantsLabel}>{
-            participantsCount
-          }</Text>
-        </View>
-      </Pressable>
     )
   }
 
@@ -295,22 +278,6 @@ const styles = StyleSheet.create({
     width: '80%',
     backgroundColor: 'white',
     flexDirection: 'row'
-  },
-  bailButtonParticipantsLabel: {
-    color: blueBackground
-  },
-  bailButtonTitle: {
-    color: 'red',
-    fontSize: 20,
-    marginRight: 12
-  },
-  bailButton: {
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 8,
-    alignItems: 'center',
-    justifyContent: 'center'
   },
   timerContainer: {
 
