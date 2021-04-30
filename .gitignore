@@ -13,4 +13,3 @@ web-build/
 .DS_Store
 
 .firebase/
-*/__tests__/*
