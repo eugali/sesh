@@ -21,6 +21,7 @@ test("Creates new room given valid HMW", async () => {
   expect(room).toStrictEqual({
     isPrivate: false,
     question: "How might we test the DB?",
+    problemStatement: "",
     status: "waiting",
     startedAt: false,
   });

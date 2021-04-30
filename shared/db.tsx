@@ -13,10 +13,11 @@ const db = (
 ) => ({
   votes: {},
 
-  async createRoom(hmwText) {
+  async createRoom(hmwText, problemStatement = "", isPrivate = false) {
     let roomRef = await firestore.collection(collection).add({
       question: hmwText,
-      isPrivate: false,
+      problemStatement: problemStatement,
+      isPrivate: isPrivate,
       status: "waiting",
       startedAt: false,
     });
