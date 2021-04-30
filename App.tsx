@@ -7,6 +7,8 @@ import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 
 import firebase from "firebase/app"
+import "firebase/firestore";
+import db from "./shared/db"
 
 // Initialize Firebase
 const firebaseConfig = {
