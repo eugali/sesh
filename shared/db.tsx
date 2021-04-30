@@ -1,9 +1,12 @@
+import { max } from "react-native-reanimated";
+
 const hmwsCollectionName = "HMWs";
 const solutionsSubCollectionName = "Solutions";
 const participantsSubCollectionName = "Participants";
 const votesSubCollectionName = "Votes";
+const maxVoteCount = 4
 
-const db = (firestore, collection = hmwsCollectionName) => ({
+const db = (firestore, collection = hmwsCollectionName, maxVotes = maxVoteCount) => ({
   votes: {},
 
   async createRoom(hmwText) {
@@ -38,11 +41,11 @@ const db = (firestore, collection = hmwsCollectionName) => ({
 
   async upvote(roomID, solutionID) {
     if (!(roomID in this.votes)) {
-      this.votes[roomID] = new Set();
+      this.votes[roomID] = 0;
     }
 
-    if (this.votes[roomID].has(solutionID)) {
-      // already voted
+    if (this.votes[roomID] >= maxVotes) {
+      // already voted max times
       return false;
     } else {
       let res = await firestore
@@ -52,7 +55,7 @@ const db = (firestore, collection = hmwsCollectionName) => ({
         .doc(solutionID)
         .collection(votesSubCollectionName)
         .add({});
-      this.votes[roomID].add(solutionID);
+      this.votes[roomID] += 1
       return true;
     }
   },
