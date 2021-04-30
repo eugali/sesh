@@ -1,0 +1,5 @@
+# Ignore artifacts:
+web-build
+coverage
+.expo
+node-modules

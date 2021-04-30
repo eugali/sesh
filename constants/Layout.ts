@@ -1,26 +1,25 @@
-import { Dimensions } from 'react-native';
+import { Dimensions } from "react-native";
 
-export const screenWidth = Dimensions.get('window').width;
-export const screenHeight = Dimensions.get('window').height;
-
+export const screenWidth = Dimensions.get("window").width;
+export const screenHeight = Dimensions.get("window").height;
 
 export default {
   window: {
     width: screenWidth,
     height: screenHeight,
   },
-  isSmallDevice: screenWidth < 375
+  isSmallDevice: screenWidth < 375,
 };
 
 const basicSizes = {
   small: 4,
-  normal: 8, 
+  normal: 8,
   large: 12,
-  veryLarge: 16
-}
+  veryLarge: 16,
+};
 
-export const paddings = basicSizes
+export const paddings = basicSizes;
 
-export const margins = basicSizes
+export const margins = basicSizes;
 
-export const borderRadiuses = basicSizes
+export const borderRadiuses = basicSizes;

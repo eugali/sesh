@@ -3,25 +3,33 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import * as React from 'react';
-import { ColorSchemeName } from 'react-native';
+import {
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+} from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import * as React from "react";
+import { ColorSchemeName } from "react-native";
 
-import NotFoundScreen from '../screens/NotFoundScreen';
 import HomeScreen from '../screens/HomeScreen'
 import CreateRoomScreen from '../screens/CreateRoomScreen'
 import WaitingRoomScreen from '../screens/WaitingRoomScreen'
 import RoomScreen from '../screens/RoomScreen'
 import { RootStackParamList } from '../types';
-import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
 
-export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+
+export default function Navigation({
+  colorScheme, 
+}: {
+  colorScheme: ColorSchemeName;
+}) {
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
-      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+    >
       <RootNavigator />
     </NavigationContainer>
   );
@@ -38,7 +46,6 @@ function RootNavigator() {
       <Stack.Screen name="Room" component={RoomScreen}/>
       <Stack.Screen name="WaitingRoom" component={WaitingRoomScreen}/>
       <Stack.Screen name="CreateRoom" component={CreateRoomScreen}/>
-      
     </Stack.Navigator>
   );
 }

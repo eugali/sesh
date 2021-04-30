@@ -3,9 +3,9 @@ import * as React from 'react';
 import {
   useState
 } from 'react'
-import { 
-  StyleSheet, 
-  Text, 
+import {
+  StyleSheet,
+  Text,
   View,
   SafeAreaView,
   Alert,
@@ -14,7 +14,7 @@ import {
   Pressable,
   Modal
 } from 'react-native';
-import { 
+import {
   Button,
   Icon,
   Switch
@@ -58,7 +58,7 @@ export default function RoomScreen({
 
   const [idea, setIdea] = useState<string>('')
   const [ideas, setIdeas] = useState<Idea[]>([
-    {title: 'ciao', voted: false}, {title: 'mbare', voted: false}, {title: 'ciao', voted: false}, {title: 'mbare', voted: false}, {title: 'ciao', voted: false}, {title: 'mbare', voted: false}
+    { title: 'ciao', voted: false }, { title: 'mbare', voted: false }, { title: 'ciao', voted: false }, { title: 'mbare', voted: false }, { title: 'ciao', voted: false }, { title: 'mbare', voted: false }
   ])
   const [niceJobModalVisible, setNiceJobModalVisible] = useState<boolean>(false)
   const [screenMode, setScreenMode] = useState<ScreenModes>(ScreenModes.IdeaSubmission)
@@ -69,29 +69,29 @@ export default function RoomScreen({
     )
   }
 
-  const renderIdea = ({item, index}: {item: Idea, index: number}) => {
+  const renderIdea = ({ item, index }: { item: Idea, index: number }) => {
     return (
       <View style={styles.ideaContainer} key={item.title}>
         <View style={styles.ideaInnerContainer}>
-        <Text style={styles.ideaTitle}>{item.title}</Text>
+          <Text style={styles.ideaTitle}>{item.title}</Text>
 
-        {
-          screenMode === ScreenModes.IdeaVoting ? (
-        <Icon 
-          type='material-community'
-          name='star'
-          color={item.voted ? 'yellow' : 'grey'}
-          onPress={() => {
+          {
+            screenMode === ScreenModes.IdeaVoting ? (
+              <Icon
+                type='material-community'
+                name='star'
+                color={item.voted ? 'yellow' : 'grey'}
+                onPress={() => {
 
-            if(hasVotesLimitBeenReached()) return
+                  if (hasVotesLimitBeenReached()) return
 
-            const tmpIdeas = [...ideas]
-            tmpIdeas[index].voted = !tmpIdeas[index].voted
-            setIdeas(tmpIdeas)
-        }}
-        />
-          ) : null
-  }
+                  const tmpIdeas = [...ideas]
+                  tmpIdeas[index].voted = !tmpIdeas[index].voted
+                  setIdeas(tmpIdeas)
+                }}
+              />
+            ) : null
+          }
         </View>
       </View>
     )
@@ -99,14 +99,14 @@ export default function RoomScreen({
 
   const NiceJobModal = () => {
 
-    if(niceJobModalVisible === false) return null
+    if (niceJobModalVisible === false) return null
 
     return (
       <View style={styles.niceJobModalContainer}>
         <View style={styles.niceJobModalInnerContainer}>
           <View style={styles.niceJobModalHeaderContainer}>
             <Text style={styles.niceJobModalHeader}>🤩 Nice job!</Text>
-            <View style={{flex: 1}}/>
+            <View style={{ flex: 1 }} />
             <Text style={styles.niceJobModalHeader}>0:03</Text>
           </View>
 
@@ -121,17 +121,17 @@ export default function RoomScreen({
   const BailButton = () => {
     return (
       <Pressable onPress={() => console.log('bail')}>
-      <View style={styles.bailButton}>
-        <Text style={styles.bailButtonTitle}>✌Bail</Text>
-        <Icon 
-          type='material-community'
-          name='account-outline'
-          color={blueBackground}
-        />
-        <Text style={styles.bailButtonParticipantsLabel}>{
-          participantsCount
-        }</Text>
-      </View>
+        <View style={styles.bailButton}>
+          <Text style={styles.bailButtonTitle}>✌Bail</Text>
+          <Icon
+            type='material-community'
+            name='account-outline'
+            color={blueBackground}
+          />
+          <Text style={styles.bailButtonParticipantsLabel}>{
+            participantsCount
+          }</Text>
+        </View>
       </Pressable>
     )
   }
@@ -139,20 +139,20 @@ export default function RoomScreen({
   return (
     <SafeAreaView style={styles.container}>
 
-<NiceJobModal/>
+      <NiceJobModal />
 
       <View style={styles.headerContainer}>
-        
-          <BailButton />  
-        
-          <Icon 
+
+        <BailButton />
+
+        <Icon
           type='material-community'
           name='music'
           color='grey'
         />
 
-        <View style={{flex: 1}}/>
-  
+        <View style={{ flex: 1 }} />
+
         <View style={styles.timerContainer}>
           <Text style={styles.timer}>{remainingTime}</Text>
         </View>
@@ -164,56 +164,56 @@ export default function RoomScreen({
 
       {
         screenMode === ScreenModes.IdeaSubmission && (
-<>
+          <>
 
-{ideas.map((item, index) => renderIdea({item, index}))}
-      <View style={styles.ideaInputContainer}>
-        <TextInput
-          placeholder='Type your answer here'
-          style={styles.ideaInput}
-          onChangeText={setIdea}
-          value={idea}
-          maxLength={140}
-        />
-      </View>
-
-
-      <View style={styles.saveButtonContainer}>
-        <Button 
-          title={'Save'}
-          buttonStyle={styles.saveButton}
-          onPress={() => {
-            setIdeas([...ideas, {title: idea, voted: false}])
-            setIdea('')
-          }}
-        />
-      </View>
-
-
-      <View style={styles.tipContainer}>
-        <Text style={styles.tip}>Shoot for 10+ ideas, don't overthink it!</Text>
-      </View>
-</>
-        )
-        }
-
-        {
-          screenMode === ScreenModes.IdeaVoting && (
-            <View style={styles.ideaVotingContainer}>
-              <View style={styles.ideaVotingHeaderContainer}>
-                <Text style={styles.ideaVotingHeader}>You have 4 ⭐️'s available to give, which ideas do you think are most important?</Text>
-              </View>
-
-              <View style={styles.ideaVotingIdeasContainer}>
-                {ideas.map((item, index) => renderIdea({item, index}))}
-              </View>
-
-              <View style={styles.ideaVotingFooterContainer}>
-                <Text style={styles.ideaVotingFooterText}>🤯  Am I right??</Text>
-              </View>
+            {ideas.map((item, index) => renderIdea({ item, index }))}
+            <View style={styles.ideaInputContainer}>
+              <TextInput
+                placeholder='Type your answer here'
+                style={styles.ideaInput}
+                onChangeText={setIdea}
+                value={idea}
+                maxLength={140}
+              />
             </View>
-          )
-        }
+
+
+            <View style={styles.saveButtonContainer}>
+              <Button
+                title={'Save'}
+                buttonStyle={styles.saveButton}
+                onPress={() => {
+                  setIdeas([...ideas, { title: idea, voted: false }])
+                  setIdea('')
+                }}
+              />
+            </View>
+
+
+            <View style={styles.tipContainer}>
+              <Text style={styles.tip}>Shoot for 10+ ideas, don't overthink it!</Text>
+            </View>
+          </>
+        )
+      }
+
+      {
+        screenMode === ScreenModes.IdeaVoting && (
+          <View style={styles.ideaVotingContainer}>
+            <View style={styles.ideaVotingHeaderContainer}>
+              <Text style={styles.ideaVotingHeader}>You have 4 ⭐️'s available to give, which ideas do you think are most important?</Text>
+            </View>
+
+            <View style={styles.ideaVotingIdeasContainer}>
+              {ideas.map((item, index) => renderIdea({ item, index }))}
+            </View>
+
+            <View style={styles.ideaVotingFooterContainer}>
+              <Text style={styles.ideaVotingFooterText}>🤯  Am I right??</Text>
+            </View>
+          </View>
+        )
+      }
 
 
     </SafeAreaView>
@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 8,
     marginTop: 8,
-    alignItems:'center',
+    alignItems: 'center',
     justifyContent: 'center'
   },
   ideaInnerContainer: {
@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
     height: 60
   },
   ideaInput: {
-color: 'white'
+    color: 'white'
   },
   tipContainer: {
     width: '100%',
