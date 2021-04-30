@@ -6,6 +6,8 @@ import "firebase/firestore";
 const testCollection = "HMWsTest";
 let testFirestore;
 let testDB;
+let testRoomID;
+let testSolutionID;
 
 beforeAll(() => {
   firebase.initializeApp(firebaseConfig);
@@ -14,8 +16,8 @@ beforeAll(() => {
 });
 
 test("Creates new room given valid HMW", async () => {
-  let roomID = await testDB.createRoom("How might we test the DB?");
-  let room = await testDB.getRoom(roomID);
+  testRoomID = await testDB.createRoom("How might we test the DB?");
+  let room = await testDB.getRoom(testRoomID);
   expect(room).toStrictEqual({
     isPrivate: false,
     question: "How might we test the DB?",
@@ -25,8 +27,12 @@ test("Creates new room given valid HMW", async () => {
 });
 
 test("Creates new solution for HMW given valid solution", async () => {
-  let roomID = await testDB.createRoom("How might we test the DB?");
-  await testDB.createSolution(roomID, "Very carefully");
-  let solutions = await testDB.getSolutions(roomID);
+  testSolutionID = await testDB.createSolution(testRoomID, "Very carefully");
+  let solutions = await testDB.getSolutions(testRoomID);
   expect(solutions).toStrictEqual([{ text: "Very carefully" }]);
+});
+
+test("Allows exactly one upvote", async () => {
+  expect(await testDB.upvote(testRoomID, testSolutionID)).toBe(true);
+  expect(await testDB.upvote(testRoomID, testSolutionID)).toBe(false);
 });

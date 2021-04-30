@@ -1,8 +1,11 @@
 const hmwsCollectionName = "HMWs";
 const solutionsCollectionName = "Solutions";
 const participantsCollectionName = "Participants";
+const votesCollectionName = "Votes";
 
 const db = (firestore, collection = hmwsCollectionName) => ({
+  votes: {},
+
   async createRoom(hmwText) {
     let roomRef = await firestore.collection(collection).add({
       question: hmwText,
@@ -19,19 +22,39 @@ const db = (firestore, collection = hmwsCollectionName) => ({
       .collection(collection)
       .doc(roomID)
       .collection(participantsCollectionName)
-      .doc()
-      .set({});
+      .add({});
   },
 
   async createSolution(roomID, solutionText) {
-    await firestore
+    let solutionRef = await firestore
       .collection(collection)
       .doc(roomID)
       .collection(solutionsCollectionName)
-      .doc()
-      .set({
+      .add({
         text: solutionText,
       });
+    return solutionRef.id;
+  },
+
+  async upvote(roomID, solutionID) {
+    if (!(roomID in this.votes)) {
+      this.votes[roomID] = new Set();
+    }
+
+    if (this.votes[roomID].has(solutionID)) {
+      // already voted
+      return false;
+    } else {
+      let res = await firestore
+        .collection(collection)
+        .doc(roomID)
+        .collection(solutionsCollectionName)
+        .doc(solutionID)
+        .collection(votesCollectionName)
+        .add({});
+      this.votes[roomID].add(solutionID);
+      return true;
+    }
   },
 
   async getRoom(roomID) {
