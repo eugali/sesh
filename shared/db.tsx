@@ -4,9 +4,13 @@ const hmwsCollectionName = "HMWs";
 const solutionsSubCollectionName = "Solutions";
 const participantsSubCollectionName = "Participants";
 const votesSubCollectionName = "Votes";
-const maxVoteCount = 4
+const maxVoteCount = 4;
 
-const db = (firestore, collection = hmwsCollectionName, maxVotes = maxVoteCount) => ({
+const db = (
+  firestore,
+  collection = hmwsCollectionName,
+  maxVotes = maxVoteCount
+) => ({
   votes: {},
 
   async createRoom(hmwText) {
@@ -55,7 +59,7 @@ const db = (firestore, collection = hmwsCollectionName, maxVotes = maxVoteCount)
         .doc(solutionID)
         .collection(votesSubCollectionName)
         .add({});
-      this.votes[roomID] += 1
+      this.votes[roomID] += 1;
       return true;
     }
   },
