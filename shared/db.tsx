@@ -49,4 +49,4 @@ const db = (firestore, collection = hmwsCollectionName) => ({
   },
 });
 
-export default db
+export default db;

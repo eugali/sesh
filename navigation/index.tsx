@@ -12,16 +12,15 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 import { ColorSchemeName } from "react-native";
 
-import HomeScreen from '../screens/HomeScreen'
-import CreateRoomScreen from '../screens/CreateRoomScreen'
-import WaitingRoomScreen from '../screens/WaitingRoomScreen'
-import RoomScreen from '../screens/RoomScreen'
-import { RootStackParamList } from '../types';
-import LinkingConfiguration from './LinkingConfiguration';
-
+import HomeScreen from "../screens/HomeScreen";
+import CreateRoomScreen from "../screens/CreateRoomScreen";
+import WaitingRoomScreen from "../screens/WaitingRoomScreen";
+import RoomScreen from "../screens/RoomScreen";
+import { RootStackParamList } from "../types";
+import LinkingConfiguration from "./LinkingConfiguration";
 
 export default function Navigation({
-  colorScheme, 
+  colorScheme,
 }: {
   colorScheme: ColorSchemeName;
 }) {
@@ -42,10 +41,10 @@ const Stack = createStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="WaitingRoom" component={WaitingRoomScreen}/>
-      <Stack.Screen name="CreateRoom" component={CreateRoomScreen}/>
-      <Stack.Screen name="Home" component={HomeScreen}/>
-      <Stack.Screen name="Room" component={RoomScreen}/>
+      <Stack.Screen name="WaitingRoom" component={WaitingRoomScreen} />
+      <Stack.Screen name="CreateRoom" component={CreateRoomScreen} />
+      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Room" component={RoomScreen} />
     </Stack.Navigator>
   );
 }
