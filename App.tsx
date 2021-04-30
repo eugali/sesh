@@ -13,16 +13,15 @@ import {
   Nunito_800ExtraBold,
 } from "@expo-google-fonts/nunito";
 
-import firebase from "firebase/app";
-import "firebase/firestore";
-import { firebaseConfig } from "./constants/Config";
-import db from "./shared/db";
+//import firebase from "firebase/app";
+//import "firebase/firestore";
+//import { firebaseConfig } from "./constants/Config";
+//import db from "./shared/db";
+//firebase.initializeApp(firebaseConfig);
+//const DBContext = React.createContext(db(firebase.firestore()))
 
-firebase.initializeApp(firebaseConfig);
 
 export default function App() {
-  let DBContext = React.useContext(db(firebase.firestore()));
-
   useFonts({
     Nunito_400Regular,
     Nunito_700Bold,

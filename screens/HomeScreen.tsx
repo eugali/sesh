@@ -29,6 +29,8 @@ import {
 import { RootStackParamList } from "../types";
 import { defaultScreenPadding } from "../constants/Layout";
 
+import dbInstance from '../shared/dbInstance'
+
 enum HomeTabs {
   JoinRoom,
   CreateRoom,
@@ -55,7 +57,7 @@ export default function HomeScreen({
   const [currentTab, setCurrentTab] = useState(HomeTabs.JoinRoom);
   const [isNewRoomPublic, setIsNewRoomPublic] = useState(true);
   const joinRoom = () => navigation.navigate("WaitingRoom");
-  const createRoom = () => navigation.navigate("CreateRoom");
+  const createRoom = () => navigation.navigate("CreateRoom")
 
   const renderAvailableRoom = ({ item }) => {
     return (

@@ -31,12 +31,22 @@ import {
   white80,
 } from "../constants/Colors";
 import { defaultScreenPadding } from "../constants/Layout";
+import dbInstance from '../shared/dbInstance'
 
 export default function CreateRoomScreen({
   navigation,
 }: StackScreenProps<RootStackParamList, "CreateRoom">) {
   const goHome = () => navigation.navigate("Home");
   const [isNewRoomPublic, setIsNewRoomPublic] = useState<boolean>(false);
+  const [HMWStatement, setHMWStatement] = useState<string>('')
+  const [problemDescription, setProblemDescription] = useState<string>('')
+  const [roomId, setRoomId] = useState<string>('')
+
+  const createRoom = async () => {
+    const roomId = await dbInstance.createRoom(HMWStatement)
+    setRoomId(roomId)
+    console.log(roomId)
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -64,6 +74,8 @@ export default function CreateRoomScreen({
           multiline
           style={styles.enterHMWInput}
           placeholder="How might we ..."
+          value={HMWStatement}
+          onChangeText={setHMWStatement}
         />
       </View>
 
@@ -75,6 +87,8 @@ export default function CreateRoomScreen({
           style={styles.enterProblemContextInput}
           multiline
           placeholder="What information is helpful to know before the brainstom?"
+          value={problemDescription}
+          onChangeText={setProblemDescription}
         />
       </View>
 
@@ -97,9 +111,11 @@ export default function CreateRoomScreen({
 
       <View style={styles.submitButtonContainer}>
         <Button
+          disabled={HMWStatement.length < 10}
           title={"Submit"}
           buttonStyle={styles.submitButton}
           titleStyle={styles.submitButtonTitle}
+          onPress={createRoom}
         />
       </View>
     </SafeAreaView>
