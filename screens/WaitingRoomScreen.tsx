@@ -9,9 +9,11 @@ import {
   Alert,
   TextInput,
   FlatList,
-  Pressable,
+  Pressable
 } from "react-native";
 import { Button, Icon, Switch } from "react-native-elements";
+
+import Clipboard from 'expo-clipboard'
 
 import {
   paddings,
@@ -31,6 +33,7 @@ export default function WaitingRoomScreen({
 }: StackScreenProps<RootStackParamList, "WaitingRoom">) {
   const hmwTitle = "How might we make college less expensive";
   const participantsCount = 4;
+  const currentRoomId = 'https://whateverwhatever.com/123123123456456456'
   const hmwContent =
     "Tuition inflation has risen at a faster rate than the cost of medical service, child care, and housing. While generous...";
 
@@ -73,7 +76,7 @@ export default function WaitingRoomScreen({
           title={"Copy Link"}
           buttonStyle={styles.copyLinkBottomButton}
           titleStyle={styles.copyLinkBottomButtonTitle}
-          onPress={() => console.log("copy link")}
+          onPress={() => Clipboard.setString(currentRoomId)}
         />
       </View>
 
