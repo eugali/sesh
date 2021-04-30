@@ -2,6 +2,7 @@ import { Dimensions } from "react-native";
 
 export const screenWidth = Dimensions.get("window").width;
 export const screenHeight = Dimensions.get("window").height;
+export const defaultScreenPadding = 25
 
 export default {
   window: {

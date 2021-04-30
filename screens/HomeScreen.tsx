@@ -26,9 +26,10 @@ import {
   screenWidth,
   screenHeight
 } from '../constants/Layout'
-import { blueBackground } from '../constants/Colors'
+import { blueBackground, nonSelectedWhite, lighterWhite } from '../constants/Colors';
 
 import { RootStackParamList } from "../types";
+import { defaultScreenPadding } from '../constants/Layout';
 
 enum HomeTabs {
   JoinRoom,
@@ -54,10 +55,10 @@ export default function HomeScreen({
   navigation,
 }: StackScreenProps<RootStackParamList, 'Home'>) {
 
-  const [currentTab, setCurrentTab] = useState(HomeTabs.CreateRoom)
+  const [currentTab, setCurrentTab] = useState(HomeTabs.JoinRoom)
   const [isNewRoomPublic, setIsNewRoomPublic] = useState(true)
   const joinRoom = () => navigation.navigate('WaitingRoom')
-  const createRoom = () => navigation.navigate('Room')
+  const createRoom = () => navigation.navigate('CreateRoom')
 
   const renderAvailableRoom = ({ item }) => {
     return (
@@ -74,7 +75,7 @@ export default function HomeScreen({
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.logoContainer}>
-          <Text style={styles.logo}>Sesh</Text>
+          <Text style={styles.logo}>🧠 Sesh</Text>
         </View>
 
 
@@ -82,55 +83,56 @@ export default function HomeScreen({
           <Text style={styles.header}>Generate better ideas in half the time</Text>
         </View>
 
-        <View style={styles.subHeaderContainer}>
-          <Text style={styles.subHeader}>Problem solving exercises inspired by Jake Knapp, AJ&Smart, and Deep Work Studio</Text>
-        </View>
-
-
+        {/*
         <View style={styles.roomTabsContainer}>
-
           <Pressable onPress={() => setCurrentTab(HomeTabs.JoinRoom)}>
-            <Text style={[styles.roomTab, { color: currentTab === HomeTabs.JoinRoom ? 'white' : 'grey' }]}>Join Room</Text>
+            <Text style={[styles.roomTab, { color: currentTab === HomeTabs.JoinRoom ? 'white' : nonSelectedWhite }]}>Join Room</Text>
           </Pressable>
-
           <Pressable onPress={() => setCurrentTab(HomeTabs.CreateRoom)}>
-            <Text style={[styles.roomTab, { color: currentTab === HomeTabs.CreateRoom ? 'white' : 'grey' }]}>Create Room</Text>
+            <Text style={[styles.roomTab, { color: currentTab === HomeTabs.CreateRoom ? 'white' : nonSelectedWhite }]}>Create Room</Text>
           </Pressable>
         </View>
+        */}
 
-        {
-          currentTab === HomeTabs.JoinRoom && (
-            <View style={styles.availableRoomsContainer}>
+        <View style={styles.createRoomButtonContainer}>
+          <Button 
+            title='Create Room'
+            onPress={createRoom}
+            buttonStyle={styles.createRoomButton}
+            titleStyle={styles.createRoomButtonTitleStyle}
+          />
+        </View>
+        
+        <View style={styles.availableRoomsContainer}>
 
-              <View style={styles.joinRoomContainer}>
-                <TextInput
-                  style={styles.joinRoomInputContainer}
-                  placeholder={'Enter Code'}
-                />
+          <View style={styles.joinRoomContainer}>
+            <TextInput
+              style={styles.joinRoomInputContainer}
+              placeholder={'Type room code here'}
+            />
 
-                <Icon
-                  type='material-community'
-                  name='arrow-right-circle-outline'
-                  size={30}
-                  color='white'
-                  onPress={joinRoom}
-                />
-              </View>
+            <Icon
+              type='material-community'
+              name='arrow-right-circle-outline'
+              size={40}
+              color='white'
+              onPress={joinRoom}
+            />
+          </View>
 
-              <View style={styles.communityRoomsLabelContainer}>
-                <Text style={styles.communityRoomsLabel}>Community Rooms</Text>
-              </View>
+          <View style={styles.communityRoomsLabelContainer}>
+            <Text style={styles.communityRoomsLabel}>Explore community Rroms</Text>
+          </View>
 
-              <FlatList
-                data={mockData}
-                renderItem={renderAvailableRoom}
-                style={styles.availableRoomsFlatList}
-              />
-            </View>
-          )
-        }
+          <FlatList
+            data={mockData}
+            renderItem={renderAvailableRoom}
+            style={styles.availableRoomsFlatList}
+          />
+        </View>
+          
 
-        {
+        {/*
           currentTab === HomeTabs.CreateRoom && (
             <View>
 
@@ -162,7 +164,7 @@ export default function HomeScreen({
 
             </View>
           )
-        }
+          */}
       </SafeAreaView>
     );
   }
@@ -175,7 +177,18 @@ export default function HomeScreen({
       flexDirection: 'row'
     },
     createRoomButtonContainer: {
-
+      width: '100%',
+      marginTop: 10,
+      marginBottom: 10
+    },
+    createRoomButton: {
+      backgroundColor: 'white',
+      borderRadius: 4
+    },
+    createRoomButtonTitleStyle: {
+      fontFamily: 'Nunito_700Bold',
+      color: blueBackground,
+      fontSize: 16
     },
     createRoomActionsContainer: {
       width: '100%',
@@ -197,11 +210,13 @@ export default function HomeScreen({
       justifyContent: 'center'
     },
     communityRoomsLabel: {
-      color: 'white'
+      color: lighterWhite,
+      fontSize: 18,
+      fontFamily: 'Nunito_700Bold'
     },
     roomTab: {
-      color: 'white',
-      fontWeight: 'bold'
+      color: lighterWhite,
+      
     },
     roomTabsContainer: {
       flexDirection: 'row',
@@ -217,7 +232,8 @@ export default function HomeScreen({
       padding: paddings.veryLarge
     },
     subHeader: {
-      color: 'white'
+      color: lighterWhite,
+      fontFamily: 'Nunito_700Bold'
     },
     headerContainer: {
       width: '100%',
@@ -226,17 +242,19 @@ export default function HomeScreen({
       padding: paddings.veryLarge
     },
     header: {
-      color: 'white'
+      color: lighterWhite,
+      fontFamily: 'Nunito_700Bold',
+      fontSize: 31
     },
     availableRoomRowUsersCount: {
       color: "grey",
     },
     availableRoomRowInnerContainer: {
-      width: '80%',
-      backgroundColor: 'white',
+      width: '100%',
+      backgroundColor: '#F8F8F8',
       padding: 15,
       margin: 5,
-      borderRadius: 10
+      borderRadius: 33
     },
     horizontalLineSeparator: {
       width: "80%",
@@ -253,7 +271,9 @@ export default function HomeScreen({
       height: 60,
     },
     availableRoomRowTitle: {
-      width: '100%'
+      width: '100%',
+      fontFamily: 'Nunito_700Bold',
+      fontSize: 17
     },
     availableRoomRowContainer: {
       width: '100%',
@@ -280,37 +300,39 @@ export default function HomeScreen({
       marginHorizontal: margins.small,
     },
     logo: {
-      fontSize: 24,
+      fontSize: 40,
       fontWeight: "bold",
+      color: lighterWhite,
+      fontFamily: 'Nunito_800ExtraBold'
     },
     logoContainer: {
-      alignItems: "center",
+      alignItems: "flex-start",
       justifyContent: "center",
       width: "100%",
-      height: 50,
+      height: 50
     },
     joinRoomInputContainer: {
       flex: 1,
-      borderWidth: 1,
-      borderColor: "grey",
-      borderRadius: borderRadiuses.normal,
       justifyContent: 'space-around',
       marginHorizontal: margins.small,
-      backgroundColor: 'white'
+      fontFamily: 'Nunito_700Bold'
     },
-
     joinRoomContainer: {
       flexDirection: "row",
       width: "100%",
       justifyContent: "center",
-      padding: paddings.normal,
+      marginTop: 20,
+      marginBottom: 20
     },
     container: {
       width: '100%',
       height: '100%',
       backgroundColor: blueBackground,
       alignItems: 'center',
-      justifyContent: 'flex-start'
+      justifyContent: 'flex-start',
+      paddingRight: defaultScreenPadding,
+      paddingLeft: defaultScreenPadding,
+      paddingTop: defaultScreenPadding
     }
   });
 
