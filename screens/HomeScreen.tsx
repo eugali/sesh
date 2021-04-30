@@ -71,10 +71,6 @@ export default function HomeScreen({
     )
   }
 
-
-  export default function HomeScreen({
-    navigation,
-  }: StackScreenProps<RootStackParamList, "Home">) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.logoContainer}>
@@ -101,8 +97,6 @@ export default function HomeScreen({
             <Text style={[styles.roomTab, { color: currentTab === HomeTabs.CreateRoom ? 'white' : 'grey' }]}>Create Room</Text>
           </Pressable>
         </View>
-
-
 
         {
           currentTab === HomeTabs.JoinRoom && (
