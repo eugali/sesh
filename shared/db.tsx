@@ -7,7 +7,7 @@ export default db = (firestore, collection = hmwsCollectionName) => ({
     let roomRef = await firestore.collection(collection).add({
       question: hmwText,
       isPrivate: false,
-      status: false,
+      status: "waiting",
       startedAt: false,
     });
     await this.joinRoom(roomRef.id);

@@ -12,6 +12,7 @@ import { firebaseConfig } from "./constants/Config";
 import db from "./shared/db";
 
 firebase.initializeApp(firebaseConfig);
+let DBContext = React.useContext(db(firebase.firestore()))
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
