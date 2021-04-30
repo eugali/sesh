@@ -2,7 +2,7 @@ const hmwsCollectionName = "HMWs";
 const solutionsCollectionName = "Solutions";
 const participantsCollectionName = "Participants";
 
-export default db = (firestore, collection = hmwsCollectionName) => ({
+const db = (firestore, collection = hmwsCollectionName) => ({
   async createRoom(hmwText) {
     let roomRef = await firestore.collection(collection).add({
       question: hmwText,
@@ -48,3 +48,5 @@ export default db = (firestore, collection = hmwsCollectionName) => ({
     return solutions.docs.map((s) => s.data());
   },
 });
+
+export default db
