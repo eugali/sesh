@@ -89,42 +89,44 @@ export default function WaitingRoomScreen({
         />
       </View>
 
-      <View style={styles.screenTitleContainer}>
-        <Text style={styles.screenTitle}>Waiting Room: GSKL</Text>
-      </View>
+      <View style={styles.bodyContainer}>
+        <View style={styles.screenTitleContainer}>
+          <Text style={styles.screenTitle}>Waiting Room: GSKL</Text>
+        </View>
 
-      <View style={styles.hmwTitleContainer}>
-        <Text style={styles.hmwTitle}>{hmwTitle}</Text>
-      </View>
+        <View style={styles.hmwTitleContainer}>
+          <Text style={styles.hmwTitle}>{hmwTitle}</Text>
+        </View>
 
-      <View style={styles.theProblemLabelContainer}>
-        <Text style={styles.theProblemLabel}>The Problem</Text>
-      </View>
+        <View style={styles.theProblemLabelContainer}>
+          <Text style={styles.theProblemLabel}>The Problem</Text>
+        </View>
 
-      <View style={styles.hmwContentContainer}>
-        <Text style={styles.hmwContent}>{hmwContent}</Text>
-      </View>
+        <View style={styles.hmwContentContainer}>
+          <Text style={styles.hmwContent}>{hmwContent}</Text>
+        </View>
 
-      <View style={styles.bottomButtonContainer}>
-        <Button
-          title={"Copy Link"}
-          buttonStyle={styles.copyLinkBottomButton}
-          titleStyle={styles.copyLinkBottomButtonTitle}
-          onPress={() =>
-            Clipboard.setString(
-              `https://sesh-e5398.web.app/Home?roomID=${roomID}`
-            )
-          }
-        />
-      </View>
+        <View style={styles.bottomButtonContainer}>
+          <Button
+            title={"Copy Link"}
+            buttonStyle={styles.copyLinkBottomButton}
+            titleStyle={styles.copyLinkBottomButtonTitle}
+            onPress={() =>
+              Clipboard.setString(
+                `https://sesh-e5398.web.app/Home?roomID=${roomID}`
+              )
+            }
+          />
+        </View>
 
-      <View style={styles.bottomButtonContainer}>
-        <Button
-          title={"Start Room"}
-          buttonStyle={styles.startRoomBottomButton}
-          titleStyle={styles.startRoomBottomButtonTitle}
-          onPress={startRoom}
-        />
+        <View style={styles.bottomButtonContainer}>
+          <Button
+            title={"Start Room"}
+            buttonStyle={styles.startRoomBottomButton}
+            titleStyle={styles.startRoomBottomButtonTitle}
+            onPress={startRoom}
+          />
+        </View>
       </View>
 
       <View style={styles.bottomSpace} />
@@ -153,6 +155,7 @@ const styles = StyleSheet.create({
   hmwContentContainer: {
     width: "100%",
     flex: 1,
+    marginBottom: 20,
   },
   hmwContent: {
     fontFamily: "Nunito_400Regular",
@@ -235,12 +238,16 @@ const styles = StyleSheet.create({
   },
   container: {
     width: "100%",
-    height: "100%",
+    height: screenHeight,
     alignItems: "center",
     justifyContent: "flex-start",
     backgroundColor: blueBackground,
     paddingRight: defaultScreenPadding,
     paddingLeft: defaultScreenPadding,
     paddingTop: defaultScreenPadding,
+  },
+  bodyContainer: {
+    maxWidth: 600,
+    width: "100%",
   },
 });

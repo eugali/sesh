@@ -56,3 +56,28 @@ test("Should allow starting room with sufficient participants", async () => {
 test("Closes a room", async () => {
   expect(await testDB.closeRoom(testRoomID)).toBe(true);
 });
+
+test("Shows new solutions in real time", async (done) => {
+  let newRoomID = await testDB.createRoom("Test");
+  let expectedNewSolution = "Asynchronously";
+  testDB.watchRoomSolutions(newRoomID, (solutions) => {
+    expect(solutions).toStrictEqual([{ text: expectedNewSolution }]);
+    done();
+  });
+  await testDB.createSolution(newRoomID, expectedNewSolution);
+}, 1000);
+
+test("Shows new participants in real time", async (done) => {
+  let newRoomID = await testDB.createRoom("Test");
+  first = true;
+  testDB.watchRoomParticipants(newRoomID, (participants) => {
+    if (first) {
+      expect(participants.length).toBe(1);
+      first = false;
+    } else {
+      expect(participants.length).toBe(2);
+      done();
+    }
+  });
+  await testDB.joinRoom(newRoomID);
+}, 1000);

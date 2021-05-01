@@ -11,6 +11,8 @@ import {
   TextInput,
   FlatList,
   Pressable,
+  Linking,
+  Platform,
 } from "react-native";
 import { Button, Switch, Icon } from "react-native-elements";
 
@@ -52,78 +54,99 @@ export default function CreateRoomScreen({
     console.log(roomID);
   };
 
+  const openLink = (url: string) => {
+    if (Platform.OS == "web") {
+      window.open(url, "_blank");
+    } else {
+      Linking.openURL(url);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.backContainer}>
-        <Pressable onPress={goHome}>
-          <View style={styles.backInnerContainer}>
+      <View style={styles.bodyContainer}>
+        <View style={styles.backContainer}>
+          <Pressable onPress={goHome}>
+            <View style={styles.backInnerContainer}>
+              <Icon
+                type="material-community"
+                name="arrow-left"
+                color="white"
+                size={22}
+              />
+              <Text style={styles.backLabel}> Back</Text>
+            </View>
+          </Pressable>
+        </View>
+
+        <View style={styles.headerContainer}>
+          <Text style={styles.header}>Create a Sesh</Text>
+        </View>
+
+        <View style={styles.enterHMWContainer}>
+          <Text style={styles.enterHMWLabel}>Create a HMW statement</Text>
+          <View style={styles.helpIcon}>
             <Icon
               type="material-community"
-              name="arrow-left"
+              onPress={() =>
+                openLink("https://www.odellkeller.com/the-how-might-we-method/")
+              }
+              name="help-circle-outline"
               color="white"
               size={22}
             />
-            <Text style={styles.backLabel}> Back</Text>
           </View>
-        </Pressable>
-      </View>
+          <TextInput
+            multiline
+            style={[styles.enterHMWInput, Shared.textArea]}
+            placeholder="How might we ..."
+            placeholderTextColor={nonSelectedWhite}
+            value={HMWStatement}
+            maxLength={100}
+            onChangeText={setHMWStatement}
+          />
+        </View>
 
-      <View style={styles.headerContainer}>
-        <Text style={styles.header}>Create a Sesh</Text>
-      </View>
-
-      <View style={styles.enterHMWContainer}>
-        <Text style={styles.enterHMWLabel}>Create a HMW statement</Text>
-        <TextInput
-          multiline
-          style={[styles.enterHMWInput, Shared.textArea]}
-          placeholder="How might we ..."
-          placeholderTextColor={nonSelectedWhite}
-          value={HMWStatement}
-          maxLength={100}
-          onChangeText={setHMWStatement}
-        />
-      </View>
-
-      <View style={styles.enterProblemContextContainer}>
-        <Text style={styles.enterProblemContextLabel}>
-          Describe the problem
-        </Text>
-        <TextInput
-          style={[styles.enterProblemContextInput, Shared.textArea]}
-          multiline
-          placeholder="What information is helpful to know before the brainstom?"
-          placeholderTextColor={nonSelectedWhite}
-          value={problemDescription}
-          onChangeText={setProblemDescription}
-        />
-      </View>
-
-      <View style={styles.publicRoomSwitchContainer}>
-        <Switch
-          color="#F2C94C"
-          value={isNewRoomPublic}
-          onValueChange={() => setIsNewRoomPublic(!isNewRoomPublic)}
-        />
-        <Text style={styles.publicRoomSwitchLabel}>Public</Text>
-      </View>
-
-      <View style={styles.bottomTipContainer}>
-        {isNewRoomPublic && (
-          <Text style={styles.bottomTipLabel}>
-            Your room will be listed publicly for anyone to join
+        <View style={styles.enterProblemContextContainer}>
+          <Text style={styles.enterProblemContextLabel}>
+            Describe the problem
           </Text>
-        )}
-      </View>
+          <TextInput
+            style={[styles.enterProblemContextInput, Shared.textArea]}
+            multiline
+            placeholder="What information is helpful to know before the brainstom?"
+            placeholderTextColor={nonSelectedWhite}
+            value={problemDescription}
+            onChangeText={setProblemDescription}
+          />
+        </View>
 
-      <View style={styles.submitButtonContainer}>
-        <Button
-          disabled={HMWStatement.length < 10}
-          title={"Submit"}
-          buttonStyle={styles.submitButton}
-          titleStyle={styles.submitButtonTitle}
-          onPress={createRoom}
-        />
+        <View style={styles.publicRoomSwitchContainer}>
+          <Switch
+            color="#F2C94C"
+            value={isNewRoomPublic}
+            onValueChange={() => setIsNewRoomPublic(!isNewRoomPublic)}
+          />
+          <Text style={styles.publicRoomSwitchLabel}>Public</Text>
+        </View>
+
+        <View style={styles.bottomTipContainer}>
+          {isNewRoomPublic && (
+            <Text style={styles.bottomTipLabel}>
+              Your room will be listed publicly for anyone to join
+            </Text>
+          )}
+        </View>
+
+        <View style={styles.submitButtonContainer}>
+          <Button
+            disabled={HMWStatement.length < 10}
+            title={"Submit"}
+            buttonStyle={styles.submitButton}
+            titleStyle={styles.submitButtonTitle}
+            onPress={createRoom}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -205,6 +228,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
   },
+  helpIcon: {
+    position: "absolute",
+    right: 0,
+    top: 12,
+  },
   enterHMWInput: {},
   enterHMWContainer: {
     width: "100%",
@@ -221,7 +249,6 @@ const styles = StyleSheet.create({
     fontFamily: "Nunito_700Bold",
   },
   container: {
-    width: screenWidth,
     height: screenHeight,
     backgroundColor: blueBackground,
     alignItems: "center",
@@ -229,5 +256,9 @@ const styles = StyleSheet.create({
     paddingRight: defaultScreenPadding,
     paddingLeft: defaultScreenPadding,
     paddingTop: defaultScreenPadding,
+  },
+  bodyContainer: {
+    maxWidth: 600,
+    width: "100%",
   },
 });

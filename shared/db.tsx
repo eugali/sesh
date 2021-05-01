@@ -38,7 +38,7 @@ const db = (
 
   async startRoom(roomID: string) {
     let participants = await this.getParticipants(roomID);
-    if (participants.length >= minParticipantsCount) {
+    if (participants.length >= minParticipants) {
       await firestore
         .collection(collection)
         .doc(roomID)
@@ -107,6 +107,36 @@ const db = (
     }
 
     return room.exists ? room.data() : null;
+  },
+
+  watchRoomParticipants(roomID: string, callback) {
+    firestore
+      .collection(collection)
+      .doc(roomID)
+      .collection(participantsSubCollectionName)
+      .onSnapshot(
+        (snapshot) => {
+          callback(snapshot.docs.map((s) => s.data()));
+        },
+        (error) => {
+          callback(error);
+        }
+      );
+  },
+
+  watchRoomSolutions(roomID: string, callback) {
+    firestore
+      .collection(collection)
+      .doc(roomID)
+      .collection(solutionsSubCollectionName)
+      .onSnapshot(
+        (snapshot) => {
+          callback(snapshot.docs.map((s) => s.data()));
+        },
+        (error) => {
+          callback(error);
+        }
+      );
   },
 
   async getParticipants(roomID: string) {

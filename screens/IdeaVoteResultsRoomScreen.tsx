@@ -55,8 +55,14 @@ export default function IdeaVoteResultsRoomScreen({
   const shareRoomOnTwitter = () =>
     tw({
       url: `${baseURL}/Home?roomID=${roomID}`,
-      title: hmwTitle,
-      hashtags: ["#sesh"],
+      title:
+        participantsCount +
+        ` people came up with ` +
+        ideas.length +
+        ` @seshIdeas for "` +
+        hmwTitle +
+        `". Check out the top ideas here:`,
+      hashtags: ["sesh"],
     });
 
   const [idea, setIdea] = useState<string>("");
@@ -125,22 +131,24 @@ export default function IdeaVoteResultsRoomScreen({
       </View>
 
       <View style={styles.footerContainer}>
-        <View style={styles.footerButtonContainer}>
-          <Button
-            title="Exit"
-            buttonStyle={styles.footerExitButton}
-            titleStyle={styles.footerExitButtonTitle}
-            onPress={goBackHome}
-          />
-        </View>
+        <View style={styles.footerRow}>
+          <View style={styles.footerButtonContainer}>
+            <Button
+              title="New Sesh"
+              buttonStyle={styles.footerExitButton}
+              titleStyle={styles.footerExitButtonTitle}
+              onPress={goBackHome}
+            />
+          </View>
 
-        <View style={styles.footerButtonContainer}>
-          <Button
-            title="Tweet"
-            buttonStyle={styles.footerTweetButton}
-            titleStyle={styles.footerTweetButtonTitle}
-            onPress={shareRoomOnTwitter}
-          />
+          <View style={styles.footerButtonContainer}>
+            <Button
+              title="Tweet"
+              buttonStyle={styles.footerTweetButton}
+              titleStyle={styles.footerTweetButtonTitle}
+              onPress={shareRoomOnTwitter}
+            />
+          </View>
         </View>
       </View>
     </SafeAreaView>
@@ -168,16 +176,23 @@ const styles = StyleSheet.create({
   },
   footerButtonContainer: {
     flex: 1,
-    backgroundColor: blueBackground,
     paddingTop: 25,
     paddingBottom: 25,
     paddingRight: 25,
     paddingLeft: 25,
   },
   footerContainer: {
+    backgroundColor: blueBackground,
     width: "100%",
     position: "fixed",
     bottom: 0,
+  },
+  footerRow: {
+    maxWidth: 600,
+    width: "100%",
+    margin: 0,
+    marginLeft: "auto",
+    marginRight: "auto",
     flexDirection: "row",
   },
   votingResultsLabelContainer: {
@@ -220,6 +235,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "flex-start",
+    paddingBottom: 100,
   },
   ideaVotingFooterContainer: {
     width: "100%",
