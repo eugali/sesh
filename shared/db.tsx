@@ -109,6 +109,21 @@ const db = (
     return room.exists ? room.data() : null;
   },
 
+  watchRoomSolutions(roomID, callback) {
+    firestore
+      .collection(collection)
+      .doc(roomID)
+      .collection(solutionsSubCollectionName)
+      .onSnapshot(
+        (snapshot) => {
+          callback(snapshot.docs.map((s) => s.data()));
+        },
+        (error) => {
+          callback(error);
+        }
+      );
+  },
+
   async getParticipants(roomID: string) {
     let participants = await firestore
       .collection(collection)
