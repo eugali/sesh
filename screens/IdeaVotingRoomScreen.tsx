@@ -1,6 +1,6 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -14,6 +14,8 @@ import {
   Platform,
 } from "react-native";
 import { Button, Icon, Switch } from "react-native-elements";
+import { useTimer } from "react-timer-hook";
+import moment from "moment";
 
 import {
   defaultScreenPadding,
@@ -63,7 +65,7 @@ export default function RoomScreen({
   navigation,
 }: StackScreenProps<RootStackParamList, "Room">) {
   const hmwTitle = "How might we help designers break into web3?";
-  const remainingTime = "4:28";
+  const roomVotingStartTimestamp = moment().add(5, "minutes").valueOf();
   const participantsCount = 6;
   const votesLimit = 4;
 
@@ -108,6 +110,25 @@ export default function RoomScreen({
     }
     setIdeas(tmpIdeas);
   };
+
+  const {
+    seconds,
+    minutes,
+    hours,
+    days,
+    isRunning,
+    start,
+    pause,
+    resume,
+    restart,
+  } = useTimer({
+    roomVotingStartTimestamp,
+    onExpire: () => console.warn("onExpire called"),
+  });
+
+  useEffect(() => {
+    restart(roomVotingStartTimestamp);
+  }, []);
 
   const renderIdea = ({ item, index }: { item: Idea; index: number }) => {
     return (
@@ -189,7 +210,9 @@ export default function RoomScreen({
         <View style={{ flex: 1 }} />
 
         <View style={styles.timerContainer}>
-          <Text style={styles.timer}>{remainingTime}</Text>
+          <Text style={styles.timer}>{`${minutes.pad(2)}:${seconds.pad(
+            2
+          )}`}</Text>
         </View>
       </View>
 

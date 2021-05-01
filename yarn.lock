@@ -10086,6 +10086,11 @@ mockdate@^3.0.2:
   resolved "https://registry.yarnpkg.com/mockdate/-/mockdate-3.0.5.tgz#789be686deb3149e7df2b663d2bc4392bc3284fb"
   integrity sha512-iniQP4rj1FhBdBYS/+eQv7j1tadJ9lJtdzgOpvsOHng/GbcDh2Fhdeq+ZRldrPYdXvCyfFUmFeEwEGXZB5I/AQ==
 
+moment@^2.29.1:
+  version "2.29.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
+  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
+
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -12195,6 +12200,11 @@ react-test-renderer@~16.11.0:
     prop-types "^15.6.2"
     react-is "^16.8.6"
     scheduler "^0.17.0"
+
+react-timer-hook@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/react-timer-hook/-/react-timer-hook-3.0.2.tgz#7cf0c7d2a54eb7a0b8021e8e607af5e382d5c634"
+  integrity sha512-FW06yAkgJMBHUk658F09nk5lYD/24+O3nfqixHz6WzdEk+I8KVyvfYYUZVlxj6GUq9Dqq0OA9jz13AyQblrZmQ==
 
 react-timer-mixin@^0.13.4:
   version "0.13.4"

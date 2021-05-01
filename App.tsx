@@ -13,6 +13,14 @@ import {
   Nunito_800ExtraBold,
 } from "@expo-google-fonts/nunito";
 
+Number.prototype.pad = function (size) {
+  var s = String(this);
+  while (s.length < (size || 2)) {
+    s = "0" + s;
+  }
+  return s;
+};
+
 //import firebase from "firebase/app";
 //import "firebase/firestore";
 //import { firebaseConfig } from "./constants/Config";
