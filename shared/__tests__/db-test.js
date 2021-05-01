@@ -40,3 +40,18 @@ test("Allows no more than 4 upvotes on one post in one room", async () => {
   expect(await testDB.upvote(testRoomID, testSolutionID)).toBe(true);
   expect(await testDB.upvote(testRoomID, testSolutionID)).toBe(false);
 });
+
+test("Should forbid starting room with unsufficient participants", async () => {
+  expect(await testDB.startRoom(testRoomID)).toBe(false);
+});
+
+test("Should allow starting room with sufficient participants", async () => {
+  for (let i = 0; i < 20; i++) {
+    testDB.joinRoom(testRoomID);
+  }
+  expect(await testDB.startRoom(testRoomID)).toBe(true);
+});
+
+test("Closes a room", async () => {
+  expect(await testDB.closeRoom(testRoomID)).toBe(true);
+});
