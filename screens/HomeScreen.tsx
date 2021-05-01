@@ -110,16 +110,14 @@ export default function HomeScreen({
       </View>
 
       <View style={styles.headerContainer}>
-        <Text style={styles.header}>
-          Generate better ideas in half the time
-        </Text>
+        <Text style={styles.header}>Generate better ideas in 10 minutes</Text>
       </View>
 
       <View style={Shared.buttonContainer}>
         <Button
           title="Create Room"
           onPress={createRoom}
-          buttonStyle={Shared.button}
+          buttonStyle={[Shared.button, styles.createNewRoomButton]}
           titleStyle={Shared.buttonTitleStyle}
         />
       </View>
@@ -129,22 +127,25 @@ export default function HomeScreen({
           <TextInput
             style={styles.joinRoomInputContainer}
             placeholder={"Type room code here"}
+            placeholderTextColor={nonSelectedWhite}
             value={joinRoomID}
             onChangeText={setJoinRoomID}
           />
 
-          <Icon
-            type="material-community"
-            name="arrow-right-circle-outline"
-            size={40}
-            color="white"
-            onPress={joinRoom}
-          />
+          <View style={styles.joinIcon}>
+            <Icon
+              type="material-community"
+              name="arrow-right-circle-outline"
+              size={30}
+              color="white"
+              onPress={joinRoom}
+            />
+          </View>
         </View>
 
         <View style={styles.communityRoomsLabelContainer}>
           <Text style={styles.communityRoomsLabel}>
-            Explore community Rroms
+            Explore community rooms
           </Text>
         </View>
 
@@ -183,6 +184,8 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "flex-start",
     justifyContent: "center",
+    marginTop: 15,
+    marginBottom: 20,
   },
   communityRoomsLabel: {
     color: lighterWhite,
@@ -264,7 +267,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   createNewRoomButton: {
-    width: "80%",
+    padding: 15,
   },
   joinButton: {
     borderRadius: borderRadiuses.normal,
@@ -272,16 +275,16 @@ const styles = StyleSheet.create({
     marginHorizontal: margins.small,
   },
   logo: {
-    fontSize: 40,
+    fontSize: 47,
     fontWeight: "bold",
-    color: lighterWhite,
+    color: "#FFF",
     fontFamily: "Nunito_800ExtraBold",
   },
   logoContainer: {
     alignItems: "flex-start",
     justifyContent: "center",
     width: "100%",
-    height: 50,
+    marginTop: 15,
   },
   joinRoomInputContainer: {
     ...Shared.inputField,
@@ -289,14 +292,25 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     marginHorizontal: margins.small,
     fontFamily: "Nunito_700Bold",
+    paddingTop: 15,
+    paddingBottom: 15,
+    paddingLeft: 10,
+    paddingRight: 45,
   },
   joinRoomContainer: {
     flexDirection: "row",
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 20,
+    marginTop: 10,
     marginBottom: 20,
+    position: "relative",
+  },
+  joinIcon: {
+    position: "absolute",
+    right: 10,
+    top: 12,
+    zIndex: 10,
   },
   container: {
     width: "100%",

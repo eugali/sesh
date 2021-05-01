@@ -12,6 +12,8 @@ export const input = {
   padding: paddings.large,
   fontSize: 17,
   textAlignVertical: "top",
+  marginLeft: 0,
+  marginRight: 0,
 };
 
 export const blockItem = {
