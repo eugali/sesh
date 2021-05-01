@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   bailButton: {
     flexDirection: "row",
     backgroundColor: "white",
-    borderRadius: 4,
+    borderRadius: 7,
     paddingTop: 6,
     paddingBottom: 6,
     paddingRight: 6,

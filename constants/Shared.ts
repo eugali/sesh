@@ -1,4 +1,5 @@
 import {
+    blueBackground,
     white30,
 } from "../constants/Colors";
 
@@ -38,5 +39,19 @@ export default {
     },
     blockItem: {
         ...blockItem
-    }
+    },
+    buttonContainer: {
+        width: "100%",
+        marginTop: 10,
+        marginBottom: 10,
+    },
+    button: {
+        backgroundColor: "white",
+        borderRadius: 7,
+    },
+    buttonTitleStyle: {
+        fontFamily: "Nunito_700Bold",
+        color: blueBackground,
+        fontSize: 16,
+    },
 };

@@ -102,12 +102,12 @@ export default function HomeScreen({
         </View>
         */}
 
-      <View style={styles.createRoomButtonContainer}>
+      <View style={Shared.buttonContainer}>
         <Button
           title="Create Room"
           onPress={createRoom}
-          buttonStyle={styles.createRoomButton}
-          titleStyle={styles.createRoomButtonTitleStyle}
+          buttonStyle={Shared.button}
+          titleStyle={Shared.buttonTitleStyle}
         />
       </View>
 
@@ -153,7 +153,7 @@ export default function HomeScreen({
                   <Text style={styles.createRoomPublicLabel}>Public</Text>
                 </View>
 
-                <View style={styles.createRoomButtonContainer}>
+                <View style={styles.buttonContainer}>
                   <Icon
                     type='material-community'
                     name='arrow-right-circle-outline'
@@ -185,20 +185,6 @@ const styles = StyleSheet.create({
   },
   createRoomPublicSwitchContainer: {
     flexDirection: "row",
-  },
-  createRoomButtonContainer: {
-    width: "100%",
-    marginTop: 10,
-    marginBottom: 10,
-  },
-  createRoomButton: {
-    backgroundColor: "white",
-    borderRadius: 4,
-  },
-  createRoomButtonTitleStyle: {
-    fontFamily: "Nunito_700Bold",
-    color: blueBackground,
-    fontSize: 16,
   },
   createRoomActionsContainer: {
     width: "100%",

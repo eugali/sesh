@@ -11,6 +11,7 @@ import {
   FlatList,
   Pressable,
   Modal,
+  Platform
 } from "react-native";
 import { Button, Icon, Switch } from "react-native-elements";
 
@@ -28,6 +29,33 @@ import BailButton from "../components/BailButton";
 import { RootStackParamList } from "../types";
 import { blueBackground, nonSelectedWhite } from "../constants/Colors";
 import Shared from "../constants/Shared";
+
+const noGlow = `
+textarea, select, input, button {
+	-webkit-appearance: none;
+	outline: none!important;
+}
+textarea:focus, select:focus, input:focus, button:focus {
+	-webkit-appearance: none;
+	outline: none!important;
+}
+`
+
+export const injectWebCss = () => {
+
+  // Only on web
+  if (Platform.OS != "web") {
+    return;
+  }
+
+  // Inject style
+  const style = document.createElement('style')
+  style.textContent = `textarea, select, input, button { outline: none!important; }`
+  return document.head.append(style)
+
+}
+
+injectWebCss();
 
 type Idea = {
   title: string;
@@ -60,6 +88,9 @@ export default function RoomScreen({
     { title: "Curate the best communities for web3 designrs", voted: false },
     { title: "Curate the best communities for web3 desgners", voted: false },
     { title: "Curate the best communities fr web3 designers", voted: false },
+    { title: "Crate the best communities for web3 designrs", voted: false },
+    { title: "Curate he best communities for web3 desgners", voted: false },
+    { title: "Curate the bet communities fr web3 designers", voted: false },
   ]);
   const [niceJobModalVisible, setNiceJobModalVisible] = useState<boolean>(
     false
@@ -145,6 +176,7 @@ export default function RoomScreen({
             <View style={[styles.ideaInputContainer, Shared.inputField]}>
               <TextInput
                 placeholder="Type your answer here"
+                placeholderTextColor={nonSelectedWhite}
                 style={styles.ideaInput}
                 onChangeText={setIdea}
                 value={idea}
@@ -157,18 +189,18 @@ export default function RoomScreen({
                 Shoot for 10+ ideas, don't overthink it!
               </Text>
             </View>
-            {ideas.map((item, index) => renderIdea({ item, index }))}
-
-            <View style={styles.saveButtonContainer}>
+            <View style={Shared.buttonContainer}>
               <Button
                 title={"Save"}
-                buttonStyle={styles.saveButton}
+                buttonStyle={[Shared.button, styles.saveButton]}
+                titleStyle={Shared.buttonTitleStyle}
                 onPress={() => {
                   setIdeas([...ideas, { title: idea, voted: false }]);
                   setIdea("");
                 }}
               />
             </View>
+            {ideas.map((item, index) => renderIdea({ item, index }))}
           </>
         )}
 
@@ -196,6 +228,9 @@ export default function RoomScreen({
 }
 
 const styles = StyleSheet.create({
+  saveButton: {
+    marginBottom: 10,
+  },
   ideaTitle: {
     width: "100%",
     fontSize: 17,
@@ -280,10 +315,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   ideaInputContainer: {
-    marginBottom: 10,
+    marginBottom: 15,
   },
   ideaInput: {
     color: "white",
+    fontFamily: "Nunito_700Bold",
+    outline: 0,
   },
   tipContainer: {
     width: "100%",
@@ -291,7 +328,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "flex-start",
-    marginBottom: 20,
+    marginBottom: 10,
   },
   tipBox: {
     backgroundColor: nonSelectedWhite,
@@ -313,16 +350,6 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   hmwContent: {},
-  saveButtonContainer: {
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 5,
-    marginBottom: 5,
-  },
-  saveButton: {
-    width: 250,
-  },
   hmwTitleContainer: {
     width: "100%",
     marginTop: 20,
@@ -337,17 +364,25 @@ const styles = StyleSheet.create({
     lineHeight: 27,
   },
   headerContainer: {
+    position: "fixed",
     width: "100%",
+    top: 0,
+    background: "#4b31bb",
+    zIndex: 9,
+    paddingBottom: "15px",
+    boxShadow: "-5px 2px 9px 3px #00000021",
     alignItems: "center",
     justifyContent: "space-evenly",
     flexDirection: "row",
     paddingRight: defaultScreenPadding,
     paddingLeft: defaultScreenPadding,
     paddingTop: defaultScreenPadding,
+    backgroundColor: blueBackground,
   },
   bodyContainer: {
     paddingRight: defaultScreenPadding,
     paddingLeft: defaultScreenPadding,
+    marginTop: 70,
   },
   header: {
     fontSize: 24,
