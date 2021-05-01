@@ -317,13 +317,9 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
   },
-<<<<<<< HEAD
-  ideaInputContainer: {},
-=======
   ideaInputContainer: {
     marginBottom: 15,
   },
->>>>>>> adrian
   ideaInput: {
     color: "white",
     fontFamily: "Nunito_700Bold",
