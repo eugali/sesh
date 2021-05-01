@@ -1,4 +1,5 @@
 import firebase from "firebase/app";
+import { roomState } from "../constants/Enums";
 
 const hmwsCollectionName = "HMWs";
 const solutionsSubCollectionName = "Solutions";
@@ -20,7 +21,7 @@ const db = (
       question: hmwText,
       problemStatement: problemStatement,
       isPrivate: isPrivate,
-      status: "waiting",
+      status: roomState.WAITING,
       startedAt: false,
     });
     await this.joinRoom(roomRef.id);
@@ -43,7 +44,7 @@ const db = (
         .doc(roomID)
         .set(
           {
-            status: "active",
+            status: roomState.ACTIVE,
             startedAt: firebase.firestore.Timestamp.fromDate(new Date()),
           },
           { merge: true }
@@ -57,7 +58,7 @@ const db = (
   async closeRoom(roomID) {
     await firestore.collection(collection).doc(roomID).set(
       {
-        status: "closed",
+        status: roomState.CLOSED,
       },
       { merge: true }
     );

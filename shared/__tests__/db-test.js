@@ -1,6 +1,7 @@
 import db from "../db";
 import firebase from "firebase/app";
 import { firebaseConfig } from "../../constants/Config";
+import { roomState } from "../../constants/Enums";
 import "firebase/firestore";
 
 const testCollection = "HMWsTest";
@@ -22,7 +23,7 @@ test("Creates new room given valid HMW", async () => {
     isPrivate: false,
     question: "How might we test the DB?",
     problemStatement: "",
-    status: "waiting",
+    status: roomState.WAITING,
     startedAt: false,
   });
 });
