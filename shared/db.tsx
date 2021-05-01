@@ -38,7 +38,7 @@ const db = (
 
   async startRoom(roomID: string) {
     let participants = await this.getParticipants(roomID);
-    if (participants.length >= minParticipantsCount) {
+    if (participants.length >= minParticipants) {
       await firestore
         .collection(collection)
         .doc(roomID)
