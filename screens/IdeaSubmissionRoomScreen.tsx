@@ -63,12 +63,7 @@ enum BottomTags {
   Oops,
 }
 
-enum ScreenModes {
-  IdeaSubmission,
-  IdeaVoting,
-}
-
-export default function RoomScreen({
+export default function IdeaSubmissionRoomScreen({
   navigation,
 }: StackScreenProps<RootStackParamList, "Room">) {
   const hmwTitle = "How might we help designers break into web3?";

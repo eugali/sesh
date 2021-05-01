@@ -44,6 +44,10 @@ const Stack = createStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen
+        name="IdeaVoteResults"
+        component={IdeaVoteResultsRoomScreen}
+      />
       <Stack.Screen name="IdeaVotingRoom" component={IdeaVotingRoomScreen} />
       <Stack.Screen
         name="IdeaSubmissionRoom"

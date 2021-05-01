@@ -14,6 +14,9 @@ export type RootStackParamList = {
   IdeaSubmissionRoom: {
     roomID: string;
   };
+  IdeaVoteResults: {
+    roomID: string;
+  };
   WaitingRoom: {
     roomID: string;
   };

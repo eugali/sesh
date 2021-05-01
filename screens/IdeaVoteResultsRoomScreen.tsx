@@ -1,34 +1,17 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import * as React from "react";
 import { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  Alert,
-  TextInput,
-  FlatList,
-  Pressable,
-  Modal,
-  Platform,
-} from "react-native";
-import { Button, Icon, Switch } from "react-native-elements";
+import { StyleSheet, Text, View, SafeAreaView, Platform } from "react-native";
+import { Button, Icon } from "react-native-elements";
 
-import {
-  defaultScreenPadding,
-  paddings,
-  margins,
-  borderRadiuses,
-  screenWidth,
-  screenHeight,
-} from "../constants/Layout";
-
-import BailButton from "../components/BailButton";
+import { defaultScreenPadding } from "../constants/Layout";
+import { Idea } from "../types";
+import { tw } from "vanilla-sharing";
 
 import { RootStackParamList } from "../types";
 import { blueBackground, nonSelectedWhite, white50 } from "../constants/Colors";
 import Shared from "../constants/Shared";
+import { baseURL } from "../constants/Config";
 
 const noGlow = `
 textarea, select, input, button {
@@ -55,59 +38,38 @@ export const injectWebCss = () => {
 
 injectWebCss();
 
-type Idea = {
-  title: string;
-  voted: number;
-};
+const YellowVotes = "#F2C94C";
+const GreyNoVotes = "#DDDDDD";
 
-enum BottomTags {
-  Tip,
-  Oops,
-}
-
-enum ScreenModes {
-  IdeaSubmission,
-  IdeaVoting,
-}
-
-export default function RoomScreen({
+export default function IdeaVoteResultsRoomScreen({
   navigation,
 }: StackScreenProps<RootStackParamList, "Room">) {
   const hmwTitle = "How might we help designers break into web3?";
-  const remainingTime = "4:28";
+  const roomID = "1234";
   const participantsCount = 6;
   const votesLimit = 4;
 
   const goBackHome = () => navigation.navigate("Home");
 
+  const shareRoomOnTwitter = () =>
+    tw({
+      url: `${baseURL}/IdeaVoteResults?roomID=${roomID}`,
+      title: hmwTitle,
+      hashtags: ["#sesh"],
+    });
+
   const [idea, setIdea] = useState<string>("");
   const [ideas, setIdeas] = useState<Idea[]>([
-    { title: "Create figma only hackathons (no code!)", voted: 0 },
-    { title: "Start a podcast featuring designers in web3 ", voted: 0 },
-    { title: "Curate job web3 design job opportunities", voted: 0 },
-    { title: "Curate the best communities for web3 designrs", voted: 0 },
-    { title: "Curate the best communities for web3 desgners", voted: 0 },
-    { title: "Curate the best communities fr web3 designers", voted: 0 },
-    { title: "Crate the best communities for web3 designrs", voted: 0 },
-    { title: "Curate he best communities for web3 desgners", voted: 0 },
-    { title: "Curate the bet communities fr web3 designers", voted: 0 },
+    { title: "Create figma only hackathons (no code!)", votes: 1 },
+    { title: "Start a podcast featuring designers in web3 ", votes: 3 },
+    { title: "Curate job web3 design job opportunities", votes: 2 },
+    { title: "Curate the best communities for web3 designrs", votes: 1 },
+    { title: "Curate the best communities for web3 desgners", votes: 1 },
+    { title: "Curate the best communities fr web3 designers", votes: 4 },
+    { title: "Crate the best communities for web3 designrs", votes: 1 },
+    { title: "Curate he best communities for web3 desgners", votes: 3 },
+    { title: "Curate the bet communities fr web3 designers", votes: 0 },
   ]);
-
-  const [niceJobModalVisible, setNiceJobModalVisible] = useState<boolean>(
-    false
-  );
-
-  const [screenMode, setScreenMode] = useState<ScreenModes>(
-    ScreenModes.IdeaSubmission
-  );
-
-  const hasVotesLimitBeenReached = () => {
-    return ideas.filter((idea) => idea.voted).length >= votesLimit;
-  };
-
-  const deleteIdea = (indexToDelete: number) => {
-    setIdeas(ideas.filter((item, index) => index !== indexToDelete));
-  };
 
   const renderIdea = ({ item, index }: { item: Idea; index: number }) => {
     return (
@@ -115,54 +77,18 @@ export default function RoomScreen({
         <View style={styles.ideaInnerContainer}>
           <Text style={styles.ideaTitle}>{item.title}</Text>
 
-          {screenMode === ScreenModes.IdeaSubmission && (
-            <Pressable onPress={() => deleteIdea(index)}>
-              <Icon
-                type="material-community"
-                name="close"
-                size={20}
-                color={"#AAAAAA"}
-                style={styles.deleteIdeaIcon}
-              />
-            </Pressable>
-          )}
-
-          {screenMode === ScreenModes.IdeaVoting && (
-            <Icon
-              type="material-community"
-              name="star"
-              color={item.voted ? "yellow" : "grey"}
-              onPress={() => {
-                if (hasVotesLimitBeenReached()) return;
-
-                const tmpIdeas = [...ideas];
-                tmpIdeas[index].voted = !tmpIdeas[index].voted;
-                setIdeas(tmpIdeas);
-              }}
-            />
-          )}
-        </View>
-      </View>
-    );
-  };
-
-  const NiceJobModal = () => {
-    if (niceJobModalVisible === false) return null;
-
-    return (
-      <View style={styles.niceJobModalContainer}>
-        <View style={styles.niceJobModalInnerContainer}>
-          <View style={styles.niceJobModalHeaderContainer}>
-            <Text style={styles.niceJobModalHeader}>🤩 Nice job!</Text>
-            <View style={{ flex: 1 }} />
-            <Text style={styles.niceJobModalHeader}>0:03</Text>
+          <View style={styles.ideaVotesLabelContainer}>
+            {item.votes > 0 && (
+              <Text style={styles.ideaVotesLabel}>{item.votes}</Text>
+            )}
           </View>
 
-          <View style={styles.niceJobSubModalHeaderContainer}>
-            <Text style={styles.niceJobSubModalHeader}>
-              Transferring you to the voting room
-            </Text>
-          </View>
+          <Icon
+            type="material-community"
+            name="star"
+            color={item.votes > 0 ? YellowVotes : GreyNoVotes}
+            size={22}
+          />
         </View>
       </View>
     );
@@ -170,90 +96,111 @@ export default function RoomScreen({
 
   return (
     <SafeAreaView style={styles.container}>
-      <NiceJobModal />
-
-      <View style={styles.headerContainer}>
-        <BailButton
-          onPress={goBackHome}
-          participantsCount={participantsCount}
-        />
-
-        <Icon
-          type="material-community"
-          name="music"
-          color={nonSelectedWhite}
-          style={styles.music}
-        />
-
-        <View style={{ flex: 1 }} />
-
-        <View style={styles.timerContainer}>
-          <Text style={styles.timer}>{remainingTime}</Text>
-        </View>
-      </View>
+      {/*<View style={styles.headerContainer}></View>*/}
 
       <View style={styles.bodyContainer}>
         <View style={styles.hmwTitleContainer}>
           <Text style={styles.hmwTitle}>{hmwTitle}</Text>
         </View>
 
-        {screenMode === ScreenModes.IdeaSubmission && (
-          <>
-            <View style={[styles.ideaInputContainer, Shared.inputField]}>
-              <TextInput
-                placeholder="Type your answer here"
-                placeholderTextColor={nonSelectedWhite}
-                style={styles.ideaInput}
-                onChangeText={setIdea}
-                value={idea}
-                maxLength={140}
-              />
-            </View>
-            <View style={styles.tipContainer}>
-              <Text style={styles.tipBox}>TIP</Text>
-              <Text style={styles.tip}>
-                Shoot for 10+ ideas, don't overthink it!
-              </Text>
-            </View>
-            <View style={Shared.buttonContainer}>
-              <Button
-                title={"Save"}
-                buttonStyle={[Shared.button, styles.saveButton]}
-                titleStyle={Shared.buttonTitleStyle}
-                onPress={() => {
-                  setIdeas([{ title: idea, voted: 0 }, ...ideas]);
-                  setIdea("");
-                }}
-              />
-            </View>
-            {ideas.map((item, index) => renderIdea({ item, index }))}
-          </>
-        )}
+        <View style={styles.votingResultsLabelContainer}>
+          <Text style={styles.votingResultsLabel}>🏅 Voting Results</Text>
+        </View>
 
-        {screenMode === ScreenModes.IdeaVoting && (
-          <View style={styles.ideaVotingContainer}>
-            <View style={styles.ideaVotingHeaderContainer}>
-              <Text style={styles.ideaVotingHeader}>
-                You have 4 ⭐️'s available to give, which ideas do you think are
-                most important?
-              </Text>
-            </View>
+        <View style={styles.ideaVotingIdeasContainer}>
+          {ideas
+            .slice()
+            .sort((a, b) => {
+              if (a.votes < b.votes) {
+                return 1;
+              }
+              if (a.votes > b.votes) {
+                return -1;
+              }
+              return 0;
+            })
+            .map((item, index) => renderIdea({ item, index }))}
+        </View>
+      </View>
 
-            <View style={styles.ideaVotingIdeasContainer}>
-              {ideas.map((item, index) => renderIdea({ item, index }))}
-            </View>
+      <View style={styles.footerContainer}>
+        <View style={styles.footerButtonContainer}>
+          <Button
+            title="Exit"
+            buttonStyle={styles.footerExitButton}
+            titleStyle={styles.footerExitButtonTitle}
+            onPress={goBackHome}
+          />
+        </View>
 
-            <View style={styles.ideaVotingFooterContainer}>
-              <Text style={styles.ideaVotingFooterText}>🤯 Am I right??</Text>
-            </View>
-          </View>
-        )}
+        <View style={styles.footerButtonContainer}>
+          <Button
+            title="Tweet"
+            buttonStyle={styles.footerTweetButton}
+            titleStyle={styles.footerTweetButtonTitle}
+            onPress={shareRoomOnTwitter}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  footerExitButtonTitle: {
+    color: blueBackground,
+    fontFamily: "Nunito_700Bold",
+    fontSize: 16,
+  },
+  footerTweetButtonTitle: {
+    color: blueBackground,
+    fontFamily: "Nunito_700Bold",
+    fontSize: 16,
+  },
+  footerExitButton: {
+    backgroundColor: "white",
+    width: "100%",
+  },
+  footerTweetButton: {
+    backgroundColor: "#F2C94C",
+    width: "100%",
+  },
+  footerButtonContainer: {
+    flex: 1,
+    backgroundColor: blueBackground,
+    paddingTop: 25,
+    paddingBottom: 25,
+    paddingRight: 25,
+    paddingLeft: 25,
+  },
+  footerContainer: {
+    width: "100%",
+    position: "fixed",
+    bottom: 0,
+    flexDirection: "row",
+  },
+  votingResultsLabelContainer: {
+    width: "100%",
+    alignItems: "flex-start",
+    justifyContent: "center",
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  votingResultsLabel: {
+    fontFamily: "Nunito_700Bold",
+    fontSize: 18,
+    color: "white",
+  },
+  ideaVotesLabelContainer: {
+    minWidth: 10,
+    marginRight: 2,
+    marginLeft: 10,
+  },
+  ideaVotesLabel: {
+    fontFamily: "Nunito_700Bold",
+    fontSize: 17,
+    color: YellowVotes,
+  },
   deleteIdeaIcon: {
     margin: 10,
     marginRight: 2,
@@ -415,7 +362,7 @@ const styles = StyleSheet.create({
   bodyContainer: {
     paddingRight: defaultScreenPadding,
     paddingLeft: defaultScreenPadding,
-    marginTop: 70,
+    paddingTop: defaultScreenPadding,
   },
   header: {
     fontSize: 24,

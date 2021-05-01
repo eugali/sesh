@@ -61,7 +61,7 @@ injectWebCss();
 const YellowVote = "#F2C94C";
 const PinkVote = "#CAC0F4";
 
-export default function RoomScreen({
+export default function IdeaVotingRoomScreen({
   navigation,
 }: StackScreenProps<RootStackParamList, "Room">) {
   const hmwTitle = "How might we help designers break into web3?";

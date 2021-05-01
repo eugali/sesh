@@ -14463,6 +14463,11 @@ validate-npm-package-name@^3.0.0:
   dependencies:
     builtins "^1.0.3"
 
+vanilla-sharing@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/vanilla-sharing/-/vanilla-sharing-6.1.0.tgz#636cf2175759c9b5ad7eb8752b824a1e063ad5ad"
+  integrity sha512-wZZ8lZ3ykOOOe5h3vOZvRiYYojy9zvRA9Fod7+pnWtzupDqEXnVz9qqnsl1yrcEQQAF8jMyxDtbwb9w3auKbmA==
+
 vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"

@@ -7,3 +7,5 @@ export const firebaseConfig = {
   appId: "1:526817755196:web:11f6e3c174177ed80d8339",
   measurementId: "G-GQN94NFWQT",
 };
+
+export const baseURL = "https://sesh-e5398.web.app";
