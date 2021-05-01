@@ -126,7 +126,12 @@ export default function RoomScreen({
       <View style={styles.headerContainer}>
         <BailButton />
 
-        <Icon type="material-community" name="music" color={nonSelectedWhite} style={styles.music} />
+        <Icon
+          type="material-community"
+          name="music"
+          color={nonSelectedWhite}
+          style={styles.music}
+        />
 
         <View style={{ flex: 1 }} />
 
@@ -277,8 +282,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
   },
-  ideaInputContainer: {
-  },
+  ideaInputContainer: {},
   ideaInput: {
     color: "white",
   },
@@ -345,5 +349,5 @@ const styles = StyleSheet.create({
   music: {
     padding: 5,
     marginLeft: 10,
-  }
+  },
 });

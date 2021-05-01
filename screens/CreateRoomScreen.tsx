@@ -192,8 +192,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
   },
-  enterProblemContextInput: {
-  },
+  enterProblemContextInput: {},
   enterHMWLabel: {
     color: "white",
     fontSize: 18,
@@ -201,8 +200,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
   },
-  enterHMWInput: {
-  },
+  enterHMWInput: {},
   enterHMWContainer: {
     width: "100%",
   },
