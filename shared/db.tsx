@@ -28,7 +28,7 @@ const db = (
     return roomRef.id;
   },
 
-  async joinRoom(roomID) {
+  async joinRoom(roomID: string) {
     await firestore
       .collection(collection)
       .doc(roomID)
@@ -36,7 +36,7 @@ const db = (
       .add({});
   },
 
-  async startRoom(roomID) {
+  async startRoom(roomID: string) {
     let participants = await this.getParticipants(roomID);
     if (participants.length >= minParticipantsCount) {
       await firestore
@@ -55,7 +55,7 @@ const db = (
     }
   },
 
-  async closeRoom(roomID) {
+  async closeRoom(roomID: string) {
     await firestore.collection(collection).doc(roomID).set(
       {
         status: roomState.CLOSED,
@@ -65,7 +65,7 @@ const db = (
     return true;
   },
 
-  async createSolution(roomID, solutionText) {
+  async createSolution(roomID: string, solutionText: string) {
     let solutionRef = await firestore
       .collection(collection)
       .doc(roomID)
@@ -76,7 +76,7 @@ const db = (
     return solutionRef.id;
   },
 
-  async upvote(roomID, solutionID) {
+  async upvote(roomID: string, solutionID) {
     if (!(roomID in this.votes)) {
       this.votes[roomID] = 0;
     }
@@ -97,12 +97,19 @@ const db = (
     }
   },
 
-  async getRoom(roomID) {
-    let room = await firestore.collection(collection).doc(roomID).get();
+  async getRoom(roomID: string) {
+    let room;
+    try {
+      room = await firestore.collection(collection).doc(roomID).get();
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+
     return room.exists ? room.data() : null;
   },
 
-  async getParticipants(roomID) {
+  async getParticipants(roomID: string) {
     let participants = await firestore
       .collection(collection)
       .doc(roomID)
@@ -111,7 +118,7 @@ const db = (
     return participants.docs.map((s) => s.data());
   },
 
-  async getSolutions(roomID) {
+  async getSolutions(roomID: string) {
     let solutions = await firestore
       .collection(collection)
       .doc(roomID)

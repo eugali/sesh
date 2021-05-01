@@ -23,6 +23,7 @@ import {
   screenWidth,
   screenHeight,
 } from "../constants/Layout";
+import { Idea } from "../types";
 
 import BailButton from "../components/BailButton";
 
@@ -55,20 +56,8 @@ export const injectWebCss = () => {
 
 injectWebCss();
 
-type Idea = {
-  title: string;
-  voted: number;
-};
-
-enum BottomTags {
-  Tip,
-  Oops,
-}
-
-enum ScreenModes {
-  IdeaSubmission,
-  IdeaVoting,
-}
+const YellowVote = "#F2C94C";
+const PinkVote = "#CAC0F4";
 
 export default function RoomScreen({
   navigation,
@@ -82,65 +71,77 @@ export default function RoomScreen({
 
   const [idea, setIdea] = useState<string>("");
   const [ideas, setIdeas] = useState<Idea[]>([
-    { title: "Create figma only hackathons (no code!)", voted: 0 },
-    { title: "Start a podcast featuring designers in web3 ", voted: 0 },
-    { title: "Curate job web3 design job opportunities", voted: 0 },
-    { title: "Curate the best communities for web3 designrs", voted: 0 },
-    { title: "Curate the best communities for web3 desgners", voted: 0 },
-    { title: "Curate the best communities fr web3 designers", voted: 0 },
-    { title: "Crate the best communities for web3 designrs", voted: 0 },
-    { title: "Curate he best communities for web3 desgners", voted: 0 },
-    { title: "Curate the bet communities fr web3 designers", voted: 0 },
+    { title: "Create figma only hackathons (no code!)", votes: 0 },
+    { title: "Start a podcast featuring designers in web3 ", votes: 0 },
+    { title: "Curate job web3 design job opportunities", votes: 0 },
+    { title: "Curate the best communities for web3 designrs", votes: 0 },
+    { title: "Curate the best communities for web3 desgners", votes: 0 },
+    { title: "Curate the best communities fr web3 designers", votes: 0 },
+    { title: "Crate the best communities for web3 designrs", votes: 0 },
+    { title: "Curate he best communities for web3 desgners", votes: 0 },
+    { title: "Curate the bet communities fr web3 designers", votes: 0 },
   ]);
 
   const [niceJobModalVisible, setNiceJobModalVisible] = useState<boolean>(
     false
   );
 
-  const [screenMode, setScreenMode] = useState<ScreenModes>(
-    ScreenModes.IdeaSubmission
-  );
-
   const hasVotesLimitBeenReached = () => {
-    return ideas.filter((idea) => idea.voted).length >= votesLimit;
+    return (
+      ideas.map((idea) => idea.votes).reduce((a: number, b) => a + b, 0) >=
+      votesLimit
+    );
   };
 
-  const deleteIdea = (indexToDelete: number) => {
-    setIdeas(ideas.filter((item, index) => index !== indexToDelete));
+  const voteUp = (index) => {
+    if (hasVotesLimitBeenReached()) return;
+
+    const tmpIdeas = [...ideas];
+    tmpIdeas[index].votes += 1;
+    setIdeas(tmpIdeas);
+  };
+
+  const voteDown = (index) => {
+    const tmpIdeas = [...ideas];
+    if (tmpIdeas[index].votes > 0) {
+      tmpIdeas[index].votes -= 1;
+    }
+    setIdeas(tmpIdeas);
   };
 
   const renderIdea = ({ item, index }: { item: Idea; index: number }) => {
     return (
-      <View style={styles.ideaContainer} key={index}>
-        <View style={styles.ideaInnerContainer}>
-          <Text style={styles.ideaTitle}>{item.title}</Text>
-
-          {screenMode === ScreenModes.IdeaSubmission && (
-            <Pressable onPress={() => deleteIdea(index)}>
-              <Icon
-                type="material-community"
-                name="close"
-                size={20}
-                color={"#AAAAAA"}
-                style={styles.deleteIdeaIcon}
-              />
-            </Pressable>
-          )}
-
-          {screenMode === ScreenModes.IdeaVoting && (
+      <View style={styles.ideaRowContainer}>
+        <View style={styles.ideaContainer} key={index}>
+          <View style={styles.ideaInnerContainer}>
+            <Text style={styles.ideaTitle}>{item.title}</Text>
+          </View>
+        </View>
+        <View style={styles.ideaVoteControlsContainer}>
+          <Pressable onPress={() => voteUp(index)}>
             <Icon
               type="material-community"
-              name="star"
-              color={item.voted ? "yellow" : "grey"}
-              onPress={() => {
-                if (hasVotesLimitBeenReached()) return;
-
-                const tmpIdeas = [...ideas];
-                tmpIdeas[index].voted = !tmpIdeas[index].voted;
-                setIdeas(tmpIdeas);
-              }}
+              name="star-circle-outline"
+              size={24}
+              color={item.votes > 0 ? YellowVote : PinkVote}
             />
-          )}
+          </Pressable>
+          <Text
+            style={[
+              styles.votesLabel,
+              { color: item.votes > 0 ? YellowVote : PinkVote },
+            ]}
+          >
+            {item.votes}
+          </Text>
+          <Pressable onPress={() => voteDown(index)}>
+            <Icon
+              type="material-community"
+              name="minus-circle-outline"
+              size={24}
+              color={PinkVote}
+            />
+          </Pressable>
         </View>
       </View>
     );
@@ -197,63 +198,36 @@ export default function RoomScreen({
           <Text style={styles.hmwTitle}>{hmwTitle}</Text>
         </View>
 
-        {screenMode === ScreenModes.IdeaSubmission && (
-          <>
-            <View style={[styles.ideaInputContainer, Shared.inputField]}>
-              <TextInput
-                placeholder="Type your answer here"
-                placeholderTextColor={nonSelectedWhite}
-                style={styles.ideaInput}
-                onChangeText={setIdea}
-                value={idea}
-                maxLength={140}
-              />
-            </View>
-            <View style={styles.tipContainer}>
-              <Text style={styles.tipBox}>TIP</Text>
-              <Text style={styles.tip}>
-                Shoot for 10+ ideas, don't overthink it!
-              </Text>
-            </View>
-            <View style={Shared.buttonContainer}>
-              <Button
-                title={"Save"}
-                buttonStyle={[Shared.button, styles.saveButton]}
-                titleStyle={Shared.buttonTitleStyle}
-                onPress={() => {
-                  setIdeas([{ title: idea, voted: 0 }, ...ideas]);
-                  setIdea("");
-                }}
-              />
-            </View>
-            {ideas.map((item, index) => renderIdea({ item, index }))}
-          </>
-        )}
-
-        {screenMode === ScreenModes.IdeaVoting && (
-          <View style={styles.ideaVotingContainer}>
-            <View style={styles.ideaVotingHeaderContainer}>
-              <Text style={styles.ideaVotingHeader}>
-                You have 4 ⭐️'s available to give, which ideas do you think are
-                most important?
-              </Text>
-            </View>
-
-            <View style={styles.ideaVotingIdeasContainer}>
-              {ideas.map((item, index) => renderIdea({ item, index }))}
-            </View>
-
-            <View style={styles.ideaVotingFooterContainer}>
-              <Text style={styles.ideaVotingFooterText}>🤯 Am I right??</Text>
-            </View>
+        <View style={styles.ideaVotingContainer}>
+          <View style={styles.ideaVotingHeaderContainer}>
+            <Text style={styles.ideaVotingHeader}>
+              Take a deep breath while the others wrap up
+            </Text>
           </View>
-        )}
+
+          <View style={styles.ideaVotingIdeasContainer}>
+            {ideas.map((item, index) => renderIdea({ item, index }))}
+          </View>
+        </View>
       </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  votesLabel: {
+    color: PinkVote,
+    fontFamily: "Nunito_700Bold",
+    fontSize: 15,
+  },
+  ideaRowContainer: {
+    flexDirection: "row",
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingRight: 20,
+    paddingLeft: 20,
+  },
   deleteIdeaIcon: {
     margin: 10,
     marginRight: 2,
@@ -291,8 +265,7 @@ const styles = StyleSheet.create({
   },
   ideaVotingHeaderContainer: {
     width: "100%",
-    paddingRight: 20,
-    paddingLeft: 20,
+    marginBottom: 30,
   },
   ideaVotingHeader: {
     color: "white",
@@ -328,12 +301,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
   },
+  ideaVoteControlsContainer: {
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    height: "100%",
+    marginRight: 4,
+    marginLeft: 4,
+  },
   ideaContainer: {
     ...Shared.blockItem,
     width: "100%",
-    alignItems: "flex-start",
-
-    justifyContent: "center",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    flexDirection: "row",
   },
   ideaInnerContainer: {
     width: "100%",

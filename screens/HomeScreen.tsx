@@ -1,6 +1,6 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   StyleSheet,
   Text,
@@ -12,7 +12,7 @@ import {
   Pressable,
 } from "react-native";
 import { Button, Icon, Switch } from "react-native-elements";
-
+import { useFocusEffect } from "@react-navigation/native";
 import {
   paddings,
   margins,
@@ -31,45 +31,69 @@ import { defaultScreenPadding } from "../constants/Layout";
 import Shared from "../constants/Shared";
 
 import dbInstance from "../shared/dbInstance";
-
-enum HomeTabs {
-  JoinRoom,
-  CreateRoom,
-}
+import { roomState } from "../constants/Enums";
+import { createIconSetFromFontello } from "react-native-vector-icons";
 
 const mockData = [
   {
     title: "How might we ...",
+    roomID: "yJEBZxgLYO86RFblJuLC",
   },
   {
     title: "How might we ...",
+    roomID: "yJEBZxgLYO86RFblJuLC",
   },
   {
     title: "How might we ...",
-  },
-  {
-    title: "How might we ...",
+    roomID: "yJEBZxgLYO86RFblJuLC",
   },
 ];
 
 export default function HomeScreen({
   navigation,
 }: StackScreenProps<RootStackParamList, "Home">) {
-  const [currentTab, setCurrentTab] = useState(HomeTabs.JoinRoom);
-  const [isNewRoomPublic, setIsNewRoomPublic] = useState(true);
+  //const [currentTab, setCurrentTab] = useState(HomeTabs.JoinRoom);
+  //const [isNewRoomPublic, setIsNewRoomPublic] = useState(true);
 
   //yJEBZxgLYO86RFblJuLC room id to test
-  const [joinRoomID, setJoinRoomId] = useState<string>("");
-  const joinRoom = () => {
-    if (joinRoomID.length === 0) return;
+  const [joinRoomID, setJoinRoomID] = useState<string>("");
 
-    navigation.navigate("WaitingRoom", { joinRoomID });
+  useFocusEffect(
+    useCallback(() => {
+      setJoinRoomID("");
+    }, [])
+  );
+
+  // 4ZEXSCrhywDBX2DUdRN3
+
+  const joinRoom = async (roomID: string) => {
+    if (roomID.length === 0) return;
+
+    const room = await dbInstance.getRoom(roomID);
+
+    if (room === null) {
+      // TODO - alert
+      return;
+    }
+
+    if (room.status === roomState.CLOSED) {
+      // TODO - the closed room should show the results
+    }
+
+    if (room.status === roomState.WAITING) {
+      navigation.navigate("WaitingRoom", { roomID });
+    }
+
+    if (room.status === roomState.ACTIVE) {
+      navigation.navigate("Room", { roomID });
+    }
   };
+
   const createRoom = () => navigation.navigate("CreateRoom");
 
   const renderAvailableRoom = ({ item }) => {
     return (
-      <Pressable onPress={joinRoom}>
+      <Pressable onPress={() => joinRoom(item.roomID)}>
         <View style={styles.availableRoomRowContainer}>
           <View style={styles.availableRoomRowInnerContainer}>
             <Text style={styles.availableRoomRowTitle}>{item.title}</Text>
@@ -91,17 +115,6 @@ export default function HomeScreen({
         </Text>
       </View>
 
-      {/*
-        <View style={styles.roomTabsContainer}>
-          <Pressable onPress={() => setCurrentTab(HomeTabs.JoinRoom)}>
-            <Text style={[styles.roomTab, { color: currentTab === HomeTabs.JoinRoom ? 'white' : nonSelectedWhite }]}>Join Room</Text>
-          </Pressable>
-          <Pressable onPress={() => setCurrentTab(HomeTabs.CreateRoom)}>
-            <Text style={[styles.roomTab, { color: currentTab === HomeTabs.CreateRoom ? 'white' : nonSelectedWhite }]}>Create Room</Text>
-          </Pressable>
-        </View>
-        */}
-
       <View style={Shared.buttonContainer}>
         <Button
           title="Create Room"
@@ -117,7 +130,7 @@ export default function HomeScreen({
             style={styles.joinRoomInputContainer}
             placeholder={"Type room code here"}
             value={joinRoomID}
-            onChangeText={setJoinRoomId}
+            onChangeText={setJoinRoomID}
           />
 
           <Icon
@@ -141,40 +154,6 @@ export default function HomeScreen({
           style={styles.availableRoomsFlatList}
         />
       </View>
-
-      {/*
-          currentTab === HomeTabs.CreateRoom && (
-            <View>
-
-              <View style={styles.createRoomActionsContainer}>
-                <View style={styles.createRoomPublicSwitchContainer}>
-
-                  <Switch color='blue' value={isNewRoomPublic} onValueChange={() => setIsNewRoomPublic(!isNewRoomPublic)} />
-                  <Text style={styles.createRoomPublicLabel}>Public</Text>
-                </View>
-
-                <View style={styles.buttonContainer}>
-                  <Icon
-                    type='material-community'
-                    name='arrow-right-circle-outline'
-                    size={30}
-                    color='white'
-                    onPress={createRoom}
-                  />
-                </View>
-              </View>
-
-              {
-                isNewRoomPublic && (
-                  <View style={styles.createRoomSubLabelContainer}>
-                    <Text style={styles.createRoomSubLabel}>Your room will be listed publicly for anyone to join</Text>
-                  </View>
-                )
-              }
-
-            </View>
-          )
-          */}
     </SafeAreaView>
   );
 }
@@ -315,6 +294,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     justifyContent: "center",
+    alignItems: "center",
     marginTop: 20,
     marginBottom: 20,
   },

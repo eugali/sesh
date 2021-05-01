@@ -16,6 +16,9 @@ import HomeScreen from "../screens/HomeScreen";
 import CreateRoomScreen from "../screens/CreateRoomScreen";
 import WaitingRoomScreen from "../screens/WaitingRoomScreen";
 import RoomScreen from "../screens/RoomScreen";
+import IdeaSubmissionRoomScreen from "../screens/IdeaSubmissionRoomScreen";
+import IdeaVotingRoomScreen from "../screens/IdeaVotingRoomScreen";
+import IdeaVoteResultsRoomScreen from "../screens/IdeaVoteResultsRoomScreen";
 import { RootStackParamList } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 
@@ -41,7 +44,11 @@ const Stack = createStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Room" component={RoomScreen} />
+      <Stack.Screen name="IdeaVotingRoom" component={IdeaVotingRoomScreen} />
+      <Stack.Screen
+        name="IdeaSubmissionRoom"
+        component={IdeaSubmissionRoomScreen}
+      />
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="WaitingRoom" component={WaitingRoomScreen} />
       <Stack.Screen name="CreateRoom" component={CreateRoomScreen} />

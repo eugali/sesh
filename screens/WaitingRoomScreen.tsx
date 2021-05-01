@@ -29,15 +29,17 @@ import { defaultScreenPadding } from "../constants/Layout";
 import BailButton from "../components/BailButton";
 
 export default function WaitingRoomScreen({
+  route,
   navigation,
 }: StackScreenProps<RootStackParamList, "WaitingRoom">) {
-  const hmwTitle = "How might we make college less expensive";
   const participantsCount = 4;
-  const currentRoomId = "https://whateverwhatever.com/123123123456456456";
+  const roomID = route.params.roomID;
   const hmwContent =
     "Tuition inflation has risen at a faster rate than the cost of medical service, child care, and housing. While generous...";
 
   const goBackHome = () => navigation.navigate("Home");
+
+  const [hmwTitle, setHmwTitle] = useState<string>("");
 
   return (
     <SafeAreaView style={styles.container}>
@@ -76,7 +78,7 @@ export default function WaitingRoomScreen({
           title={"Copy Link"}
           buttonStyle={styles.copyLinkBottomButton}
           titleStyle={styles.copyLinkBottomButtonTitle}
-          onPress={() => Clipboard.setString(currentRoomId)}
+          onPress={() => Clipboard.setString(roomID)}
         />
       </View>
 

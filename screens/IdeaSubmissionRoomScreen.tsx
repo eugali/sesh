@@ -14,6 +14,7 @@ import {
   Platform,
 } from "react-native";
 import { Button, Icon, Switch } from "react-native-elements";
+import { Idea } from "../types";
 
 import {
   defaultScreenPadding,
@@ -55,11 +56,6 @@ export const injectWebCss = () => {
 
 injectWebCss();
 
-type Idea = {
-  title: string;
-  voted: number;
-};
-
 enum BottomTags {
   Tip,
   Oops,
@@ -82,28 +78,20 @@ export default function RoomScreen({
 
   const [idea, setIdea] = useState<string>("");
   const [ideas, setIdeas] = useState<Idea[]>([
-    { title: "Create figma only hackathons (no code!)", voted: 0 },
-    { title: "Start a podcast featuring designers in web3 ", voted: 0 },
-    { title: "Curate job web3 design job opportunities", voted: 0 },
-    { title: "Curate the best communities for web3 designrs", voted: 0 },
-    { title: "Curate the best communities for web3 desgners", voted: 0 },
-    { title: "Curate the best communities fr web3 designers", voted: 0 },
-    { title: "Crate the best communities for web3 designrs", voted: 0 },
-    { title: "Curate he best communities for web3 desgners", voted: 0 },
-    { title: "Curate the bet communities fr web3 designers", voted: 0 },
+    { title: "Create figma only hackathons (no code!)" },
+    { title: "Start a podcast featuring designers in web3 " },
+    { title: "Curate job web3 design job opportunities" },
+    { title: "Curate the best communities for web3 designrs" },
+    { title: "Curate the best communities for web3 desgners" },
+    { title: "Curate the best communities fr web3 designers" },
+    { title: "Crate the best communities for web3 designrs" },
+    { title: "Curate he best communities for web3 desgners" },
+    { title: "Curate the bet communities fr web3 designers" },
   ]);
 
   const [niceJobModalVisible, setNiceJobModalVisible] = useState<boolean>(
     false
   );
-
-  const [screenMode, setScreenMode] = useState<ScreenModes>(
-    ScreenModes.IdeaSubmission
-  );
-
-  const hasVotesLimitBeenReached = () => {
-    return ideas.filter((idea) => idea.voted).length >= votesLimit;
-  };
 
   const deleteIdea = (indexToDelete: number) => {
     setIdeas(ideas.filter((item, index) => index !== indexToDelete));
@@ -115,32 +103,15 @@ export default function RoomScreen({
         <View style={styles.ideaInnerContainer}>
           <Text style={styles.ideaTitle}>{item.title}</Text>
 
-          {screenMode === ScreenModes.IdeaSubmission && (
-            <Pressable onPress={() => deleteIdea(index)}>
-              <Icon
-                type="material-community"
-                name="close"
-                size={20}
-                color={"#AAAAAA"}
-                style={styles.deleteIdeaIcon}
-              />
-            </Pressable>
-          )}
-
-          {screenMode === ScreenModes.IdeaVoting && (
+          <Pressable onPress={() => deleteIdea(index)}>
             <Icon
               type="material-community"
-              name="star"
-              color={item.voted ? "yellow" : "grey"}
-              onPress={() => {
-                if (hasVotesLimitBeenReached()) return;
-
-                const tmpIdeas = [...ideas];
-                tmpIdeas[index].voted = !tmpIdeas[index].voted;
-                setIdeas(tmpIdeas);
-              }}
+              name="close"
+              size={20}
+              color={"#AAAAAA"}
+              style={styles.deleteIdeaIcon}
             />
-          )}
+          </Pressable>
         </View>
       </View>
     );
@@ -197,57 +168,34 @@ export default function RoomScreen({
           <Text style={styles.hmwTitle}>{hmwTitle}</Text>
         </View>
 
-        {screenMode === ScreenModes.IdeaSubmission && (
-          <>
-            <View style={[styles.ideaInputContainer, Shared.inputField]}>
-              <TextInput
-                placeholder="Type your answer here"
-                placeholderTextColor={nonSelectedWhite}
-                style={styles.ideaInput}
-                onChangeText={setIdea}
-                value={idea}
-                maxLength={140}
-              />
-            </View>
-            <View style={styles.tipContainer}>
-              <Text style={styles.tipBox}>TIP</Text>
-              <Text style={styles.tip}>
-                Shoot for 10+ ideas, don't overthink it!
-              </Text>
-            </View>
-            <View style={Shared.buttonContainer}>
-              <Button
-                title={"Save"}
-                buttonStyle={[Shared.button, styles.saveButton]}
-                titleStyle={Shared.buttonTitleStyle}
-                onPress={() => {
-                  setIdeas([{ title: idea, voted: 0 }, ...ideas]);
-                  setIdea("");
-                }}
-              />
-            </View>
-            {ideas.map((item, index) => renderIdea({ item, index }))}
-          </>
-        )}
-
-        {screenMode === ScreenModes.IdeaVoting && (
-          <View style={styles.ideaVotingContainer}>
-            <View style={styles.ideaVotingHeaderContainer}>
-              <Text style={styles.ideaVotingHeader}>
-                You have 4 ⭐️'s available to give, which ideas do you think are
-                most important?
-              </Text>
-            </View>
-
-            <View style={styles.ideaVotingIdeasContainer}>
-              {ideas.map((item, index) => renderIdea({ item, index }))}
-            </View>
-
-            <View style={styles.ideaVotingFooterContainer}>
-              <Text style={styles.ideaVotingFooterText}>🤯 Am I right??</Text>
-            </View>
-          </View>
-        )}
+        <View style={[styles.ideaInputContainer, Shared.inputField]}>
+          <TextInput
+            placeholder="Type your answer here"
+            placeholderTextColor={nonSelectedWhite}
+            style={styles.ideaInput}
+            onChangeText={setIdea}
+            value={idea}
+            maxLength={140}
+          />
+        </View>
+        <View style={styles.tipContainer}>
+          <Text style={styles.tipBox}>TIP</Text>
+          <Text style={styles.tip}>
+            Shoot for 10+ ideas, don't overthink it!
+          </Text>
+        </View>
+        <View style={Shared.buttonContainer}>
+          <Button
+            title={"Save"}
+            buttonStyle={[Shared.button, styles.saveButton]}
+            titleStyle={Shared.buttonTitleStyle}
+            onPress={() => {
+              setIdeas([{ title: idea }, ...ideas]);
+              setIdea("");
+            }}
+          />
+        </View>
+        {ideas.map((item, index) => renderIdea({ item, index }))}
       </View>
     </SafeAreaView>
   );

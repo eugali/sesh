@@ -8,10 +8,15 @@ export type RootStackParamList = {
   NotFound: undefined;
   Home: undefined;
   CreateRoom: undefined;
-  WaitingRoom: {
-    joinRoomID: string;
+  IdeaVotingRoom: {
+    roomID: string;
   };
-  Room: undefined;
+  IdeaSubmissionRoom: {
+    roomID: string;
+  };
+  WaitingRoom: {
+    roomID: string;
+  };
 };
 
 export type BottomTabParamList = {
@@ -25,4 +30,9 @@ export type TabOneParamList = {
 
 export type TabTwoParamList = {
   TabTwoScreen: undefined;
+};
+
+export type Idea = {
+  title: string;
+  votes?: number;
 };

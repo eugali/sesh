@@ -41,16 +41,15 @@ export default function CreateRoomScreen({
   const [isNewRoomPublic, setIsNewRoomPublic] = useState<boolean>(false);
   const [HMWStatement, setHMWStatement] = useState<string>("");
   const [problemDescription, setProblemDescription] = useState<string>("");
-  const [roomId, setRoomId] = useState<string>("");
 
   const createRoom = async () => {
-    const roomId = await dbInstance.createRoom(
+    const roomID = await dbInstance.createRoom(
       HMWStatement,
       problemDescription,
       !isNewRoomPublic
     );
-    setRoomId(roomId);
-    console.log(roomId);
+    navigation.navigate("WaitingRoom", { roomID });
+    console.log(roomID);
   };
 
   return (
