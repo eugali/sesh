@@ -42,10 +42,11 @@ const YellowVotes = "#F2C94C";
 const GreyNoVotes = "#DDDDDD";
 
 export default function IdeaVoteResultsRoomScreen({
+  route,
   navigation,
-}: StackScreenProps<RootStackParamList, "Room">) {
+}: StackScreenProps<RootStackParamList, "IdeaVoteResultsRoom">) {
   const hmwTitle = "How might we help designers break into web3?";
-  const roomID = "1234";
+  const roomID = route?.params?.roomID;
   const participantsCount = 6;
   const votesLimit = 4;
 
@@ -53,7 +54,7 @@ export default function IdeaVoteResultsRoomScreen({
 
   const shareRoomOnTwitter = () =>
     tw({
-      url: `${baseURL}/IdeaVoteResults?roomID=${roomID}`,
+      url: `${baseURL}/Home?roomID=${roomID}`,
       title: hmwTitle,
       hashtags: ["#sesh"],
     });

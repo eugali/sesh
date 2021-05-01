@@ -6,7 +6,7 @@ const solutionsSubCollectionName = "Solutions";
 const participantsSubCollectionName = "Participants";
 const votesSubCollectionName = "Votes";
 const maxVoteCount = 4;
-const minParticipantsCount = 20;
+const minParticipantsCount = 1; // TODO bring it to 20
 
 const db = (
   firestore,

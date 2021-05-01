@@ -32,6 +32,8 @@ import BailButton from "../components/BailButton";
 import { RootStackParamList } from "../types";
 import { blueBackground, nonSelectedWhite, white50 } from "../constants/Colors";
 import Shared from "../constants/Shared";
+import dbInstance from "../shared/dbInstance";
+import { SubmissionDuration } from "../constants/Config";
 
 const noGlow = `
 textarea, select, input, button {
@@ -58,57 +60,51 @@ export const injectWebCss = () => {
 
 injectWebCss();
 
-enum BottomTags {
-  Tip,
-  Oops,
-}
-
 export default function IdeaSubmissionRoomScreen({
+  route,
   navigation,
 }: StackScreenProps<RootStackParamList, "Room">) {
-  const hmwTitle = "How might we help designers break into web3?";
-  const remainingTime = "4:28";
-  const participantsCount = 6;
-  const votesLimit = 4;
-  const roomVotingStartTimestamp = moment().add(5, "minutes").valueOf();
-
-  const goBackHome = () => navigation.navigate("Home");
-
-  const {
-    seconds,
-    minutes,
-    hours,
-    days,
-    isRunning,
-    start,
-    pause,
-    resume,
-    restart,
-  } = useTimer({
-    roomVotingStartTimestamp,
-    onExpire: () => console.warn("onExpire called"),
-  });
-
-  useEffect(() => {
-    restart(roomVotingStartTimestamp);
-  }, []);
-
-  const [idea, setIdea] = useState<string>("");
-  const [ideas, setIdeas] = useState<Idea[]>([
-    { title: "Create figma only hackathons (no code!)" },
-    { title: "Start a podcast featuring designers in web3 " },
-    { title: "Curate job web3 design job opportunities" },
-    { title: "Curate the best communities for web3 designrs" },
-    { title: "Curate the best communities for web3 desgners" },
-    { title: "Curate the best communities fr web3 designers" },
-    { title: "Crate the best communities for web3 designrs" },
-    { title: "Curate he best communities for web3 desgners" },
-    { title: "Curate the bet communities fr web3 designers" },
-  ]);
-
+  const roomID = route?.params?.roomID;
+  const [hmwTitle, setHmwTitle] = useState<string>("");
+  const [participantsCount, setParticipantsCount] = useState<string>("");
   const [niceJobModalVisible, setNiceJobModalVisible] = useState<boolean>(
     false
   );
+  const [idea, setIdea] = useState<string>("");
+  const [ideas, setIdeas] = useState<Idea[]>([]);
+
+  const votesLimit = 4;
+
+  const goBackHome = () => navigation.navigate("Home");
+
+  const onTimerExpired = async () => {
+    // submit ideas
+    navigation.navigate("IdeaVotingRoom", { roomID });
+  };
+
+  const initialTimestamp = Date.now() + 100000;
+
+  const { seconds, minutes, restart } = useTimer({
+    initialTimestamp,
+    onExpire: onTimerExpired,
+  });
+
+  useEffect(() => {
+    (async () => {
+      const room = await dbInstance.getRoom(roomID);
+
+      if (room === null) {
+        navigation.navigate("Home");
+        return;
+      }
+
+      const participantsCount = await dbInstance.getParticipants(roomID);
+      setHmwTitle(room.question);
+      setParticipantsCount(participantsCount.length.toString());
+
+      restart(room.startedAt + SubmissionDuration);
+    })();
+  }, []);
 
   const deleteIdea = (indexToDelete: number) => {
     setIdeas(ideas.filter((item, index) => index !== indexToDelete));
@@ -399,6 +395,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     backgroundColor: blueBackground,
     fontFamily: "Nunito_700Bold",
+    maxWidth: 600,
   },
   music: {
     padding: 5,

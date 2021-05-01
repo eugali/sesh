@@ -45,15 +45,16 @@ function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen
-        name="IdeaVoteResults"
-        component={IdeaVoteResultsRoomScreen}
-      />
-      <Stack.Screen name="IdeaVotingRoom" component={IdeaVotingRoomScreen} />
-      <Stack.Screen
         name="IdeaSubmissionRoom"
         component={IdeaSubmissionRoomScreen}
       />
       <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen
+        name="IdeaVoteResults"
+        component={IdeaVoteResultsRoomScreen}
+      />
+      <Stack.Screen name="IdeaVotingRoom" component={IdeaVotingRoomScreen} />
+
       <Stack.Screen name="WaitingRoom" component={WaitingRoomScreen} />
       <Stack.Screen name="CreateRoom" component={CreateRoomScreen} />
     </Stack.Navigator>

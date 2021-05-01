@@ -68,7 +68,7 @@ const PinkVote = "#CAC0F4";
 
 export default function IdeaVotingRoomScreen({
   navigation,
-}: StackScreenProps<RootStackParamList, "Room">) {
+}: StackScreenProps<RootStackParamList, "IdeaVotingRoom">) {
   const hmwTitle = "How might we help designers break into web3?";
   const roomVotingStartTimestamp = moment().add(5, "minutes").valueOf();
   const participantsCount = 6;

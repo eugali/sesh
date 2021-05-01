@@ -6,7 +6,9 @@
 export type RootStackParamList = {
   Root: undefined;
   NotFound: undefined;
-  Home: undefined;
+  Home: {
+    roomID: string;
+  };
   CreateRoom: undefined;
   IdeaVotingRoom: {
     roomID: string;

@@ -1,6 +1,6 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -27,19 +27,51 @@ import { RootStackParamList } from "../types";
 import { blueBackground, white50, white30 } from "../constants/Colors";
 import { defaultScreenPadding } from "../constants/Layout";
 import BailButton from "../components/BailButton";
+import dbInstance from "../shared/dbInstance";
+import {
+  isRoomInIdeaSubmissionPhase,
+  isRoomInIdeaVotingPhase,
+  isRoomInWaitingPhase,
+  isRoomInVoteResultsPhase,
+} from "../shared/roomUtils";
+import { roomState } from "../constants/Enums";
 
 export default function WaitingRoomScreen({
   route,
   navigation,
 }: StackScreenProps<RootStackParamList, "WaitingRoom">) {
-  const participantsCount = 4;
   const roomID = route.params.roomID;
-  const hmwContent =
-    "Tuition inflation has risen at a faster rate than the cost of medical service, child care, and housing. While generous...";
 
   const goBackHome = () => navigation.navigate("Home");
 
   const [hmwTitle, setHmwTitle] = useState<string>("");
+  const [hmwContent, setHmwContent] = useState<string>("");
+  const [participantsCount, setParticipantsCount] = useState<string>("");
+
+  const startRoom = async () => {
+    const success = await dbInstance.startRoom(roomID);
+    if (success) {
+      navigation.navigate("IdeaSubmissionRoom", { roomID });
+    } else {
+      // TODO put an alert that says that there's no enough participants
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      const room = await dbInstance.getRoom(roomID);
+
+      if (room === null) {
+        navigation.navigate("Home");
+        return;
+      }
+
+      const participantsCount = await dbInstance.getParticipants(roomID);
+      setHmwTitle(room.question);
+      setHmwContent(room.problemStatement);
+      setParticipantsCount(participantsCount.length.toString());
+    })();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -78,7 +110,11 @@ export default function WaitingRoomScreen({
           title={"Copy Link"}
           buttonStyle={styles.copyLinkBottomButton}
           titleStyle={styles.copyLinkBottomButtonTitle}
-          onPress={() => Clipboard.setString(roomID)}
+          onPress={() =>
+            Clipboard.setString(
+              `https://sesh-e5398.web.app/Home?roomID=${roomID}`
+            )
+          }
         />
       </View>
 
@@ -87,7 +123,7 @@ export default function WaitingRoomScreen({
           title={"Start Room"}
           buttonStyle={styles.startRoomBottomButton}
           titleStyle={styles.startRoomBottomButtonTitle}
-          onPress={() => console.log("start the room")}
+          onPress={startRoom}
         />
       </View>
 

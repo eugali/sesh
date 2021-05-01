@@ -33,6 +33,10 @@ import Shared from "../constants/Shared";
 import dbInstance from "../shared/dbInstance";
 import { roomState } from "../constants/Enums";
 import { createIconSetFromFontello } from "react-native-vector-icons";
+import {
+  isRoomInIdeaSubmissionPhase,
+  isRoomInIdeaVotingPhase,
+} from "../shared/roomUtils";
 
 const mockData = [
   {
@@ -50,12 +54,11 @@ const mockData = [
 ];
 
 export default function HomeScreen({
+  route,
   navigation,
 }: StackScreenProps<RootStackParamList, "Home">) {
-  //const [currentTab, setCurrentTab] = useState(HomeTabs.JoinRoom);
-  //const [isNewRoomPublic, setIsNewRoomPublic] = useState(true);
-
   //yJEBZxgLYO86RFblJuLC room id to test
+
   const [joinRoomID, setJoinRoomID] = useState<string>("");
 
   useFocusEffect(
@@ -67,8 +70,6 @@ export default function HomeScreen({
   // 4ZEXSCrhywDBX2DUdRN3
 
   const joinRoom = async (roomID: string) => {
-    if (roomID.length === 0) return;
-
     const room = await dbInstance.getRoom(roomID);
 
     if (room === null) {
@@ -77,17 +78,50 @@ export default function HomeScreen({
     }
 
     if (room.status === roomState.CLOSED) {
-      // TODO - the closed room should show the results
+      navigation.navigate("IdeaVoteResults", { roomID });
+      return;
     }
 
     if (room.status === roomState.WAITING) {
+      await dbInstance.joinRoom(roomID);
       navigation.navigate("WaitingRoom", { roomID });
     }
 
     if (room.status === roomState.ACTIVE) {
-      navigation.navigate("Room", { roomID });
+      // idea submission phase
+      const roomInIdeaSubmissionPhase = await isRoomInIdeaSubmissionPhase(
+        roomID
+      );
+
+      if (roomInIdeaSubmissionPhase) {
+        await dbInstance.joinRoom(roomID);
+        navigation.navigate("IdeaSubmissionRoom", { roomID });
+        return;
+      }
+
+      const roomInIdeaVotingPhase = await isRoomInIdeaVotingPhase(roomID);
+
+      // idea voting phase
+      if (roomInIdeaVotingPhase) {
+        await dbInstance.joinRoom(roomID);
+        navigation.navigate("IdeaVotingRoom", { roomID });
+        return;
+      }
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const roomID = urlParams.get("roomID");
+
+      if (roomID !== null) {
+        // redirect to the proper room
+
+        joinRoom(roomID);
+      }
+    })();
+  }, []);
 
   const createRoom = () => navigation.navigate("CreateRoom");
 
@@ -139,7 +173,7 @@ export default function HomeScreen({
                 name="arrow-right-circle-outline"
                 size={30}
                 color="white"
-                onPress={joinRoom}
+                onPress={() => joinRoom(joinRoomID)}
               />
             </View>
           </View>
@@ -325,6 +359,7 @@ const styles = StyleSheet.create({
     paddingTop: defaultScreenPadding,
   },
   bodyContainer: {
-    width: 600,
+    maxWidth: 600,
+    height: "100%",
   },
 });

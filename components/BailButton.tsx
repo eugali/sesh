@@ -6,7 +6,7 @@ import { Icon } from "react-native-elements";
 
 type Props = {
   onPress: () => any;
-  participantsCount: number;
+  participantsCount: string;
 };
 
 const BailButton = ({ onPress, participantsCount }: Props) => {

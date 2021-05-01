@@ -4,6 +4,8 @@ import "firebase/firestore";
 import { firebaseConfig } from "../constants/Config";
 
 firebase.initializeApp(firebaseConfig);
-const dbInstance = Object.freeze(db(firebase.firestore()));
+console.log("Firebase initialized");
+const dbInstance = db(firebase.firestore());
+console.log("Firebase instance created");
 
 export default dbInstance;
