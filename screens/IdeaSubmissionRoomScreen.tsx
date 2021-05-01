@@ -114,6 +114,11 @@ export default function IdeaSubmissionRoomScreen({
     setIdeas(ideas.filter((item, index) => index !== indexToDelete));
   };
 
+  const submitIdea = () => {
+    setIdeas([{ title: idea }, ...ideas]);
+    setIdea("");
+  };
+
   const renderIdea = ({ item, index }: { item: Idea; index: number }) => {
     return (
       <View style={styles.ideaContainer} key={index}>
@@ -192,6 +197,8 @@ export default function IdeaSubmissionRoomScreen({
             placeholder="Type your answer here"
             placeholderTextColor={nonSelectedWhite}
             style={styles.ideaInput}
+            onSubmitEditing={() => submitIdea()}
+            blurOnSubmit={false}
             onChangeText={setIdea}
             value={idea}
             maxLength={140}
@@ -208,10 +215,7 @@ export default function IdeaSubmissionRoomScreen({
             title={"Save"}
             buttonStyle={[Shared.button, styles.saveButton]}
             titleStyle={Shared.buttonTitleStyle}
-            onPress={() => {
-              setIdeas([{ title: idea }, ...ideas]);
-              setIdea("");
-            }}
+            onPress={() => submitIdea()}
           />
         </View>
         {ideas.map((item, index) => renderIdea({ item, index }))}
