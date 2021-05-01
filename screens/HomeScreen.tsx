@@ -28,6 +28,7 @@ import {
 
 import { RootStackParamList } from "../types";
 import { defaultScreenPadding } from "../constants/Layout";
+import Shared from "../constants/Shared";
 
 import dbInstance from "../shared/dbInstance";
 
@@ -101,12 +102,12 @@ export default function HomeScreen({
         </View>
         */}
 
-      <View style={styles.createRoomButtonContainer}>
+      <View style={Shared.buttonContainer}>
         <Button
           title="Create Room"
           onPress={createRoom}
-          buttonStyle={styles.createRoomButton}
-          titleStyle={styles.createRoomButtonTitleStyle}
+          buttonStyle={Shared.button}
+          titleStyle={Shared.buttonTitleStyle}
         />
       </View>
 
@@ -152,7 +153,7 @@ export default function HomeScreen({
                   <Text style={styles.createRoomPublicLabel}>Public</Text>
                 </View>
 
-                <View style={styles.createRoomButtonContainer}>
+                <View style={styles.buttonContainer}>
                   <Icon
                     type='material-community'
                     name='arrow-right-circle-outline'
@@ -184,20 +185,6 @@ const styles = StyleSheet.create({
   },
   createRoomPublicSwitchContainer: {
     flexDirection: "row",
-  },
-  createRoomButtonContainer: {
-    width: "100%",
-    marginTop: 10,
-    marginBottom: 10,
-  },
-  createRoomButton: {
-    backgroundColor: "white",
-    borderRadius: 4,
-  },
-  createRoomButtonTitleStyle: {
-    fontFamily: "Nunito_700Bold",
-    color: blueBackground,
-    fontSize: 16,
   },
   createRoomActionsContainer: {
     width: "100%",
@@ -260,10 +247,7 @@ const styles = StyleSheet.create({
   },
   availableRoomRowInnerContainer: {
     width: "100%",
-    backgroundColor: "#F8F8F8",
-    padding: 15,
-    margin: 5,
-    borderRadius: 33,
+    ...Shared.blockItem,
   },
   horizontalLineSeparator: {
     width: "80%",
@@ -321,6 +305,7 @@ const styles = StyleSheet.create({
     height: 50,
   },
   joinRoomInputContainer: {
+    ...Shared.inputField,
     flex: 1,
     justifyContent: "space-around",
     marginHorizontal: margins.small,
