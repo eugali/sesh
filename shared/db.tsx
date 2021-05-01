@@ -109,7 +109,7 @@ const db = (
     return room.exists ? room.data() : null;
   },
 
-  watchRoomSolutions(roomID, callback) {
+  watchRoomSolutions(roomID: string, callback) {
     firestore
       .collection(collection)
       .doc(roomID)
