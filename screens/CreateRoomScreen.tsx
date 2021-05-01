@@ -31,6 +31,7 @@ import {
   white80,
 } from "../constants/Colors";
 import { defaultScreenPadding } from "../constants/Layout";
+import Shared from "../constants/Shared";
 import dbInstance from "../shared/dbInstance";
 
 export default function CreateRoomScreen({
@@ -76,7 +77,7 @@ export default function CreateRoomScreen({
         <Text style={styles.enterHMWLabel}>Create a HMW statement</Text>
         <TextInput
           multiline
-          style={styles.enterHMWInput}
+          style={[styles.enterHMWInput, Shared.textArea]}
           placeholder="How might we ..."
           value={HMWStatement}
           onChangeText={setHMWStatement}
@@ -88,7 +89,7 @@ export default function CreateRoomScreen({
           Describe the problem
         </Text>
         <TextInput
-          style={styles.enterProblemContextInput}
+          style={[styles.enterProblemContextInput, Shared.textArea]}
           multiline
           placeholder="What information is helpful to know before the brainstom?"
           value={problemDescription}
@@ -192,16 +193,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   enterProblemContextInput: {
-    width: "100%",
-    height: 100,
-    borderWidth: 1,
-    borderColor: white30,
-    borderRadius: borderRadiuses.normal,
-    fontFamily: "Nunito_700Bold",
-    color: "white",
-    padding: paddings.large,
-    fontSize: 17,
-    textAlignVertical: "top",
   },
   enterHMWLabel: {
     color: "white",
@@ -211,16 +202,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   enterHMWInput: {
-    width: "100%",
-    height: 100,
-    borderWidth: 1,
-    borderColor: white30,
-    borderRadius: borderRadiuses.normal,
-    fontFamily: "Nunito_700Bold",
-    color: "white",
-    padding: paddings.large,
-    fontSize: 17,
-    textAlignVertical: "top",
   },
   enterHMWContainer: {
     width: "100%",

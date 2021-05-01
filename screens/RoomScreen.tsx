@@ -15,16 +15,19 @@ import {
 import { Button, Icon, Switch } from "react-native-elements";
 
 import {
+  defaultScreenPadding,
   paddings,
   margins,
   borderRadiuses,
   screenWidth,
   screenHeight,
 } from "../constants/Layout";
+
 import BailButton from "../components/BailButton";
 
 import { RootStackParamList } from "../types";
-import { blueBackground } from "../constants/Colors";
+import { blueBackground, nonSelectedWhite } from "../constants/Colors";
+import Shared from "../constants/Shared";
 
 type Idea = {
   title: string;
@@ -123,7 +126,7 @@ export default function RoomScreen({
       <View style={styles.headerContainer}>
         <BailButton />
 
-        <Icon type="material-community" name="music" color="grey" />
+        <Icon type="material-community" name="music" color={nonSelectedWhite} style={styles.music} />
 
         <View style={{ flex: 1 }} />
 
@@ -132,60 +135,62 @@ export default function RoomScreen({
         </View>
       </View>
 
-      <View style={styles.hmwTitleContainer}>
-        <Text style={styles.hmwTitle}>{hmwTitle}</Text>
-      </View>
-
-      {screenMode === ScreenModes.IdeaSubmission && (
-        <>
-          {ideas.map((item, index) => renderIdea({ item, index }))}
-          <View style={styles.ideaInputContainer}>
-            <TextInput
-              placeholder="Type your answer here"
-              style={styles.ideaInput}
-              onChangeText={setIdea}
-              value={idea}
-              maxLength={140}
-            />
-          </View>
-
-          <View style={styles.saveButtonContainer}>
-            <Button
-              title={"Save"}
-              buttonStyle={styles.saveButton}
-              onPress={() => {
-                setIdeas([...ideas, { title: idea, voted: false }]);
-                setIdea("");
-              }}
-            />
-          </View>
-
-          <View style={styles.tipContainer}>
-            <Text style={styles.tip}>
-              Shoot for 10+ ideas, don't overthink it!
-            </Text>
-          </View>
-        </>
-      )}
-
-      {screenMode === ScreenModes.IdeaVoting && (
-        <View style={styles.ideaVotingContainer}>
-          <View style={styles.ideaVotingHeaderContainer}>
-            <Text style={styles.ideaVotingHeader}>
-              You have 4 ⭐️'s available to give, which ideas do you think are
-              most important?
-            </Text>
-          </View>
-
-          <View style={styles.ideaVotingIdeasContainer}>
-            {ideas.map((item, index) => renderIdea({ item, index }))}
-          </View>
-
-          <View style={styles.ideaVotingFooterContainer}>
-            <Text style={styles.ideaVotingFooterText}>🤯 Am I right??</Text>
-          </View>
+      <View style={styles.bodyContainer}>
+        <View style={styles.hmwTitleContainer}>
+          <Text style={styles.hmwTitle}>{hmwTitle}</Text>
         </View>
-      )}
+
+        {screenMode === ScreenModes.IdeaSubmission && (
+          <>
+            <View style={[styles.ideaInputContainer, Shared.inputField]}>
+              <TextInput
+                placeholder="Type your answer here"
+                style={styles.ideaInput}
+                onChangeText={setIdea}
+                value={idea}
+                maxLength={140}
+              />
+            </View>
+            {ideas.map((item, index) => renderIdea({ item, index }))}
+
+            <View style={styles.saveButtonContainer}>
+              <Button
+                title={"Save"}
+                buttonStyle={styles.saveButton}
+                onPress={() => {
+                  setIdeas([...ideas, { title: idea, voted: false }]);
+                  setIdea("");
+                }}
+              />
+            </View>
+
+            <View style={styles.tipContainer}>
+              <Text style={styles.tip}>
+                Shoot for 10+ ideas, don't overthink it!
+              </Text>
+            </View>
+          </>
+        )}
+
+        {screenMode === ScreenModes.IdeaVoting && (
+          <View style={styles.ideaVotingContainer}>
+            <View style={styles.ideaVotingHeaderContainer}>
+              <Text style={styles.ideaVotingHeader}>
+                You have 4 ⭐️'s available to give, which ideas do you think are
+                most important?
+              </Text>
+            </View>
+
+            <View style={styles.ideaVotingIdeasContainer}>
+              {ideas.map((item, index) => renderIdea({ item, index }))}
+            </View>
+
+            <View style={styles.ideaVotingFooterContainer}>
+              <Text style={styles.ideaVotingFooterText}>🤯 Am I right??</Text>
+            </View>
+          </View>
+        )}
+      </View>
     </SafeAreaView>
   );
 }
@@ -273,8 +278,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   ideaInputContainer: {
-    width: "100%",
-    height: 60,
   },
   ideaInput: {
     color: "white",
@@ -310,12 +313,22 @@ const styles = StyleSheet.create({
   },
   hmwTitle: {
     color: "white",
+    fontSize: 24,
+    fontFamily: "Nunito_700Bold",
+    lineHeight: 27,
   },
   headerContainer: {
     width: "100%",
     alignItems: "center",
     justifyContent: "space-evenly",
     flexDirection: "row",
+    paddingRight: defaultScreenPadding,
+    paddingLeft: defaultScreenPadding,
+    paddingTop: defaultScreenPadding,
+  },
+  bodyContainer: {
+    paddingRight: defaultScreenPadding,
+    paddingLeft: defaultScreenPadding,
   },
   header: {
     fontSize: 24,
@@ -327,5 +340,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     backgroundColor: blueBackground,
+    fontFamily: "Nunito_700Bold",
   },
+  music: {
+    padding: 5,
+    marginLeft: 10,
+  }
 });
