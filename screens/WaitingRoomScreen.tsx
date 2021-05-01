@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
   hmwContentContainer: {
     width: "100%",
     flex: 1,
+    marginBottom: 20,
   },
   hmwContent: {
     fontFamily: "Nunito_400Regular",
@@ -201,7 +202,7 @@ const styles = StyleSheet.create({
   },
   container: {
     width: "100%",
-    height: "100%",
+    height: screenHeight,
     alignItems: "center",
     justifyContent: "flex-start",
     backgroundColor: blueBackground,

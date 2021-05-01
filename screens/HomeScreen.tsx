@@ -111,7 +111,9 @@ export default function HomeScreen({
         </View>
 
         <View style={styles.headerContainer}>
-          <Text style={styles.header}>Generate better ideas in 10 minutes</Text>
+          <Text style={styles.header}>
+            Generate better ideas in just 10 minutes
+          </Text>
         </View>
 
         <View style={Shared.buttonContainer}>
@@ -225,6 +227,7 @@ const styles = StyleSheet.create({
     color: lighterWhite,
     fontFamily: "Nunito_700Bold",
     fontSize: 31,
+    lineHeight: 35,
   },
   availableRoomRowUsersCount: {
     color: "grey",
@@ -261,6 +264,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     padding: paddings.small,
+    paddingBottom: 60,
   },
   availableRoomsContainer: {
     width: "100%",

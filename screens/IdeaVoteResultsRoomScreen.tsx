@@ -54,7 +54,13 @@ export default function IdeaVoteResultsRoomScreen({
   const shareRoomOnTwitter = () =>
     tw({
       url: `${baseURL}/IdeaVoteResults?roomID=${roomID}`,
-      title: hmwTitle,
+      title:
+        participantsCount +
+        ` people came up with ` +
+        ideas.length +
+        ` @seshIdeas for "` +
+        hmwTitle +
+        `". Check out the top ideas here:`,
       hashtags: ["sesh"],
     });
 
