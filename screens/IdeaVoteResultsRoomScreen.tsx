@@ -55,7 +55,7 @@ export default function IdeaVoteResultsRoomScreen({
     tw({
       url: `${baseURL}/IdeaVoteResults?roomID=${roomID}`,
       title: hmwTitle,
-      hashtags: ["#sesh"],
+      hashtags: ["sesh"],
     });
 
   const [idea, setIdea] = useState<string>("");

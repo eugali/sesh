@@ -57,38 +57,41 @@ export default function WaitingRoomScreen({
         />
       </View>
 
-      <View style={styles.screenTitleContainer}>
-        <Text style={styles.screenTitle}>Waiting Room: GSKL</Text>
-      </View>
+      <View style={styles.bodyContainer}>
 
-      <View style={styles.hmwTitleContainer}>
-        <Text style={styles.hmwTitle}>{hmwTitle}</Text>
-      </View>
+        <View style={styles.screenTitleContainer}>
+          <Text style={styles.screenTitle}>Waiting Room: GSKL</Text>
+        </View>
 
-      <View style={styles.theProblemLabelContainer}>
-        <Text style={styles.theProblemLabel}>The Problem</Text>
-      </View>
+        <View style={styles.hmwTitleContainer}>
+          <Text style={styles.hmwTitle}>{hmwTitle}</Text>
+        </View>
 
-      <View style={styles.hmwContentContainer}>
-        <Text style={styles.hmwContent}>{hmwContent}</Text>
-      </View>
+        <View style={styles.theProblemLabelContainer}>
+          <Text style={styles.theProblemLabel}>The Problem</Text>
+        </View>
 
-      <View style={styles.bottomButtonContainer}>
-        <Button
-          title={"Copy Link"}
-          buttonStyle={styles.copyLinkBottomButton}
-          titleStyle={styles.copyLinkBottomButtonTitle}
-          onPress={() => Clipboard.setString(roomID)}
-        />
-      </View>
+        <View style={styles.hmwContentContainer}>
+          <Text style={styles.hmwContent}>{hmwContent}</Text>
+        </View>
 
-      <View style={styles.bottomButtonContainer}>
-        <Button
-          title={"Start Room"}
-          buttonStyle={styles.startRoomBottomButton}
-          titleStyle={styles.startRoomBottomButtonTitle}
-          onPress={() => console.log("start the room")}
-        />
+        <View style={styles.bottomButtonContainer}>
+          <Button
+            title={"Copy Link"}
+            buttonStyle={styles.copyLinkBottomButton}
+            titleStyle={styles.copyLinkBottomButtonTitle}
+            onPress={() => Clipboard.setString(roomID)}
+          />
+        </View>
+
+        <View style={styles.bottomButtonContainer}>
+          <Button
+            title={"Start Room"}
+            buttonStyle={styles.startRoomBottomButton}
+            titleStyle={styles.startRoomBottomButtonTitle}
+            onPress={() => console.log("start the room")}
+          />
+        </View>
       </View>
 
       <View style={styles.bottomSpace} />
@@ -207,4 +210,8 @@ const styles = StyleSheet.create({
     paddingLeft: defaultScreenPadding,
     paddingTop: defaultScreenPadding,
   },
+  bodyContainer: {
+    maxWidth: 600,
+    width: "100%"
+  }
 });

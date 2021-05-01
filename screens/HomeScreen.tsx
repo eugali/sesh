@@ -325,6 +325,6 @@ const styles = StyleSheet.create({
     paddingTop: defaultScreenPadding,
   },
   bodyContainer: {
-    width: 600,
+    maxWidth: 600,
   },
 });
