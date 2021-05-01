@@ -13,7 +13,7 @@ const BailButton = ({ onPress, participantsCount }: Props) => {
   return (
     <Pressable onPress={onPress}>
       <View style={styles.bailButton}>
-        <Text style={styles.bailButtonTitle}>✌Bail</Text>
+        <Text style={styles.bailButtonTitle}>✌Leave</Text>
         <Icon
           type="material-community"
           name="account-outline"

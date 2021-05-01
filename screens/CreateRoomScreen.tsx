@@ -78,7 +78,9 @@ export default function CreateRoomScreen({
           multiline
           style={[styles.enterHMWInput, Shared.textArea]}
           placeholder="How might we ..."
+          placeholderTextColor={nonSelectedWhite}
           value={HMWStatement}
+          maxLength={100}
           onChangeText={setHMWStatement}
         />
       </View>
@@ -91,6 +93,7 @@ export default function CreateRoomScreen({
           style={[styles.enterProblemContextInput, Shared.textArea]}
           multiline
           placeholder="What information is helpful to know before the brainstom?"
+          placeholderTextColor={nonSelectedWhite}
           value={problemDescription}
           onChangeText={setProblemDescription}
         />
@@ -98,7 +101,7 @@ export default function CreateRoomScreen({
 
       <View style={styles.publicRoomSwitchContainer}>
         <Switch
-          color="white"
+          color="#F2C94C"
           value={isNewRoomPublic}
           onValueChange={() => setIsNewRoomPublic(!isNewRoomPublic)}
         />
@@ -144,7 +147,9 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    height: 80,
+    paddingTop: 20,
+    paddingBottom: 30,
+    height: 69,
   },
   publicRoomSwitchLabel: {
     marginRight: 10,
@@ -183,6 +188,7 @@ const styles = StyleSheet.create({
   },
   enterProblemContextContainer: {
     width: "100%",
+    marginTop: 15,
   },
   enterProblemContextLabel: {
     color: "white",

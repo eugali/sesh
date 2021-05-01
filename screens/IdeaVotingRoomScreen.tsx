@@ -30,7 +30,12 @@ import { Idea } from "../types";
 import BailButton from "../components/BailButton";
 
 import { RootStackParamList } from "../types";
-import { blueBackground, nonSelectedWhite, white50 } from "../constants/Colors";
+import {
+  blueBackground,
+  nonSelectedWhite,
+  white50,
+  lighterWhite,
+} from "../constants/Colors";
 import Shared from "../constants/Shared";
 
 const noGlow = `
@@ -224,7 +229,9 @@ export default function IdeaVotingRoomScreen({
         <View style={styles.ideaVotingContainer}>
           <View style={styles.ideaVotingHeaderContainer}>
             <Text style={styles.ideaVotingHeader}>
-              Take a deep breath while the others wrap up
+              You have 4 <Text style={{ color: "white" }}>⭐</Text>'s available
+              to give. Which ideas do you think are{" "}
+              <Text style={{ fontWeight: "bold" }}>most important?</Text>
             </Text>
           </View>
 
@@ -250,6 +257,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingRight: 20,
     paddingLeft: 20,
+    marginBottom: 10,
   },
   deleteIdeaIcon: {
     margin: 10,
@@ -291,8 +299,9 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   ideaVotingHeader: {
-    color: "white",
-    fontSize: 20,
+    color: lighterWhite,
+    fontSize: 16,
+    fontFamily: "Nunito_400Regular",
   },
   niceJobSubModalHeader: {
     fontSize: 18,
@@ -326,7 +335,7 @@ const styles = StyleSheet.create({
   },
   ideaVoteControlsContainer: {
     alignItems: "center",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
     height: "100%",
     marginRight: 4,
     marginLeft: 4,
@@ -337,6 +346,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     flexDirection: "row",
+    marginBottom: 0,
   },
   ideaInnerContainer: {
     width: "100%",
