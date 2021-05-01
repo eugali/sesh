@@ -97,6 +97,7 @@ export default function CreateRoomScreen({
         />
       </View>
 
+
       <View style={styles.publicRoomSwitchContainer}>
         <Switch
           color="white"

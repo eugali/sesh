@@ -19,6 +19,15 @@ export const input = {
     textAlignVertical: "top",
 };
 
+export const blockItem = {
+    backgroundColor: "#F8F8F8",
+    padding: 15,
+    marginBottom: 10,
+    borderRadius: 33,
+    fontFamily: "Nunito_700Bold",
+    fontSize: 17,
+}
+
 export default {
     inputField: {
         ...input
@@ -26,5 +35,8 @@ export default {
     textArea: {
         ...input,
         minHeight: 100,
+    },
+    blockItem: {
+        ...blockItem
     }
 };

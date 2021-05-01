@@ -28,6 +28,7 @@ import {
 
 import { RootStackParamList } from "../types";
 import { defaultScreenPadding } from "../constants/Layout";
+import Shared from "../constants/Shared";
 
 import dbInstance from "../shared/dbInstance";
 
@@ -260,10 +261,7 @@ const styles = StyleSheet.create({
   },
   availableRoomRowInnerContainer: {
     width: "100%",
-    backgroundColor: "#F8F8F8",
-    padding: 15,
-    margin: 5,
-    borderRadius: 33,
+    ...Shared.blockItem
   },
   horizontalLineSeparator: {
     width: "80%",
@@ -321,6 +319,7 @@ const styles = StyleSheet.create({
     height: 50,
   },
   joinRoomInputContainer: {
+    ...Shared.inputField,
     flex: 1,
     justifyContent: "space-around",
     marginHorizontal: margins.small,
