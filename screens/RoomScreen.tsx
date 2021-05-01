@@ -11,7 +11,7 @@ import {
   FlatList,
   Pressable,
   Modal,
-  Platform
+  Platform,
 } from "react-native";
 import { Button, Icon, Switch } from "react-native-elements";
 
@@ -39,21 +39,19 @@ textarea:focus, select:focus, input:focus, button:focus {
 	-webkit-appearance: none;
 	outline: none!important;
 }
-`
+`;
 
 export const injectWebCss = () => {
-
   // Only on web
   if (Platform.OS != "web") {
     return;
   }
 
   // Inject style
-  const style = document.createElement('style')
-  style.textContent = `textarea, select, input, button { outline: none!important; }`
-  return document.head.append(style)
-
-}
+  const style = document.createElement("style");
+  style.textContent = `textarea, select, input, button { outline: none!important; }`;
+  return document.head.append(style);
+};
 
 injectWebCss();
 
@@ -157,7 +155,12 @@ export default function RoomScreen({
       <View style={styles.headerContainer}>
         <BailButton />
 
-        <Icon type="material-community" name="music" color={nonSelectedWhite} style={styles.music} />
+        <Icon
+          type="material-community"
+          name="music"
+          color={nonSelectedWhite}
+          style={styles.music}
+        />
 
         <View style={{ flex: 1 }} />
 
@@ -335,16 +338,16 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     marginRight: 8,
     fontSize: 10,
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: "Nunito_700Bold",
     color: "#4b31bb",
     paddingTop: 3,
     paddingBottom: 3,
     paddingLeft: 6,
-    paddingRight: 6
+    paddingRight: 6,
   },
   tip: {
     color: nonSelectedWhite,
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: "Nunito_700Bold",
   },
   hmwContentContainer: {
     width: "100%",
@@ -399,5 +402,5 @@ const styles = StyleSheet.create({
   music: {
     padding: 5,
     marginLeft: 10,
-  }
+  },
 });

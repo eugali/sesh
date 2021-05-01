@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
   },
   availableRoomRowInnerContainer: {
     width: "100%",
-    ...Shared.blockItem
+    ...Shared.blockItem,
   },
   horizontalLineSeparator: {
     width: "80%",

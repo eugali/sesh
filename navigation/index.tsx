@@ -45,7 +45,6 @@ function RootNavigator() {
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="WaitingRoom" component={WaitingRoomScreen} />
       <Stack.Screen name="CreateRoom" component={CreateRoomScreen} />
-
     </Stack.Navigator>
   );
 }
