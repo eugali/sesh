@@ -58,7 +58,6 @@ export default function WaitingRoomScreen({
       </View>
 
       <View style={styles.bodyContainer}>
-
         <View style={styles.screenTitleContainer}>
           <Text style={styles.screenTitle}>Waiting Room: GSKL</Text>
         </View>
@@ -212,6 +211,6 @@ const styles = StyleSheet.create({
   },
   bodyContainer: {
     maxWidth: 600,
-    width: "100%"
-  }
+    width: "100%",
+  },
 });
