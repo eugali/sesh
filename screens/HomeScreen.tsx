@@ -105,55 +105,57 @@ export default function HomeScreen({
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.logoContainer}>
-        <Text style={styles.logo}>🧠 Sesh</Text>
-      </View>
+      <View style={styles.bodyContainer}>
+        <View style={styles.logoContainer}>
+          <Text style={styles.logo}>🧠 Sesh</Text>
+        </View>
 
-      <View style={styles.headerContainer}>
-        <Text style={styles.header}>Generate better ideas in 10 minutes</Text>
-      </View>
+        <View style={styles.headerContainer}>
+          <Text style={styles.header}>Generate better ideas in 10 minutes</Text>
+        </View>
 
-      <View style={Shared.buttonContainer}>
-        <Button
-          title="Create Room"
-          onPress={createRoom}
-          buttonStyle={[Shared.button, styles.createNewRoomButton]}
-          titleStyle={Shared.buttonTitleStyle}
-        />
-      </View>
-
-      <View style={styles.availableRoomsContainer}>
-        <View style={styles.joinRoomContainer}>
-          <TextInput
-            style={styles.joinRoomInputContainer}
-            placeholder={"Type room code here"}
-            placeholderTextColor={nonSelectedWhite}
-            value={joinRoomID}
-            onChangeText={setJoinRoomID}
+        <View style={Shared.buttonContainer}>
+          <Button
+            title="Create Room"
+            onPress={createRoom}
+            buttonStyle={[Shared.button, styles.createNewRoomButton]}
+            titleStyle={Shared.buttonTitleStyle}
           />
+        </View>
 
-          <View style={styles.joinIcon}>
-            <Icon
-              type="material-community"
-              name="arrow-right-circle-outline"
-              size={30}
-              color="white"
-              onPress={joinRoom}
+        <View style={styles.availableRoomsContainer}>
+          <View style={styles.joinRoomContainer}>
+            <TextInput
+              style={styles.joinRoomInputContainer}
+              placeholder={"Type room code here"}
+              placeholderTextColor={nonSelectedWhite}
+              value={joinRoomID}
+              onChangeText={setJoinRoomID}
             />
+
+            <View style={styles.joinIcon}>
+              <Icon
+                type="material-community"
+                name="arrow-right-circle-outline"
+                size={30}
+                color="white"
+                onPress={joinRoom}
+              />
+            </View>
           </View>
-        </View>
 
-        <View style={styles.communityRoomsLabelContainer}>
-          <Text style={styles.communityRoomsLabel}>
-            Explore community rooms
-          </Text>
-        </View>
+          <View style={styles.communityRoomsLabelContainer}>
+            <Text style={styles.communityRoomsLabel}>
+              Explore community rooms
+            </Text>
+          </View>
 
-        <FlatList
-          data={mockData}
-          renderItem={renderAvailableRoom}
-          style={styles.availableRoomsFlatList}
-        />
+          <FlatList
+            data={mockData}
+            renderItem={renderAvailableRoom}
+            style={styles.availableRoomsFlatList}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -321,5 +323,8 @@ const styles = StyleSheet.create({
     paddingRight: defaultScreenPadding,
     paddingLeft: defaultScreenPadding,
     paddingTop: defaultScreenPadding,
+  },
+  bodyContainer: {
+    width: 600,
   },
 });

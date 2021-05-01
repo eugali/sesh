@@ -148,6 +148,10 @@ const styles = StyleSheet.create({
   copyLinkBottomButton: {
     width: "100%",
     backgroundColor: white30,
+    paddingTop: 12,
+    paddingRight: 12,
+    paddingLeft: 12,
+    paddingBottom: 12,
   },
   copyLinkBottomButtonTitle: {
     fontFamily: "Nunito_700Bold",
@@ -157,6 +161,10 @@ const styles = StyleSheet.create({
   startRoomBottomButton: {
     width: "100%",
     backgroundColor: "white",
+    paddingTop: 12,
+    paddingRight: 12,
+    paddingLeft: 12,
+    paddingBottom: 12,
   },
   startRoomBottomButtonTitle: {
     fontFamily: "Nunito_700Bold",
