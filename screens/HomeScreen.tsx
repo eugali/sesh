@@ -42,7 +42,6 @@ export default function HomeScreen({
   route,
   navigation,
 }: StackScreenProps<RootStackParamList, "Home">) {
-
   const [joinRoomID, setJoinRoomID] = useState<string>("");
 
   useFocusEffect(
@@ -125,7 +124,7 @@ export default function HomeScreen({
   const createRoom = () => navigation.navigate("CreateRoom");
 
   const renderAvailableRoom = ({ item }) => {
-    console.log(item.id)
+    console.log(item.id);
     return (
       <Pressable onPress={() => joinRoom(item.id)}>
         <View style={styles.availableRoomRowContainer}>
@@ -293,6 +292,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
+    cursor: "pointer",
   },
   availableRoomsFlatList: {
     width: "100%",

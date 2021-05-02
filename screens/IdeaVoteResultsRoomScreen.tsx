@@ -1,7 +1,14 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import * as React from "react";
 import { useState } from "react";
-import { StyleSheet, Text, View, SafeAreaView, Platform } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  Platform,
+  Pressable,
+} from "react-native";
 import { Button, Icon } from "react-native-elements";
 
 import { defaultScreenPadding } from "../constants/Layout";
@@ -12,6 +19,7 @@ import { RootStackParamList } from "../types";
 import { blueBackground, nonSelectedWhite, white50 } from "../constants/Colors";
 import Shared from "../constants/Shared";
 import { baseURL } from "../constants/Config";
+import { Nunito_700Bold } from "@expo-google-fonts/nunito";
 
 const noGlow = `
 textarea, select, input, button {
@@ -101,11 +109,33 @@ export default function IdeaVoteResultsRoomScreen({
     );
   };
 
+  const goHome = () => {
+    navigation.navigate("Home");
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       {/*<View style={styles.headerContainer}></View>*/}
 
       <View style={styles.bodyContainer}>
+        <View style={styles.footerContainer}>
+          <View style={styles.headerRow}>
+            <Pressable onPress={() => goHome()}>
+              <View style={styles.logoContainer}>
+                <Text style={styles.logo}>🧠 Sesh</Text>
+              </View>
+            </Pressable>
+
+            <View style={styles.tweetButtonContainer}>
+              <Button
+                title="Tweet Results"
+                buttonStyle={styles.footerTweetButton}
+                titleStyle={styles.footerTweetButtonTitle}
+                onPress={shareRoomOnTwitter}
+              />
+            </View>
+          </View>
+        </View>
         <View style={styles.hmwTitleContainer}>
           <Text style={styles.hmwTitle}>{hmwTitle}</Text>
         </View>
@@ -128,28 +158,9 @@ export default function IdeaVoteResultsRoomScreen({
             })
             .map((item, index) => renderIdea({ item, index }))}
         </View>
-      </View>
-
-      <View style={styles.footerContainer}>
-        <View style={styles.footerRow}>
-          <View style={styles.footerButtonContainer}>
-            <Button
-              title="New Sesh"
-              buttonStyle={styles.footerExitButton}
-              titleStyle={styles.footerExitButtonTitle}
-              onPress={goBackHome}
-            />
-          </View>
-
-          <View style={styles.footerButtonContainer}>
-            <Button
-              title="Tweet"
-              buttonStyle={styles.footerTweetButton}
-              titleStyle={styles.footerTweetButtonTitle}
-              onPress={shareRoomOnTwitter}
-            />
-          </View>
-        </View>
+        <Text style={styles.votingCaption}>
+          Generated and priotized by 6 people in less than 10 minutes
+        </Text>
       </View>
     </SafeAreaView>
   );
@@ -174,26 +185,34 @@ const styles = StyleSheet.create({
     backgroundColor: "#F2C94C",
     width: "100%",
   },
-  footerButtonContainer: {
+  logoContainer: {
+    cursor: "pointer",
+  },
+  logo: {
+    color: "#FFF",
+    fontFamily: "Nunito_800ExtraBold",
+    fontSize: 25,
+    paddingTop: 5,
+  },
+  tweetButtonContainer: {
     flex: 1,
-    paddingTop: 25,
-    paddingBottom: 25,
-    paddingRight: 25,
+    paddingTop: 0,
+    paddingBottom: 15,
+    paddingRight: 0,
     paddingLeft: 25,
+    maxWidth: 150,
   },
   footerContainer: {
-    backgroundColor: blueBackground,
     width: "100%",
-    position: "fixed",
-    bottom: 0,
   },
-  footerRow: {
+  headerRow: {
     maxWidth: 600,
     width: "100%",
     margin: 0,
     marginLeft: "auto",
     marginRight: "auto",
     flexDirection: "row",
+    justifyContent: "space-between",
   },
   votingResultsLabelContainer: {
     width: "100%",
@@ -235,7 +254,6 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "flex-start",
-    paddingBottom: 100,
   },
   ideaVotingFooterContainer: {
     width: "100%",
@@ -396,5 +414,13 @@ const styles = StyleSheet.create({
   music: {
     padding: 5,
     marginLeft: 10,
+  },
+  votingCaption: {
+    fontFamily: "Nunito_700Bold",
+    color: white50,
+    paddingBottom: 30,
+    textAlign: "center",
+    fontSize: 16,
+    paddingTop: 20,
   },
 });

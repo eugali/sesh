@@ -383,6 +383,7 @@ const styles = StyleSheet.create({
     paddingRight: defaultScreenPadding,
     paddingLeft: defaultScreenPadding,
     marginTop: 70,
+    width: "100%",
   },
   header: {
     fontSize: 24,
