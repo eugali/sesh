@@ -396,13 +396,15 @@ const styles = StyleSheet.create({
     paddingLeft: defaultScreenPadding,
     paddingTop: defaultScreenPadding,
     backgroundColor: blueBackground,
-    maxWidth: 600,
   },
   bodyContainer: {
     paddingRight: defaultScreenPadding,
     paddingLeft: defaultScreenPadding,
     marginTop: 70,
     width: "100%",
+    maxWidth: 600,
+    marginLeft: "auto",
+    marginRight: "auto",
   },
   header: {
     fontSize: 24,
@@ -410,12 +412,12 @@ const styles = StyleSheet.create({
   },
   container: {
     width: "100%",
-    height: screenHeight,
+    minHeight: screenHeight,
+    height: "100%",
     alignItems: "center",
     justifyContent: "flex-start",
     backgroundColor: blueBackground,
     fontFamily: "Nunito_700Bold",
-    maxWidth: 600,
   },
   music: {
     padding: 5,

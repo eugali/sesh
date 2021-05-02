@@ -423,6 +423,7 @@ const styles = StyleSheet.create({
   },
   container: {
     width: "100%",
+    minHeight: screenHeight,
     height: "100%",
     alignItems: "center",
     justifyContent: "flex-start",

@@ -367,6 +367,7 @@ const styles = StyleSheet.create({
   },
   container: {
     width: "100%",
+    minHeight: screenHeight,
     height: "100%",
     backgroundColor: blueBackground,
     alignItems: "center",

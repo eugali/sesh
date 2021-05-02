@@ -249,7 +249,8 @@ const styles = StyleSheet.create({
     fontFamily: "Nunito_700Bold",
   },
   container: {
-    height: screenHeight,
+    minHeight: screenHeight,
+    height: "100%",
     backgroundColor: blueBackground,
     alignItems: "center",
     justifyContent: "flex-start",
