@@ -57,7 +57,7 @@ export default function HomeScreen({
   const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
-    dbInstance.watchRooms(
+    const unsubscribe = dbInstance.watchRooms(
       (rooms) => {
         setIsLoaded(true);
         setRooms(
@@ -79,6 +79,8 @@ export default function HomeScreen({
         setError(error);
       }
     );
+
+    return unsubscribe;
   }, []);
 
   const joinRoom = async (roomID: string) => {

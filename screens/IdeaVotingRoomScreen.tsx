@@ -118,7 +118,7 @@ export default function IdeaVotingRoomScreen({
   });
 
   useEffect(() => {
-    dbInstance.watchRoomParticipants(
+    const unsubscribe = dbInstance.watchRoomParticipants(
       roomID,
       (participants) => {
         //setIsLoaded(true);
@@ -129,10 +129,12 @@ export default function IdeaVotingRoomScreen({
         //setError(error);
       }
     );
+
+    return unsubscribe;
   }, []);
 
   useEffect(() => {
-    dbInstance.watchRoomSolutions(
+    const unsubscribe = dbInstance.watchRoomSolutions(
       roomID,
       (solutions) => {
         //setIsLoaded(true);
@@ -149,6 +151,8 @@ export default function IdeaVotingRoomScreen({
         //setError(error);
       }
     );
+
+    return unsubscribe;
   }, []);
 
   useEffect(() => {

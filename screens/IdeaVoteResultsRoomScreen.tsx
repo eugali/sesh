@@ -76,7 +76,7 @@ export default function IdeaVoteResultsRoomScreen({
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    dbInstance.watchRoomParticipants(
+    const unsubscribe = dbInstance.watchRoomParticipants(
       roomID,
       (participants) => {
         //setIsLoaded(true);
@@ -87,6 +87,8 @@ export default function IdeaVoteResultsRoomScreen({
         //setError(error);
       }
     );
+
+    return unsubscribe;
   }, []);
 
   useEffect(() => {

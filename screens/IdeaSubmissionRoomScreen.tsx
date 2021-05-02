@@ -89,13 +89,15 @@ export default function IdeaSubmissionRoomScreen({
   });
 
   useEffect(() => {
-    dbInstance.watchRoomParticipants(
+    const unsubscribe = dbInstance.watchRoomParticipants(
       roomID,
       (participants) => {
         setParticipantsCount(participants.length.toString());
       },
       (error) => {}
     );
+
+    return unsubscribe;
   }, []);
 
   useEffect(() => {
