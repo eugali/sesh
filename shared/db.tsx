@@ -156,14 +156,17 @@ const db = (
   },
 
   watchRooms(callback, error) {
-    return firestore.collection(collection).onSnapshot(
-      (snapshot) => {
-        callback(snapshot.docs.map((s) => this.buildRoom(s)));
-      },
-      (error) => {
-        error(error);
-      }
-    );
+    return firestore
+      .collection(collection)
+      .orderBy("createdAt", "desc")
+      .onSnapshot(
+        (snapshot) => {
+          callback(snapshot.docs.map((s) => this.buildRoom(s)));
+        },
+        (error) => {
+          error(error);
+        }
+      );
   },
 
   watchRoomParticipants(roomID: string, callback) {
