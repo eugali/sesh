@@ -22,6 +22,7 @@ test("Creates new room given valid HMW", async () => {
   testRoomID = await testDB.createRoom("How might we test the DB?");
   let room = await testDB.getRoom(testRoomID);
   expect(room).toStrictEqual({
+    id: room.id,
     isPrivate: false,
     question: "How might we test the DB?",
     problemStatement: "",

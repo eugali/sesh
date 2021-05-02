@@ -72,14 +72,17 @@ export default function HomeScreen({
   const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
-    dbInstance.watchRooms((rooms) => {
-      setIsLoaded(true);
-      setRooms(rooms);
-    }, (error) => {
-      setIsLoaded(true);
-      setError(error);
-    })
-  }, [])
+    dbInstance.watchRooms(
+      (rooms) => {
+        setIsLoaded(true);
+        setRooms(rooms);
+      },
+      (error) => {
+        setIsLoaded(true);
+        setError(error);
+      }
+    );
+  }, []);
 
   // 4ZEXSCrhywDBX2DUdRN3
 
@@ -140,8 +143,9 @@ export default function HomeScreen({
   const createRoom = () => navigation.navigate("CreateRoom");
 
   const renderAvailableRoom = ({ item }) => {
+    console.log(item.id)
     return (
-      <Pressable onPress={() => joinRoom(item.roomID)}>
+      <Pressable onPress={() => joinRoom(item.id)}>
         <View style={styles.availableRoomRowContainer}>
           <View style={styles.availableRoomRowInnerContainer}>
             <Text style={styles.availableRoomRowTitle}>{item.question}</Text>

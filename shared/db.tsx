@@ -106,7 +106,13 @@ const db = (
       return null;
     }
 
-    return room.exists ? room.data() : null;
+    return room.exists ? this.buildRoom(room) : null;
+  },
+
+  buildRoom(room) {
+    let data = room.data();
+    data.id = room.id;
+    return data;
   },
 
   watchRoom(roomID: string, callback) {
@@ -115,7 +121,7 @@ const db = (
       .doc(roomID)
       .onSnapshot(
         (snapshot) => {
-          callback(snapshot.data());
+          callback(this.buildRoom(snapshot));
         },
         (error) => {
           callback(error);
@@ -126,7 +132,7 @@ const db = (
   watchRooms(callback, error) {
     firestore.collection(collection).onSnapshot(
       (snapshot) => {
-        callback(snapshot.docs.map((s) => s.data()));
+        callback(snapshot.docs.map((s) => this.buildRoom(s)));
       },
       (error) => {
         error(error);
