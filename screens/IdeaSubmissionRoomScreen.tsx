@@ -192,10 +192,7 @@ export default function IdeaSubmissionRoomScreen({
       <NiceJobModal />
 
       <View style={styles.headerContainer}>
-        <BailButton
-          onPress={leaveRoom}
-          participantsCount={participantsCount}
-        />
+        <BailButton onPress={leaveRoom} participantsCount={participantsCount} />
 
         <Icon
           type="material-community"

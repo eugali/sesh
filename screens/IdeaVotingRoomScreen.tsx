@@ -238,10 +238,7 @@ export default function IdeaVotingRoomScreen({
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
-        <BailButton
-          onPress={leaveRoom}
-          participantsCount={participantsCount}
-        />
+        <BailButton onPress={leaveRoom} participantsCount={participantsCount} />
 
         <Icon
           type="material-community"

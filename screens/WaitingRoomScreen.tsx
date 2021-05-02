@@ -28,6 +28,12 @@ import { blueBackground, white50, white30 } from "../constants/Colors";
 import { defaultScreenPadding } from "../constants/Layout";
 import BailButton from "../components/BailButton";
 import dbInstance from "../shared/dbInstance";
+import { roomState } from "../constants/Enums";
+import {
+  isRoomInIdeaSubmissionPhase,
+  isRoomInIdeaVotingPhase,
+  isRoomInWaitingPhase,
+} from "../shared/roomUtils";
 
 export default function WaitingRoomScreen({
   route,
@@ -56,7 +62,35 @@ export default function WaitingRoomScreen({
   };
 
   useEffect(() => {
-    dbInstance.watchRoomParticipants(
+    const unsubscribe = dbInstance.watchRoom(roomID, async (room) => {
+      if (isRoomInWaitingPhase(room)) return;
+
+      if (
+        room.status === roomState.ACTIVE &&
+        isRoomInIdeaSubmissionPhase(room)
+      ) {
+        navigation.navigate("IdeaSubmissionRoom", { roomID });
+        return;
+      }
+
+      if (room.status === roomState.ACTIVE && isRoomInIdeaVotingPhase(room)) {
+        navigation.navigate("IdeaVotingRoom", { roomID });
+        return;
+      }
+
+      if (room.status === roomState.CLOSED) {
+        navigation.navigate("IdeaVoteResults", { roomID });
+        return;
+      }
+
+      navigation.navigate("Home");
+    });
+
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = dbInstance.watchRoomParticipants(
       roomID,
       (participants) => {
         //setIsLoaded(true);
@@ -67,6 +101,8 @@ export default function WaitingRoomScreen({
         //setError(error);
       }
     );
+
+    return unsubscribe;
   }, []);
 
   useEffect(() => {

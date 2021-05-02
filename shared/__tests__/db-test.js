@@ -104,8 +104,8 @@ test("Shows new participants in real time", async (done) => {
 }, 1000);
 
 test("Should allow leaving a room", async () => {
-  let participants = await testDB.getParticipants(testRoomID)
-  await testDB.leaveRoom(testRoomID)
-  let participantsNew = await testDB.getParticipants(testRoomID)
-  expect(participants.length - participantsNew.length).toBe(1)
-})
+  let participants = await testDB.getParticipants(testRoomID);
+  await testDB.leaveRoom(testRoomID);
+  let participantsNew = await testDB.getParticipants(testRoomID);
+  expect(participants.length - participantsNew.length).toBe(1);
+});

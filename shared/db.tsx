@@ -52,13 +52,14 @@ const db = (
   },
 
   async leaveRoom(roomID: string) {
-    let participants = await this.getParticipants(roomID)
-    let lastParticipant = participants.pop()
+    let participants = await this.getParticipants(roomID);
+    let lastParticipant = participants.pop();
     await firestore
       .collection(collection)
       .doc(roomID)
       .collection(participantsSubCollectionName)
-      .doc(lastParticipant).delete()
+      .doc(lastParticipant)
+      .delete();
   },
 
   async startRoom(roomID: string) {

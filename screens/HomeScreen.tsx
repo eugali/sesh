@@ -141,10 +141,6 @@ export default function HomeScreen({
 
     //window.history.replaceState({}, document.title, "/");
 
-    console.log(urlParams);
-    console.log("room id from home");
-    console.log(roomID);
-
     if (roomID) {
       // redirect to the proper room
       joinRoom(roomID);
