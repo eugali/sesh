@@ -15,14 +15,7 @@ import { Idea } from "../types";
 import { useTimer } from "react-timer-hook";
 import moment from "moment";
 
-import {
-  defaultScreenPadding,
-  paddings,
-  margins,
-  borderRadiuses,
-  screenWidth,
-  screenHeight,
-} from "../constants/Layout";
+import { defaultScreenPadding } from "../constants/Layout";
 
 import BailButton from "../components/BailButton";
 
@@ -64,13 +57,12 @@ export default function IdeaSubmissionRoomScreen({
   const roomID = route?.params?.roomID;
   const [hmwTitle, setHmwTitle] = useState<string>("");
   const [participantsCount, setParticipantsCount] = useState<string>("");
+  const [showCountdown, setShowCountdown] = useState(false);
   const [niceJobModalVisible, setNiceJobModalVisible] = useState<boolean>(
     false
   );
   const [idea, setIdea] = useState<string>("");
   const [ideas, setIdeas] = useState<Idea[]>([]);
-
-  const votesLimit = 4;
 
   const goBackHome = () => navigation.navigate("Home");
 
@@ -100,13 +92,9 @@ export default function IdeaSubmissionRoomScreen({
     dbInstance.watchRoomParticipants(
       roomID,
       (participants) => {
-        //setIsLoaded(true);
         setParticipantsCount(participants.length.toString());
       },
-      (error) => {
-        //setIsLoaded(true);
-        //setError(error);
-      }
+      (error) => {}
     );
   }, []);
 
@@ -126,10 +114,11 @@ export default function IdeaSubmissionRoomScreen({
       setHmwTitle(room.question);
       setParticipantsCount(participants.length.toString());
 
-      const roomEndsAt = new Date();
-      roomEndsAt.setSeconds(roomEndsAt.getSeconds() + SubmissionDuration);
-
-      restart(roomEndsAt);
+      const roomStartedAt = new Date(
+        (room.startedAt.seconds + SubmissionDuration) * 1000
+      );
+      restart(roomStartedAt);
+      setShowCountdown(true);
     })();
   }, [route.params]);
 
@@ -204,9 +193,11 @@ export default function IdeaSubmissionRoomScreen({
         <View style={{ flex: 1 }} />
 
         <View style={styles.timerContainer}>
-          <Text style={styles.timer}>{`${minutes.pad(2)}:${seconds.pad(
-            2
-          )}`}</Text>
+          {showCountdown && (
+            <Text style={styles.timer}>
+              {`${minutes.pad(2)}:${seconds.pad(2)}`}
+            </Text>
+          )}
         </View>
       </View>
 

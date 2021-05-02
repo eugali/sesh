@@ -79,6 +79,7 @@ export default function IdeaVotingRoomScreen({
   const [hmwTitle, setHmwTitle] = useState<string>("");
   const [participantsCount, setParticipantsCount] = useState<string>("");
   const [roomEndsAt, setRoomEndsAt] = useState(null);
+  const [showCountdown, setShowCountdown] = useState(false);
   const [votesCounter, setVotesCounter] = useState(0);
 
   const goBackHome = () => navigation.navigate("Home");
@@ -166,10 +167,12 @@ export default function IdeaVotingRoomScreen({
       setHmwTitle(room.question);
       setParticipantsCount(participants.length.toString());
 
-      const roomEndsAt = new Date();
-      roomEndsAt.setSeconds(roomEndsAt.getSeconds() + VotingDuration);
-      setRoomEndsAt(roomEndsAt);
-      restart(roomEndsAt);
+      const roomStartedAt = new Date(
+        (room.startedAt.seconds + VotingDuration) * 1000
+      );
+
+      restart(roomStartedAt);
+      setShowCountdown(true);
     })();
   }, [route.params]);
 
@@ -250,7 +253,7 @@ export default function IdeaVotingRoomScreen({
         <View style={{ flex: 1 }} />
 
         <View style={styles.timerContainer}>
-          {roomEndsAt && (
+          {showCountdown && (
             <Text style={styles.timer}>{`${minutes.pad(2)}:${seconds.pad(
               2
             )}`}</Text>
