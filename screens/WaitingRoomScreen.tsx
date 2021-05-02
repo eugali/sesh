@@ -309,7 +309,8 @@ const styles = StyleSheet.create({
   },
   container: {
     width: "100%",
-    height: screenHeight,
+    minHeight: screenHeight,
+    height: "100%",
     alignItems: "center",
     justifyContent: "flex-start",
     backgroundColor: blueBackground,
