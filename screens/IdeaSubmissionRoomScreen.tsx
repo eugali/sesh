@@ -76,15 +76,15 @@ export default function IdeaSubmissionRoomScreen({
 
   const onTimerExpired = async () => {
     // submit ideas
-    for(let idea of ideas){
-      await dbInstance.createSolution(roomID, idea.title)
+    for (let idea of ideas) {
+      await dbInstance.createSolution(roomID, idea.title);
     }
     navigation.navigate("IdeaVotingRoom", { roomID });
   };
 
   // initial value for the timer before the room is loaded
   const initTime = new Date();
-  initTime.setSeconds(initTime.getSeconds() + 100)
+  initTime.setSeconds(initTime.getSeconds() + 100);
 
   const { seconds, minutes, restart } = useTimer({
     expiryTimestamp: initTime,
@@ -93,7 +93,7 @@ export default function IdeaSubmissionRoomScreen({
 
   useEffect(() => {
     (async () => {
-      await dbInstance.waitForPendingWrites()
+      await dbInstance.waitForPendingWrites();
 
       const room = await dbInstance.getRoom(roomID);
 
@@ -108,8 +108,8 @@ export default function IdeaSubmissionRoomScreen({
       setParticipantsCount(participants.length.toString());
 
       const roomEndsAt = new Date();
-      roomEndsAt.setSeconds(roomEndsAt.getSeconds() + SubmissionDuration)
-      
+      roomEndsAt.setSeconds(roomEndsAt.getSeconds() + SubmissionDuration);
+
       restart(roomEndsAt);
     })();
   }, [route.params]);
@@ -119,8 +119,8 @@ export default function IdeaSubmissionRoomScreen({
   };
 
   const submitIdea = () => {
-    if(idea.length < 3){
-      return
+    if (idea.length < 3) {
+      return;
     }
     setIdeas([{ title: idea }, ...ideas]);
     setIdea("");

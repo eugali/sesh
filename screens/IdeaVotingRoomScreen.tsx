@@ -37,8 +37,8 @@ import {
   lighterWhite,
 } from "../constants/Colors";
 import Shared from "../constants/Shared";
-import { VotingDuration } from '../constants/Config';
-import dbInstance from '../shared/dbInstance';
+import { VotingDuration } from "../constants/Config";
+import dbInstance from "../shared/dbInstance";
 
 const noGlow = `
 textarea, select, input, button {
@@ -73,19 +73,18 @@ export default function IdeaVotingRoomScreen({
   navigation,
 }: StackScreenProps<RootStackParamList, "IdeaVotingRoom">) {
   const roomID = route?.params?.roomID;
-  const [hmwTitle, setHmwTitle] = useState<string>('')
-  const [participantsCount, setParticipantsCount] = useState<string>('')
+  const [hmwTitle, setHmwTitle] = useState<string>("");
+  const [participantsCount, setParticipantsCount] = useState<string>("");
   const votesLimit = 4;
 
   const goBackHome = () => navigation.navigate("Home");
 
-  const [ideas, setIdeas] = useState<Idea[]>([])
+  const [ideas, setIdeas] = useState<Idea[]>([]);
 
   const hasVotesLimitBeenReached = () => {
     return (
-      ideas
-      .map((idea) => idea.votes)
-      .reduce((a: number, b) => a + b, 0) >= votesLimit
+      ideas.map((idea) => idea.votes).reduce((a: number, b) => a + b, 0) >=
+      votesLimit
     );
   };
 
@@ -106,30 +105,24 @@ export default function IdeaVotingRoomScreen({
   };
 
   const onTimerExpires = async () => {
-
     // TODO - send all the data
 
-    await dbInstance.closeRoom(roomID)
-    navigation.navigate('IdeaVoteResults', {roomID})
-  }
+    await dbInstance.closeRoom(roomID);
+    navigation.navigate("IdeaVoteResults", { roomID });
+  };
 
   // initial value for the timer before the room is loaded
   const initTime = new Date();
-  initTime.setSeconds(initTime.getSeconds() + 100)
+  initTime.setSeconds(initTime.getSeconds() + 100);
 
-  const {
-    seconds,
-    minutes,
-    restart,
-  } = useTimer({
+  const { seconds, minutes, restart } = useTimer({
     expiryTimestamp: initTime,
     onExpire: onTimerExpires,
   });
 
-
   useEffect(() => {
     (async () => {
-      await dbInstance.waitForPendingWrites()
+      await dbInstance.waitForPendingWrites();
 
       const room = await dbInstance.getRoom(roomID);
 
@@ -144,18 +137,20 @@ export default function IdeaVotingRoomScreen({
       setParticipantsCount(participants.length.toString());
 
       const roomEndsAt = new Date();
-      roomEndsAt.setSeconds(roomEndsAt.getSeconds() + VotingDuration)
-      
+      roomEndsAt.setSeconds(roomEndsAt.getSeconds() + VotingDuration);
+
       restart(roomEndsAt);
 
-      const solutions = await dbInstance.getSolutions(roomID)
+      const solutions = await dbInstance.getSolutions(roomID);
 
-      setIdeas(solutions.map((solution: any) => ({title: solution.text, votes: 0})) as Idea[])
-
+      setIdeas(
+        solutions.map((solution: any) => ({
+          title: solution.text,
+          votes: 0,
+        })) as Idea[]
+      );
     })();
   }, [route.params]);
-
-
 
   const renderIdea = ({ item, index }: { item: Idea; index: number }) => {
     return (
@@ -221,7 +216,6 @@ export default function IdeaVotingRoomScreen({
 
   return (
     <SafeAreaView style={styles.container}>
-
       <View style={styles.headerContainer}>
         <BailButton
           onPress={goBackHome}

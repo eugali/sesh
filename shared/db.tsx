@@ -16,7 +16,7 @@ const db = (
 ) => ({
   votes: {},
   async waitForPendingWrites() {
-    await firestore.waitForPendingWrites()
+    await firestore.waitForPendingWrites();
   },
   async createRoom(hmwText, problemStatement = "", isPrivate = false) {
     let roomRef = await firestore.collection(collection).add({
@@ -111,15 +111,15 @@ const db = (
   },
 
   async getPublicRooms() {
-    let rooms = []
-    return rooms
+    let rooms = [];
+    return rooms;
     try {
-      rooms = await firestore.collection(collection).getAll()
-    } catch(e){
-      return []
+      rooms = await firestore.collection(collection).getAll();
+    } catch (e) {
+      return [];
     }
 
-    return rooms
+    return rooms;
   },
 
   watchRoomParticipants(roomID: string, callback) {

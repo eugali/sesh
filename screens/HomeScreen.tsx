@@ -117,12 +117,11 @@ export default function HomeScreen({
         // redirect to the proper room
 
         joinRoom(roomID);
-        return
+        return;
       }
 
-      const rooms = await dbInstance.getPublicRooms()
-      console.log(rooms)
-
+      const rooms = await dbInstance.getPublicRooms();
+      console.log(rooms);
     })();
   }, []);
 
