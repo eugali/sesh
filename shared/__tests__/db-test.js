@@ -34,7 +34,8 @@ test("Creates new room given valid HMW", async () => {
 test("Creates new solution for HMW given valid solution", async () => {
   testSolutionID = await testDB.createSolution(testRoomID, "Very carefully");
   let solutions = await testDB.getSolutions(testRoomID);
-  expect(solutions).toStrictEqual([{ text: "Very carefully", votes: 0 }]);
+  expect(solutions[0].text).toBe("Very carefully");
+  expect(solutions.length).toBe(1);
 });
 
 test("Allows no more than 4 upvotes on one post in one room", async () => {
@@ -101,3 +102,10 @@ test("Shows new participants in real time", async (done) => {
   });
   await testDB.joinRoom(newRoomID);
 }, 1000);
+
+test("Should allow leaving a room", async () => {
+  let participants = await testDB.getParticipants(testRoomID)
+  await testDB.leaveRoom(testRoomID)
+  let participantsNew = await testDB.getParticipants(testRoomID)
+  expect(participants.length - participantsNew.length).toBe(1)
+})

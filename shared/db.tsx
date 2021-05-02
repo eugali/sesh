@@ -52,7 +52,13 @@ const db = (
   },
 
   async leaveRoom(roomID: string) {
-    // TODO
+    let participants = await this.getParticipants(roomID)
+    let lastParticipant = participants.pop()
+    await firestore
+      .collection(collection)
+      .doc(roomID)
+      .collection(participantsSubCollectionName)
+      .doc(lastParticipant).delete()
   },
 
   async startRoom(roomID: string) {
@@ -97,8 +103,6 @@ const db = (
   },
 
   async upvote(roomID: string, solutionID: string, solutions: Solution[]) {
-    if (this.hasVotesLimitBeenReached(solutions)) return;
-
     await firestore
       .collection(collection)
       .doc(roomID)
@@ -109,8 +113,6 @@ const db = (
   },
 
   async downvote(roomID: string, solutionID: string, solutions: Solution[]) {
-    if (this.allVotesAvailable(solutions)) return;
-
     await firestore
       .collection(collection)
       .doc(roomID)
@@ -169,7 +171,7 @@ const db = (
       .collection(participantsSubCollectionName)
       .onSnapshot(
         (snapshot) => {
-          callback(snapshot.docs.map((s) => s.data()));
+          callback(snapshot.docs.map((s) => s.id));
         },
         (error) => {
           callback(error);
@@ -205,7 +207,7 @@ const db = (
       .doc(roomID)
       .collection(participantsSubCollectionName)
       .get();
-    return participants.docs.map((s) => s.data());
+    return participants.docs.map((s) => s.id);
   },
 
   async getSolutions(roomID: string) {
