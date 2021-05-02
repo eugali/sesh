@@ -180,8 +180,6 @@ export default function IdeaSubmissionRoomScreen({
 
   return (
     <SafeAreaView style={styles.container}>
-      <NiceJobModal />
-
       <View style={styles.headerContainer}>
         <BailButton onPress={leaveRoom} participantsCount={participantsCount} />
 
@@ -398,6 +396,7 @@ const styles = StyleSheet.create({
     paddingLeft: defaultScreenPadding,
     paddingTop: defaultScreenPadding,
     backgroundColor: blueBackground,
+    maxWidth: 600,
   },
   bodyContainer: {
     paddingRight: defaultScreenPadding,

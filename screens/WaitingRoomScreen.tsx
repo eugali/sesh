@@ -298,6 +298,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     marginBottom: 30,
     flexDirection: "row",
+    maxWidth: 600,
   },
   header: {
     fontSize: 24,
