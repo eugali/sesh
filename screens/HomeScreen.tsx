@@ -60,19 +60,7 @@ export default function HomeScreen({
     const unsubscribe = dbInstance.watchRooms(
       (rooms) => {
         setIsLoaded(true);
-        setRooms(
-          rooms
-            .filter((room) => room.isPrivate === false)
-            .sort((a, b) => {
-              if (a.createdAt > b.createdAt) {
-                return -1;
-              }
-              if (a.createdAt < b.createdAt) {
-                return 1;
-              }
-              return 0;
-            })
-        );
+        setRooms(rooms.filter((room) => room.isPrivate === false));
       },
       (error) => {
         setIsLoaded(true);
