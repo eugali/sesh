@@ -64,7 +64,7 @@ export default function IdeaVoteResultsRoomScreen({
       title:
         participantsCount +
         ` people came up with ` +
-        ideas.length +
+        solutions.length +
         ` @seshIdeas for "` +
         hmwTitle +
         `". Check out the top ideas here:`,

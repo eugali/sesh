@@ -81,6 +81,7 @@ export default function IdeaVotingRoomScreen({
   const [roomEndsAt, setRoomEndsAt] = useState(null);
   const [showCountdown, setShowCountdown] = useState(false);
   const [votesCounter, setVotesCounter] = useState(0);
+  const [votedSolutionsIds, setVotedSolutionsIds] = useState([]);
 
   const goBackHome = () => navigation.navigate("Home");
 
@@ -94,12 +95,18 @@ export default function IdeaVotingRoomScreen({
   const upvote = (index) => {
     if (votesCounter >= MAX_VOTES) return;
     setVotesCounter(votesCounter + 1);
+    setVotedSolutionsIds([...votedSolutionsIds, solutions[index].id]);
     dbInstance.upvote(roomID, solutions[index].id, solutions);
   };
 
   const downvote = (index) => {
     if (votesCounter <= 0) return;
     setVotesCounter(votesCounter - 1);
+    setVotedSolutionsIds(
+      votedSolutionsIds.filter(
+        (votedSolutionsId) => votedSolutionsId !== solutions[index].id
+      )
+    );
     dbInstance.downvote(roomID, solutions[index].id, solutions);
   };
 
@@ -194,13 +201,19 @@ export default function IdeaVotingRoomScreen({
               type="material-community"
               name="star-circle-outline"
               size={24}
-              color={item.votes > 0 ? YellowVote : PinkVote}
+              color={
+                votedSolutionsIds.includes(item.id) ? YellowVote : PinkVote
+              }
             />
           </Pressable>
           <Text
             style={[
               styles.votesLabel,
-              { color: item.votes > 0 ? YellowVote : PinkVote },
+              {
+                color: votedSolutionsIds.includes(item.id)
+                  ? YellowVote
+                  : PinkVote,
+              },
             ]}
           >
             {item.votes}
