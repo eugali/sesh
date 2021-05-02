@@ -54,9 +54,9 @@ export default function IdeaVoteResultsRoomScreen({
   route,
   navigation,
 }: StackScreenProps<RootStackParamList, "IdeaVoteResultsRoom">) {
-  const [hmwTitle, setHmwTitle] = useState('')
+  const [hmwTitle, setHmwTitle] = useState("");
   const roomID = route?.params?.roomID;
-  const [participantsCount, setParticipantsCount] = useState('')
+  const [participantsCount, setParticipantsCount] = useState("");
 
   const shareRoomOnTwitter = () =>
     tw({
@@ -77,10 +77,10 @@ export default function IdeaVoteResultsRoomScreen({
 
   useEffect(() => {
     dbInstance.watchRoomParticipants(
-      roomID, 
+      roomID,
       (participants) => {
         //setIsLoaded(true);
-        setParticipantsCount(participants.length.toString())
+        setParticipantsCount(participants.length.toString());
       },
       (error) => {
         //setIsLoaded(true);
@@ -91,7 +91,6 @@ export default function IdeaVoteResultsRoomScreen({
 
   useEffect(() => {
     (async () => {
-
       const room = await dbInstance.getRoom(roomID);
       const participants = await dbInstance.getParticipants(roomID);
       const solutions = await dbInstance.getSolutions(roomID);

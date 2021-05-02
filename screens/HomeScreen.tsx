@@ -148,7 +148,7 @@ export default function HomeScreen({
     if (roomID) {
       // redirect to the proper room
       joinRoom(roomID);
-      
+
       return;
     }
   }, []);

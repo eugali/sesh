@@ -93,10 +93,10 @@ export default function IdeaSubmissionRoomScreen({
 
   useEffect(() => {
     dbInstance.watchRoomParticipants(
-      roomID, 
+      roomID,
       (participants) => {
         //setIsLoaded(true);
-        setParticipantsCount(participants.length.toString())
+        setParticipantsCount(participants.length.toString());
       },
       (error) => {
         //setIsLoaded(true);
