@@ -37,6 +37,8 @@ import {
   lighterWhite,
 } from "../constants/Colors";
 import Shared from "../constants/Shared";
+import { VotingDuration } from '../constants/Config';
+import dbInstance from '../shared/dbInstance';
 
 const noGlow = `
 textarea, select, input, button {
@@ -67,36 +69,23 @@ const YellowVote = "#F2C94C";
 const PinkVote = "#CAC0F4";
 
 export default function IdeaVotingRoomScreen({
+  route,
   navigation,
 }: StackScreenProps<RootStackParamList, "IdeaVotingRoom">) {
-  const hmwTitle = "How might we help designers break into web3?";
-  const roomVotingStartTimestamp = moment().add(5, "minutes").valueOf();
-  const participantsCount = 6;
+  const roomID = route?.params?.roomID;
+  const [hmwTitle, setHmwTitle] = useState<string>('')
+  const [participantsCount, setParticipantsCount] = useState<string>('')
   const votesLimit = 4;
 
   const goBackHome = () => navigation.navigate("Home");
 
-  const [idea, setIdea] = useState<string>("");
-  const [ideas, setIdeas] = useState<Idea[]>([
-    { title: "Create figma only hackathons (no code!)", votes: 0 },
-    { title: "Start a podcast featuring designers in web3 ", votes: 0 },
-    { title: "Curate job web3 design job opportunities", votes: 0 },
-    { title: "Curate the best communities for web3 designrs", votes: 0 },
-    { title: "Curate the best communities for web3 desgners", votes: 0 },
-    { title: "Curate the best communities fr web3 designers", votes: 0 },
-    { title: "Crate the best communities for web3 designrs", votes: 0 },
-    { title: "Curate he best communities for web3 desgners", votes: 0 },
-    { title: "Curate the bet communities fr web3 designers", votes: 0 },
-  ]);
-
-  const [niceJobModalVisible, setNiceJobModalVisible] = useState<boolean>(
-    false
-  );
+  const [ideas, setIdeas] = useState<Idea[]>([])
 
   const hasVotesLimitBeenReached = () => {
     return (
-      ideas.map((idea) => idea.votes).reduce((a: number, b) => a + b, 0) >=
-      votesLimit
+      ideas
+      .map((idea) => idea.votes)
+      .reduce((a: number, b) => a + b, 0) >= votesLimit
     );
   };
 
@@ -116,24 +105,57 @@ export default function IdeaVotingRoomScreen({
     setIdeas(tmpIdeas);
   };
 
+  const onTimerExpires = async () => {
+
+    // TODO - send all the data
+
+    await dbInstance.closeRoom(roomID)
+    navigation.navigate('IdeaVoteResults', {roomID})
+  }
+
+  // initial value for the timer before the room is loaded
+  const initTime = new Date();
+  initTime.setSeconds(initTime.getSeconds() + 100)
+
   const {
     seconds,
     minutes,
-    hours,
-    days,
-    isRunning,
-    start,
-    pause,
-    resume,
     restart,
   } = useTimer({
-    roomVotingStartTimestamp,
-    onExpire: () => console.warn("onExpire called"),
+    expiryTimestamp: initTime,
+    onExpire: onTimerExpires,
   });
 
+
   useEffect(() => {
-    restart(roomVotingStartTimestamp);
-  }, []);
+    (async () => {
+      await dbInstance.waitForPendingWrites()
+
+      const room = await dbInstance.getRoom(roomID);
+
+      if (room === null) {
+        navigation.navigate("Home");
+        return;
+      }
+
+      const participants = await dbInstance.getParticipants(roomID);
+
+      setHmwTitle(room.question);
+      setParticipantsCount(participants.length.toString());
+
+      const roomEndsAt = new Date();
+      roomEndsAt.setSeconds(roomEndsAt.getSeconds() + VotingDuration)
+      
+      restart(roomEndsAt);
+
+      const solutions = await dbInstance.getSolutions(roomID)
+
+      setIdeas(solutions.map((solution: any) => ({title: solution.text, votes: 0})) as Idea[])
+
+    })();
+  }, [route.params]);
+
+
 
   const renderIdea = ({ item, index }: { item: Idea; index: number }) => {
     return (
@@ -173,6 +195,7 @@ export default function IdeaVotingRoomScreen({
     );
   };
 
+  /*
   const NiceJobModal = () => {
     if (niceJobModalVisible === false) return null;
 
@@ -194,10 +217,10 @@ export default function IdeaVotingRoomScreen({
       </View>
     );
   };
+  */
 
   return (
     <SafeAreaView style={styles.container}>
-      <NiceJobModal />
 
       <View style={styles.headerContainer}>
         <BailButton

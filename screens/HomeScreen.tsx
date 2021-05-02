@@ -67,8 +67,6 @@ export default function HomeScreen({
     }, [])
   );
 
-  // 4ZEXSCrhywDBX2DUdRN3
-
   const joinRoom = async (roomID: string) => {
     const room = await dbInstance.getRoom(roomID);
 
@@ -119,7 +117,12 @@ export default function HomeScreen({
         // redirect to the proper room
 
         joinRoom(roomID);
+        return
       }
+
+      const rooms = await dbInstance.getPublicRooms()
+      console.log(rooms)
+
     })();
   }, []);
 

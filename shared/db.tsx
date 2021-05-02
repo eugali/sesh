@@ -15,7 +15,9 @@ const db = (
   minParticipants = minParticipantsCount
 ) => ({
   votes: {},
-
+  async waitForPendingWrites() {
+    await firestore.waitForPendingWrites()
+  },
   async createRoom(hmwText, problemStatement = "", isPrivate = false) {
     let roomRef = await firestore.collection(collection).add({
       question: hmwText,
@@ -102,11 +104,22 @@ const db = (
     try {
       room = await firestore.collection(collection).doc(roomID).get();
     } catch (e) {
-      console.log(e);
       return null;
     }
 
     return room.exists ? room.data() : null;
+  },
+
+  async getPublicRooms() {
+    let rooms = []
+    return rooms
+    try {
+      rooms = await firestore.collection(collection).getAll()
+    } catch(e){
+      return []
+    }
+
+    return rooms
   },
 
   watchRoomParticipants(roomID: string, callback) {

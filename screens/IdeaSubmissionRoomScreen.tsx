@@ -6,11 +6,8 @@ import {
   Text,
   View,
   SafeAreaView,
-  Alert,
   TextInput,
-  FlatList,
   Pressable,
-  Modal,
   Platform,
 } from "react-native";
 import { Button, Icon, Switch } from "react-native-elements";
@@ -79,18 +76,25 @@ export default function IdeaSubmissionRoomScreen({
 
   const onTimerExpired = async () => {
     // submit ideas
+    for(let idea of ideas){
+      await dbInstance.createSolution(roomID, idea.title)
+    }
     navigation.navigate("IdeaVotingRoom", { roomID });
   };
 
-  const initialTimestamp = Date.now() + 100000;
+  // initial value for the timer before the room is loaded
+  const initTime = new Date();
+  initTime.setSeconds(initTime.getSeconds() + 100)
 
   const { seconds, minutes, restart } = useTimer({
-    initialTimestamp,
+    expiryTimestamp: initTime,
     onExpire: onTimerExpired,
   });
 
   useEffect(() => {
     (async () => {
+      await dbInstance.waitForPendingWrites()
+
       const room = await dbInstance.getRoom(roomID);
 
       if (room === null) {
@@ -98,19 +102,26 @@ export default function IdeaSubmissionRoomScreen({
         return;
       }
 
-      const participantsCount = await dbInstance.getParticipants(roomID);
-      setHmwTitle(room.question);
-      setParticipantsCount(participantsCount.length.toString());
+      const participants = await dbInstance.getParticipants(roomID);
 
-      restart(room.startedAt + SubmissionDuration);
+      setHmwTitle(room.question);
+      setParticipantsCount(participants.length.toString());
+
+      const roomEndsAt = new Date();
+      roomEndsAt.setSeconds(roomEndsAt.getSeconds() + SubmissionDuration)
+      
+      restart(roomEndsAt);
     })();
-  }, []);
+  }, [route.params]);
 
   const deleteIdea = (indexToDelete: number) => {
     setIdeas(ideas.filter((item, index) => index !== indexToDelete));
   };
 
   const submitIdea = () => {
+    if(idea.length < 3){
+      return
+    }
     setIdeas([{ title: idea }, ...ideas]);
     setIdea("");
   };
