@@ -51,8 +51,8 @@ const db = (
       .add({});
   },
 
-  async leaveRoom(roomID: string){
-    // TODO 
+  async leaveRoom(roomID: string) {
+    // TODO
   },
 
   async startRoom(roomID: string) {
