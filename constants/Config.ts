@@ -10,5 +10,5 @@ export const firebaseConfig = {
 
 export const baseURL = "https://sesh-e5398.web.app";
 
-export const SubmissionDuration = 20;
-export const VotingDuration = 20;
+export const SubmissionDuration = 60;
+export const VotingDuration = 60;

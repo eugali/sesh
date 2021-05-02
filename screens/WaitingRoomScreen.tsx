@@ -37,6 +37,11 @@ export default function WaitingRoomScreen({
 
   const goBackHome = () => navigation.navigate("Home");
 
+  const leaveRoom = async () => {
+    await dbInstance.leaveRoom(roomID)
+    goBackHome()
+  }
+
   const [hmwTitle, setHmwTitle] = useState<string>("");
   const [hmwContent, setHmwContent] = useState<string>("");
   const [participantsCount, setParticipantsCount] = useState<string>("");
@@ -70,7 +75,7 @@ export default function WaitingRoomScreen({
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
         <BailButton
-          onPress={goBackHome}
+          onPress={leaveRoom}
           participantsCount={participantsCount}
         />
 

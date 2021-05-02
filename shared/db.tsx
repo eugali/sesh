@@ -51,6 +51,10 @@ const db = (
       .add({});
   },
 
+  async leaveRoom(roomID: string){
+    // TODO 
+  },
+
   async startRoom(roomID: string) {
     let participants = await this.getParticipants(roomID);
     if (participants.length >= minParticipants) {
