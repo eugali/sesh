@@ -38,26 +38,10 @@ import {
   isRoomInIdeaVotingPhase,
 } from "../shared/roomUtils";
 
-const mockData = [
-  {
-    title: "How might we ...",
-    roomID: "yJEBZxgLYO86RFblJuLC",
-  },
-  {
-    title: "How might we ...",
-    roomID: "yJEBZxgLYO86RFblJuLC",
-  },
-  {
-    title: "How might we ...",
-    roomID: "yJEBZxgLYO86RFblJuLC",
-  },
-];
-
 export default function HomeScreen({
   route,
   navigation,
 }: StackScreenProps<RootStackParamList, "Home">) {
-  //yJEBZxgLYO86RFblJuLC room id to test
 
   const [joinRoomID, setJoinRoomID] = useState<string>("");
 
@@ -83,8 +67,6 @@ export default function HomeScreen({
       }
     );
   }, []);
-
-  // 4ZEXSCrhywDBX2DUdRN3
 
   const joinRoom = async (roomID: string) => {
     const room = await dbInstance.getRoom(roomID);
