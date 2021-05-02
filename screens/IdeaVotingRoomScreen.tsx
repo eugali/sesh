@@ -83,6 +83,11 @@ export default function IdeaVotingRoomScreen({
 
   const goBackHome = () => navigation.navigate("Home");
 
+  const leaveRoom = async () => {
+    await dbInstance.leaveRoom(roomID);
+    goBackHome();
+  };
+
   const [solutions, setSolutions] = useState<Solution[]>([]);
 
   const upvote = (index) => {
@@ -234,7 +239,7 @@ export default function IdeaVotingRoomScreen({
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
         <BailButton
-          onPress={goBackHome}
+          onPress={leaveRoom}
           participantsCount={participantsCount}
         />
 

@@ -74,6 +74,11 @@ export default function IdeaSubmissionRoomScreen({
 
   const goBackHome = () => navigation.navigate("Home");
 
+  const leaveRoom = async () => {
+    await dbInstance.leaveRoom(roomID);
+    goBackHome();
+  };
+
   const onTimerExpired = async () => {
     // submit ideas
     for (let idea of ideas) {
@@ -188,7 +193,7 @@ export default function IdeaSubmissionRoomScreen({
 
       <View style={styles.headerContainer}>
         <BailButton
-          onPress={goBackHome}
+          onPress={leaveRoom}
           participantsCount={participantsCount}
         />
 
