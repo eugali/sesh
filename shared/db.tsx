@@ -38,6 +38,7 @@ const db = (
       isPrivate: isPrivate,
       status: roomState.WAITING,
       startedAt: false,
+      createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
     });
     await this.joinRoom(roomRef.id);
     return roomRef.id;
