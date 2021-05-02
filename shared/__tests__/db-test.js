@@ -53,6 +53,16 @@ test("Should allow starting room with sufficient participants", async () => {
   expect(await testDB.startRoom(testRoomID)).toBe(true);
 });
 
+test("Should allow starting a room and notify listeners", async (done) => {
+  first = true;
+  testDB.watchRoom(testRoomID, (room) => {
+    if (first) expect(room.status).toBe(roomState.ACTIVE);
+    first = false;
+    done();
+  });
+  testDB.startRoom(testRoomID);
+});
+
 test("Closes a room", async () => {
   expect(await testDB.closeRoom(testRoomID)).toBe(true);
 });

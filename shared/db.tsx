@@ -109,6 +109,31 @@ const db = (
     return room.exists ? room.data() : null;
   },
 
+  watchRoom(roomID: string, callback) {
+    firestore
+      .collection(collection)
+      .doc(roomID)
+      .onSnapshot(
+        (snapshot) => {
+          callback(snapshot.data());
+        },
+        (error) => {
+          callback(error);
+        }
+      );
+  },
+
+  watchRooms(callback) {
+    firestore.collection(collection).onSnapshot(
+      (snapshot) => {
+        callback(snapshot.docs.map((s) => s.data()));
+      },
+      (error) => {
+        callback(error);
+      }
+    );
+  },
+
   watchRoomParticipants(roomID: string, callback) {
     firestore
       .collection(collection)
