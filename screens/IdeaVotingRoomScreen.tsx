@@ -92,6 +92,22 @@ export default function IdeaVotingRoomScreen({
 
   const [solutions, setSolutions] = useState<Solution[]>([]);
 
+  const filterOutOneIdAtATime = (ids, idToFilter) => {
+    let filteredCount = 0;
+    const output = ids.filter((id) => {
+      if (filteredCount) return true;
+
+      if (id !== idToFilter) {
+        return true;
+      } else {
+        filteredCount++;
+        return false;
+      }
+    });
+
+    return output;
+  };
+
   const upvote = (index) => {
     if (votesCounter >= MAX_VOTES) return;
     setVotesCounter(votesCounter + 1);
@@ -101,11 +117,13 @@ export default function IdeaVotingRoomScreen({
 
   const downvote = (index) => {
     if (votesCounter <= 0) return;
+
+    // you can't downvote something you didn't vote
+    if (!votedSolutionsIds.includes(solutions[index].id)) return;
+
     setVotesCounter(votesCounter - 1);
     setVotedSolutionsIds(
-      votedSolutionsIds.filter(
-        (votedSolutionsId) => votedSolutionsId !== solutions[index].id
-      )
+      filterOutOneIdAtATime(votedSolutionsIds, solutions[index].id)
     );
     dbInstance.downvote(roomID, solutions[index].id, solutions);
   };
