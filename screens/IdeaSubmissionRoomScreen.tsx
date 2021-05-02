@@ -92,6 +92,20 @@ export default function IdeaSubmissionRoomScreen({
   });
 
   useEffect(() => {
+    dbInstance.watchRoomParticipants(
+      roomID, 
+      (participants) => {
+        //setIsLoaded(true);
+        setParticipantsCount(participants.length.toString())
+      },
+      (error) => {
+        //setIsLoaded(true);
+        //setError(error);
+      }
+    );
+  }, []);
+
+  useEffect(() => {
     (async () => {
       await dbInstance.waitForPendingWrites();
 

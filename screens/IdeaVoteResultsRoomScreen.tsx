@@ -76,6 +76,20 @@ export default function IdeaVoteResultsRoomScreen({
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
+    dbInstance.watchRoomParticipants(
+      roomID, 
+      (participants) => {
+        //setIsLoaded(true);
+        setParticipantsCount(participants.length.toString())
+      },
+      (error) => {
+        //setIsLoaded(true);
+        //setError(error);
+      }
+    );
+  }, []);
+
+  useEffect(() => {
     (async () => {
 
       const room = await dbInstance.getRoom(roomID);

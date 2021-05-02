@@ -41,6 +41,8 @@ import { VotingDuration } from "../constants/Config";
 import dbInstance from "../shared/dbInstance";
 import { Solution } from "../types";
 
+const MAX_VOTES = 4
+
 const noGlow = `
 textarea, select, input, button {
 	-webkit-appearance: none;
@@ -77,22 +79,25 @@ export default function IdeaVotingRoomScreen({
   const [hmwTitle, setHmwTitle] = useState<string>("");
   const [participantsCount, setParticipantsCount] = useState<string>("");
   const [roomEndsAt, setRoomEndsAt] = useState(null);
+  const [votesCounter, setVotesCounter] = useState(0)
 
   const goBackHome = () => navigation.navigate("Home");
 
   const [solutions, setSolutions] = useState<Solution[]>([]);
 
   const upvote = (index) => {
+    if(votesCounter >= MAX_VOTES) return
+    setVotesCounter(votesCounter + 1)
     dbInstance.upvote(roomID, solutions[index].id, solutions);
   };
 
   const downvote = (index) => {
+    if(votesCounter <= 0 ) return 
+    setVotesCounter(votesCounter - 1)
     dbInstance.downvote(roomID, solutions[index].id, solutions);
   };
 
   const onTimerExpires = async () => {
-    // TODO - send all the data
-
     await dbInstance.closeRoom(roomID);
     navigation.navigate("IdeaVoteResults", { roomID });
   };
@@ -105,6 +110,20 @@ export default function IdeaVotingRoomScreen({
     expiryTimestamp: initTime,
     onExpire: onTimerExpires,
   });
+
+  useEffect(() => {
+    dbInstance.watchRoomParticipants(
+      roomID, 
+      (participants) => {
+        //setIsLoaded(true);
+        setParticipantsCount(participants.length.toString())
+      },
+      (error) => {
+        //setIsLoaded(true);
+        //setError(error);
+      }
+    );
+  }, []);
 
   useEffect(() => {
     dbInstance.watchRoomSolutions(

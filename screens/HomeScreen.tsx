@@ -139,6 +139,8 @@ export default function HomeScreen({
     const urlParams = new URLSearchParams(window.location.search);
     const roomID = urlParams.get("roomID");
 
+    //window.history.replaceState({}, document.title, "/");
+
     console.log(urlParams);
     console.log("room id from home");
     console.log(roomID);
@@ -146,6 +148,7 @@ export default function HomeScreen({
     if (roomID) {
       // redirect to the proper room
       joinRoom(roomID);
+      
       return;
     }
   }, []);
