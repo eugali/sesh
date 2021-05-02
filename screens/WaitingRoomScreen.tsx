@@ -123,7 +123,7 @@ export default function WaitingRoomScreen({
   }, []);
 
   const StartButtonOrMessage = () => {
-    if (parseInt(participantsCount) > MinParticipants) {
+    if (parseInt(participantsCount) >= MinParticipants) {
       return (
         <Button
           title={"Start Room"}
