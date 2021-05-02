@@ -124,7 +124,6 @@ export default function HomeScreen({
   const createRoom = () => navigation.navigate("CreateRoom");
 
   const renderAvailableRoom = ({ item }) => {
-    console.log(item.id);
     return (
       <Pressable onPress={() => joinRoom(item.id)}>
         <View style={styles.availableRoomRowContainer}>

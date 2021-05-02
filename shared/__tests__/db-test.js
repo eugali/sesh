@@ -34,7 +34,7 @@ test("Creates new room given valid HMW", async () => {
 test("Creates new solution for HMW given valid solution", async () => {
   testSolutionID = await testDB.createSolution(testRoomID, "Very carefully");
   let solutions = await testDB.getSolutions(testRoomID);
-  expect(solutions).toStrictEqual([{ text: "Very carefully" }]);
+  expect(solutions).toStrictEqual([{ text: "Very carefully", votes: 0 }]);
 });
 
 test("Allows no more than 4 upvotes on one post in one room", async () => {
@@ -70,14 +70,22 @@ test("Closes a room", async () => {
 });
 
 test("Shows new solutions in real time", async (done) => {
+  let first = true;
   let newRoomID = await testDB.createRoom("Test");
   let expectedNewSolution = "Asynchronously";
-  testDB.watchRoomSolutions(newRoomID, (solutions) => {
-    expect(solutions).toStrictEqual([{ text: expectedNewSolution }]);
-    done();
+  await testDB.watchRoomSolutions(newRoomID, (solutions) => {
+    if (first) {
+      expect(solutions[0].text).toBe(expectedNewSolution);
+      expect(solutions[0].votes).toBe(0);
+      first = false;
+    } else {
+      expect(solutions[0].votes).toBe(1);
+      done();
+    }
   });
-  await testDB.createSolution(newRoomID, expectedNewSolution);
-}, 1000);
+  let newID = await testDB.createSolution(newRoomID, expectedNewSolution);
+  await testDB.upvote(newRoomID, newID);
+}, 10000);
 
 test("Shows new participants in real time", async (done) => {
   let newRoomID = await testDB.createRoom("Test");
