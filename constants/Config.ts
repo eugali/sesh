@@ -12,6 +12,6 @@ export const baseURL = "https://sesh-e5398.web.app";
 
 export const prodCollectionName = "HMWs";
 export const SubmissionDuration = 30;
-export const VotingDuration = 15;
+export const VotingDuration = 10;
 export const MinParticipants = 1;
 export const MaxVotes = 4;
