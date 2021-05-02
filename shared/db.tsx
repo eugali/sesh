@@ -171,7 +171,7 @@ const db = (
       .collection(participantsSubCollectionName)
       .onSnapshot(
         (snapshot) => {
-          callback(snapshot.docs.map((s) => s.data()));
+          callback(snapshot.docs.map((s) => s.id));
         },
         (error) => {
           callback(error);
