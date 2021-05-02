@@ -33,6 +33,8 @@ import Shared from "../constants/Shared";
 import dbInstance from "../shared/dbInstance";
 import { roomState } from "../constants/Enums";
 import { createIconSetFromFontello } from "react-native-vector-icons";
+import { isRoomInWaitingPhase } from "../shared/roomUtils";
+import { sleep } from "../shared/utils";
 import {
   isRoomInIdeaSubmissionPhase,
   isRoomInIdeaVotingPhase,
@@ -50,7 +52,6 @@ export default function HomeScreen({
     }, [])
   );
 
-
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [rooms, setRooms] = useState([]);
@@ -59,7 +60,19 @@ export default function HomeScreen({
     dbInstance.watchRooms(
       (rooms) => {
         setIsLoaded(true);
-        setRooms(rooms);
+        setRooms(
+          rooms
+            .filter((room) => room.isPrivate === false)
+            .sort((a, b) => {
+              if (a.startedAt > b.startedAt) {
+                return -1;
+              }
+              if (a.startedAt < b.startedAt) {
+                return 1;
+              }
+              return 0;
+            })
+        );
       },
       (error) => {
         setIsLoaded(true);
@@ -71,75 +84,70 @@ export default function HomeScreen({
   const joinRoom = async (roomID: string) => {
     const room = await dbInstance.getRoom(roomID);
 
-    console.log('A')
+    console.log("A");
 
     if (room === null) {
       // TODO - alert
       return;
     }
 
-    console.log('B')
+    console.log("B");
 
-    if (room.status === roomState.WAITING) {
-      console.log('C')
+    if (isRoomInWaitingPhase(room)) {
+      console.log("C");
       await dbInstance.joinRoom(roomID);
       navigation.navigate("WaitingRoom", { roomID });
-      return
+      return;
     }
 
-    console.log('W')
+    console.log("W");
 
     if (room.status === roomState.ACTIVE) {
-      console.log('D')
+      console.log("D");
       // idea submission phase
-      const roomInIdeaSubmissionPhase = await isRoomInIdeaSubmissionPhase(
-        roomID
-      );
 
-      if (roomInIdeaSubmissionPhase) {
+      if (isRoomInIdeaSubmissionPhase(room)) {
         await dbInstance.joinRoom(roomID);
-        console.log('E')
+        console.log("E");
         navigation.navigate("IdeaSubmissionRoom", { roomID });
         return;
       }
 
-      console.log('Z')
-
-      const roomInIdeaVotingPhase = await isRoomInIdeaVotingPhase(roomID);
+      console.log("Z");
 
       // idea voting phase
-      if (roomInIdeaVotingPhase) {
-        console.log('F')
+      if (isRoomInIdeaVotingPhase(room)) {
+        console.log("F");
         await dbInstance.joinRoom(roomID);
         navigation.navigate("IdeaVotingRoom", { roomID });
         return;
       }
 
-      console.log('G')
+      console.log("G");
     }
 
-      if (room.status !== roomState.CLOSED) {
-        console.log('H')
-        await dbInstance.closeRoom(roomID)
-      }
+    if (room.status !== roomState.CLOSED) {
+      console.log("H");
+      await dbInstance.closeRoom(roomID);
+    }
 
-      console.log('I')
-      navigation.navigate("IdeaVoteResults", { roomID });
-    
+    console.log("I");
+    navigation.navigate("IdeaVoteResults", { roomID });
   };
 
   useEffect(() => {
-    (async () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const roomID = urlParams.get("roomID");
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomID = urlParams.get("roomID");
 
-      if (roomID !== null) {
-        // redirect to the proper room
+    console.log(urlParams);
+    console.log("room id from home");
+    console.log(roomID);
 
-        joinRoom(roomID);
-        return;
-      }
-    })();
+    if (roomID) {
+      // redirect to the proper room
+      joinRoom(roomID);
+      return;
+    }
   }, []);
 
   const createRoom = () => navigation.navigate("CreateRoom");

@@ -1,5 +1,6 @@
 import firebase from "firebase/app";
 import { roomState } from "../constants/Enums";
+import { Solution } from "../types";
 
 const hmwsCollectionName = "HMWs";
 const solutionsSubCollectionName = "Solutions";
@@ -14,6 +15,18 @@ const db = (
   maxVotes = maxVoteCount,
   minParticipants = minParticipantsCount
 ) => ({
+  hasVotesLimitBeenReached(solutions: Solution[]) {
+    return (
+      solutions.map((idea) => idea.votes).reduce((a: number, b) => a + b, 0) >=
+      maxVotes
+    );
+  },
+  allVotesAvailable(solutions: Solution[]) {
+    return (
+      solutions.map((idea) => idea.votes).reduce((a: number, b) => a + b, 0) ===
+      0
+    );
+  },
   votes: {},
   async waitForPendingWrites() {
     await firestore.waitForPendingWrites();
@@ -79,24 +92,28 @@ const db = (
     return solutionRef.id;
   },
 
-  async upvote(roomID: string, solutionID) {
-    if (!(roomID in this.votes)) {
-      this.votes[roomID] = 0;
-    }
+  async upvote(roomID: string, solutionID: string, solutions: Solution[]) {
+    if (this.hasVotesLimitBeenReached(solutions)) return;
 
-    if (this.votes[roomID] >= maxVotes) {
-      // already voted max times
-      return false;
-    } else {
-      await firestore
-        .collection(collection)
-        .doc(roomID)
-        .collection(solutionsSubCollectionName)
-        .doc(solutionID)
-        .update("votes", firebase.firestore.FieldValue.increment(1));
-      this.votes[roomID] += 1;
-      return true;
-    }
+    await firestore
+      .collection(collection)
+      .doc(roomID)
+      .collection(solutionsSubCollectionName)
+      .doc(solutionID)
+      .update("votes", firebase.firestore.FieldValue.increment(1));
+    return true;
+  },
+
+  async downvote(roomID: string, solutionID: string, solutions: Solution[]) {
+    if (this.allVotesAvailable(solutions)) return;
+
+    await firestore
+      .collection(collection)
+      .doc(roomID)
+      .collection(solutionsSubCollectionName)
+      .doc(solutionID)
+      .update("votes", firebase.firestore.FieldValue.increment(-1));
+    return true;
   },
 
   async getRoom(roomID: string) {
@@ -139,18 +156,6 @@ const db = (
         error(error);
       }
     );
-  },
-
-  async getPublicRooms() {
-    let rooms = [];
-    return rooms;
-    try {
-      rooms = await firestore.collection(collection).getAll();
-    } catch (e) {
-      return [];
-    }
-
-    return rooms;
   },
 
   watchRoomParticipants(roomID: string, callback) {
@@ -205,7 +210,7 @@ const db = (
       .doc(roomID)
       .collection(solutionsSubCollectionName)
       .get();
-    return solutions.docs.map((s) => s.data());
+    return solutions.docs.map((s) => ({ ...s.data(), id: s.id }));
   },
 });
 

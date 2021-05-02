@@ -20,7 +20,7 @@ import { blueBackground, nonSelectedWhite, white50 } from "../constants/Colors";
 import Shared from "../constants/Shared";
 import { baseURL } from "../constants/Config";
 import { Nunito_700Bold } from "@expo-google-fonts/nunito";
-import dbInstance from '../shared/dbInstance'
+import dbInstance from "../shared/dbInstance";
 
 const noGlow = `
 textarea, select, input, button {
@@ -57,9 +57,6 @@ export default function IdeaVoteResultsRoomScreen({
   const hmwTitle = "How might we help designers break into web3?";
   const roomID = route?.params?.roomID;
   const participantsCount = 6;
-  const votesLimit = 4;
-
-  const goBackHome = () => navigation.navigate("Home");
 
   const shareRoomOnTwitter = () =>
     tw({
@@ -80,10 +77,10 @@ export default function IdeaVoteResultsRoomScreen({
 
   useEffect(() => {
     (async () => {
-      const solutions = await dbInstance.getSolutions(roomID)
-      setSolutions(solutions)
-    })()
-  }, [])
+      const solutions = await dbInstance.getSolutions(roomID);
+      setSolutions(solutions);
+    })();
+  }, []);
 
   const renderIdea = ({ item, index }: { item: Idea; index: number }) => {
     return (

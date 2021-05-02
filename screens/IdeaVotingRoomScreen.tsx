@@ -39,6 +39,7 @@ import {
 import Shared from "../constants/Shared";
 import { VotingDuration } from "../constants/Config";
 import dbInstance from "../shared/dbInstance";
+import { Solution } from "../types";
 
 const noGlow = `
 textarea, select, input, button {
@@ -75,34 +76,19 @@ export default function IdeaVotingRoomScreen({
   const roomID = route?.params?.roomID;
   const [hmwTitle, setHmwTitle] = useState<string>("");
   const [participantsCount, setParticipantsCount] = useState<string>("");
-  const [roomEndsAt, setRoomEndsAt] = useState(null)
+  const [roomEndsAt, setRoomEndsAt] = useState(null);
   const votesLimit = 4;
 
   const goBackHome = () => navigation.navigate("Home");
 
-  const [ideas, setIdeas] = useState<Idea[]>([]);
+  const [solutions, setSolutions] = useState<Solution[]>([]);
 
-  const hasVotesLimitBeenReached = () => {
-    return (
-      ideas.map((idea) => idea.votes).reduce((a: number, b) => a + b, 0) >=
-      votesLimit
-    );
+  const upvote = (index) => {
+    dbInstance.upvote(roomID, solutions[index].id, solutions);
   };
 
-  const voteUp = (index) => {
-    if (hasVotesLimitBeenReached()) return;
-
-    const tmpIdeas = [...ideas];
-    tmpIdeas[index].votes += 1;
-    setIdeas(tmpIdeas);
-  };
-
-  const voteDown = (index) => {
-    const tmpIdeas = [...ideas];
-    if (tmpIdeas[index].votes > 0) {
-      tmpIdeas[index].votes -= 1;
-    }
-    setIdeas(tmpIdeas);
+  const downvote = (index) => {
+    dbInstance.downvote(roomID, solutions[index].id, solutions);
   };
 
   const onTimerExpires = async () => {
@@ -122,6 +108,26 @@ export default function IdeaVotingRoomScreen({
   });
 
   useEffect(() => {
+    dbInstance.watchRoomSolutions(
+      roomID,
+      (solutions) => {
+        //setIsLoaded(true);
+        setSolutions(
+          solutions.map((solution: any) => ({
+            title: solution.text,
+            votes: solution.votes,
+            id: solution.id,
+          })) as Solution[]
+        );
+      },
+      (error) => {
+        //setIsLoaded(true);
+        //setError(error);
+      }
+    );
+  }, []);
+
+  useEffect(() => {
     (async () => {
       await dbInstance.waitForPendingWrites();
 
@@ -139,21 +145,12 @@ export default function IdeaVotingRoomScreen({
 
       const roomEndsAt = new Date();
       roomEndsAt.setSeconds(roomEndsAt.getSeconds() + VotingDuration);
-      setRoomEndsAt(roomEndsAt)
+      setRoomEndsAt(roomEndsAt);
       restart(roomEndsAt);
-
-      const solutions = await dbInstance.getSolutions(roomID);
-
-      setIdeas(
-        solutions.map((solution: any) => ({
-          title: solution.text,
-          votes: 0,
-        })) as Idea[]
-      );
     })();
   }, [route.params]);
 
-  const renderIdea = ({ item, index }: { item: Idea; index: number }) => {
+  const renderSolution = ({ item, index }: { item: Idea; index: number }) => {
     return (
       <View style={styles.ideaRowContainer}>
         <View style={styles.ideaContainer} key={index}>
@@ -162,7 +159,7 @@ export default function IdeaVotingRoomScreen({
           </View>
         </View>
         <View style={styles.ideaVoteControlsContainer}>
-          <Pressable onPress={() => voteUp(index)}>
+          <Pressable onPress={() => upvote(index)}>
             <Icon
               type="material-community"
               name="star-circle-outline"
@@ -178,7 +175,7 @@ export default function IdeaVotingRoomScreen({
           >
             {item.votes}
           </Text>
-          <Pressable onPress={() => voteDown(index)}>
+          <Pressable onPress={() => downvote(index)}>
             <Icon
               type="material-community"
               name="minus-circle-outline"
@@ -232,12 +229,12 @@ export default function IdeaVotingRoomScreen({
 
         <View style={{ flex: 1 }} />
 
-
         <View style={styles.timerContainer}>
-          {
-            roomEndsAt && 
-          <Text style={styles.timer}>{`${minutes.pad(2)}:${seconds.pad(2)}`}</Text>
-}
+          {roomEndsAt && (
+            <Text style={styles.timer}>{`${minutes.pad(2)}:${seconds.pad(
+              2
+            )}`}</Text>
+          )}
         </View>
       </View>
 
@@ -250,13 +247,13 @@ export default function IdeaVotingRoomScreen({
           <View style={styles.ideaVotingHeaderContainer}>
             <Text style={styles.ideaVotingHeader}>
               You have 4 <Text style={{ color: "white" }}>⭐</Text>'s available
-              to give. Which ideas do you think are{" "}
+              to give. Which solutions do you think are{" "}
               <Text style={{ fontWeight: "bold" }}>most important?</Text>
             </Text>
           </View>
 
-          <View style={styles.ideaVotingIdeasContainer}>
-            {ideas.map((item, index) => renderIdea({ item, index }))}
+          <View style={styles.ideaVotingsolutionsContainer}>
+            {solutions.map((item, index) => renderSolution({ item, index }))}
           </View>
         </View>
       </View>
@@ -293,7 +290,7 @@ const styles = StyleSheet.create({
     fontFamily: "Nunito_700Bold",
     paddingLeft: 10,
   },
-  ideaVotingIdeasContainer: {
+  ideaVotingsolutionsContainer: {
     width: "100%",
     alignItems: "center",
     justifyContent: "flex-start",

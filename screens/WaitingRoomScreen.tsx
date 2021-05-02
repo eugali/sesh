@@ -28,13 +28,6 @@ import { blueBackground, white50, white30 } from "../constants/Colors";
 import { defaultScreenPadding } from "../constants/Layout";
 import BailButton from "../components/BailButton";
 import dbInstance from "../shared/dbInstance";
-import {
-  isRoomInIdeaSubmissionPhase,
-  isRoomInIdeaVotingPhase,
-  isRoomInWaitingPhase,
-  isRoomInVoteResultsPhase,
-} from "../shared/roomUtils";
-import { roomState } from "../constants/Enums";
 
 export default function WaitingRoomScreen({
   route,
