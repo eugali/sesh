@@ -2,18 +2,18 @@ import firebase from "firebase/app";
 import { roomState } from "../constants/Enums";
 import { Solution } from "../types";
 
-const hmwsCollectionName = "HMWs";
+const defaultHmwsCollectionName = "HMWs";
 const solutionsSubCollectionName = "Solutions";
 const participantsSubCollectionName = "Participants";
 const votesSubCollectionName = "Votes";
-const maxVoteCount = 4;
-const minParticipantsCount = 1; // TODO bring it to 20
+const defaultMaxVoteCount = 4;
+const defaultMinParticipantsCount = 3;
 
 const db = (
   firestore,
-  collection = hmwsCollectionName,
-  maxVotes = maxVoteCount,
-  minParticipants = minParticipantsCount
+  collection = defaultHmwsCollectionName,
+  maxVotes = defaultMaxVoteCount,
+  minParticipants = defaultMinParticipantsCount
 ) => ({
   hasVotesLimitBeenReached(solutions: Solution[]) {
     return (

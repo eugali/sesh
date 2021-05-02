@@ -1,6 +1,7 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import * as React from "react";
 import { useState, useEffect } from "react";
+import { MinParticipants } from "../constants/Config";
 import {
   StyleSheet,
   Text,
@@ -57,7 +58,7 @@ export default function WaitingRoomScreen({
     if (success) {
       navigation.navigate("IdeaSubmissionRoom", { roomID });
     } else {
-      // TODO put an alert that says that there's no enough participants
+      setNotEnoughParticipantsErrorVisible(true);
     }
   };
 
@@ -98,7 +99,7 @@ export default function WaitingRoomScreen({
       },
       (error) => {
         //setIsLoaded(true);
-        //setError(error);
+        // setError(error);
       }
     );
 
@@ -121,10 +122,33 @@ export default function WaitingRoomScreen({
     })();
   }, []);
 
+  const StartButtonOrMessage = () => {
+    if (parseInt(participantsCount) >= MinParticipants) {
+      return (
+        <Button
+          title={"Start Room"}
+          buttonStyle={styles.startRoomBottomButton}
+          titleStyle={styles.startRoomBottomButtonTitle}
+          onPress={startRoom}
+        />
+      );
+    } else {
+      return (
+        <Text style={styles.waitingMessageContent}>
+          Once there are {MinParticipants} people in the room you will be able
+          to start
+        </Text>
+      );
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
-        <BailButton onPress={leaveRoom} participantsCount={participantsCount} />
+        <BailButton
+          onPress={leaveRoom}
+          participantsCount={`${participantsCount}/${MinParticipants}`}
+        />
 
         <Icon
           type="material-community"
@@ -165,12 +189,7 @@ export default function WaitingRoomScreen({
         </View>
 
         <View style={styles.bottomButtonContainer}>
-          <Button
-            title={"Start Room"}
-            buttonStyle={styles.startRoomBottomButton}
-            titleStyle={styles.startRoomBottomButtonTitle}
-            onPress={startRoom}
-          />
+          <StartButtonOrMessage />
         </View>
       </View>
 
@@ -206,6 +225,12 @@ const styles = StyleSheet.create({
     fontFamily: "Nunito_400Regular",
     fontSize: 16,
     color: "white",
+  },
+  waitingMessageContent: {
+    fontFamily: "Nunito_700Bold",
+    fontSize: 16,
+    color: "white",
+    textAlign: "center",
   },
   theProblemLabel: {
     fontFamily: "Nunito_700Bold",
