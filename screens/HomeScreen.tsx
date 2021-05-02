@@ -67,6 +67,20 @@ export default function HomeScreen({
     }, [])
   );
 
+  const [error, setError] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [rooms, setRooms] = useState([]);
+
+  useEffect(() => {
+    dbInstance.watchRooms((rooms) => {
+      setIsLoaded(true);
+      setRooms(rooms);
+    }, (error) => {
+      setIsLoaded(true);
+      setError(error);
+    })
+  }, [])
+
   // 4ZEXSCrhywDBX2DUdRN3
 
   const joinRoom = async (roomID: string) => {
@@ -130,7 +144,7 @@ export default function HomeScreen({
       <Pressable onPress={() => joinRoom(item.roomID)}>
         <View style={styles.availableRoomRowContainer}>
           <View style={styles.availableRoomRowInnerContainer}>
-            <Text style={styles.availableRoomRowTitle}>{item.title}</Text>
+            <Text style={styles.availableRoomRowTitle}>{item.question}</Text>
           </View>
         </View>
       </Pressable>
@@ -187,7 +201,7 @@ export default function HomeScreen({
           </View>
 
           <FlatList
-            data={mockData}
+            data={isLoaded ? rooms : []}
             renderItem={renderAvailableRoom}
             style={styles.availableRoomsFlatList}
           />

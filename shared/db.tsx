@@ -123,13 +123,13 @@ const db = (
       );
   },
 
-  watchRooms(callback) {
+  watchRooms(callback, error) {
     firestore.collection(collection).onSnapshot(
       (snapshot) => {
         callback(snapshot.docs.map((s) => s.data()));
       },
       (error) => {
-        callback(error);
+        error(error);
       }
     );
   },
