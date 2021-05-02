@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { Button, Icon } from "react-native-elements";
 
-import { defaultScreenPadding } from "../constants/Layout";
+import { defaultScreenPadding, screenHeight } from "../constants/Layout";
 import { Idea } from "../types";
 import { tw } from "vanilla-sharing";
 
@@ -420,7 +420,7 @@ const styles = StyleSheet.create({
   },
   container: {
     width: "100%",
-    height: "100%",
+    height: screenHeight,
     alignItems: "center",
     justifyContent: "flex-start",
     backgroundColor: blueBackground,

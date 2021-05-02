@@ -15,7 +15,7 @@ import { Idea } from "../types";
 import { useTimer } from "react-timer-hook";
 import moment from "moment";
 
-import { defaultScreenPadding } from "../constants/Layout";
+import { defaultScreenPadding, screenHeight } from "../constants/Layout";
 
 import BailButton from "../components/BailButton";
 
@@ -409,7 +409,7 @@ const styles = StyleSheet.create({
   },
   container: {
     width: "100%",
-    height: "100%",
+    height: screenHeight,
     alignItems: "center",
     justifyContent: "flex-start",
     backgroundColor: blueBackground,
