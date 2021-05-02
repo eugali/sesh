@@ -77,7 +77,6 @@ export default function IdeaVotingRoomScreen({
   const [hmwTitle, setHmwTitle] = useState<string>("");
   const [participantsCount, setParticipantsCount] = useState<string>("");
   const [roomEndsAt, setRoomEndsAt] = useState(null);
-  const votesLimit = 4;
 
   const goBackHome = () => navigation.navigate("Home");
 

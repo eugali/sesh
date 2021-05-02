@@ -54,9 +54,9 @@ export default function IdeaVoteResultsRoomScreen({
   route,
   navigation,
 }: StackScreenProps<RootStackParamList, "IdeaVoteResultsRoom">) {
-  const hmwTitle = "How might we help designers break into web3?";
+  const [hmwTitle, setHmwTitle] = useState('')
   const roomID = route?.params?.roomID;
-  const participantsCount = 6;
+  const [participantsCount, setParticipantsCount] = useState('')
 
   const shareRoomOnTwitter = () =>
     tw({
@@ -77,7 +77,13 @@ export default function IdeaVoteResultsRoomScreen({
 
   useEffect(() => {
     (async () => {
+
+      const room = await dbInstance.getRoom(roomID);
+      const participants = await dbInstance.getParticipants(roomID);
       const solutions = await dbInstance.getSolutions(roomID);
+
+      setHmwTitle(room.question);
+      setParticipantsCount(participants.length.toString());
       setSolutions(solutions);
     })();
   }, []);
@@ -155,7 +161,7 @@ export default function IdeaVoteResultsRoomScreen({
             .map((item, index) => renderIdea({ item, index }))}
         </View>
         <Text style={styles.votingCaption}>
-          Generated and priotized by 6 people in less than 10 minutes
+          {`Generated and priotized by ${participantsCount} people in less than 10 minutes`}
         </Text>
       </View>
     </SafeAreaView>
