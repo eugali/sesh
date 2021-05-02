@@ -64,10 +64,10 @@ export default function HomeScreen({
           rooms
             .filter((room) => room.isPrivate === false)
             .sort((a, b) => {
-              if (a.startedAt > b.startedAt) {
+              if (a.createdAt > b.createdAt) {
                 return -1;
               }
-              if (a.startedAt < b.startedAt) {
+              if (a.createdAt < b.createdAt) {
                 return 1;
               }
               return 0;
