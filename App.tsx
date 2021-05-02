@@ -21,13 +21,6 @@ Number.prototype.pad = function (size) {
   return s;
 };
 
-//import firebase from "firebase/app";
-//import "firebase/firestore";
-//import { firebaseConfig } from "./constants/Config";
-//import db from "./shared/db";
-//firebase.initializeApp(firebaseConfig);
-//const DBContext = React.createContext(db(firebase.firestore()))
-
 export default function App() {
   useFonts({
     Nunito_400Regular,

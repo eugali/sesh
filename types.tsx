@@ -41,3 +41,8 @@ export type Idea = {
   title: string;
   votes?: number;
 };
+
+export type SubmittedIdea = {
+  text: string;
+  votes: string;
+}

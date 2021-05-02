@@ -5,6 +5,8 @@ import { roomState } from "../../constants/Enums";
 import "firebase/firestore";
 
 const testCollection = "HMWsTest";
+const minParticipants = 20;
+const maxVotes = 4;
 let testFirestore;
 let testDB;
 let testRoomID;
@@ -13,13 +15,14 @@ let testSolutionID;
 beforeAll(() => {
   firebase.initializeApp(firebaseConfig);
   testFirestore = firebase.firestore();
-  testDB = db(testFirestore, testCollection);
+  testDB = db(testFirestore, testCollection, maxVotes, minParticipants);
 });
 
 test("Creates new room given valid HMW", async () => {
   testRoomID = await testDB.createRoom("How might we test the DB?");
   let room = await testDB.getRoom(testRoomID);
   expect(room).toStrictEqual({
+    id: room.id,
     isPrivate: false,
     question: "How might we test the DB?",
     problemStatement: "",
@@ -31,14 +34,13 @@ test("Creates new room given valid HMW", async () => {
 test("Creates new solution for HMW given valid solution", async () => {
   testSolutionID = await testDB.createSolution(testRoomID, "Very carefully");
   let solutions = await testDB.getSolutions(testRoomID);
-  expect(solutions).toStrictEqual([{ text: "Very carefully" }]);
+  expect(solutions).toStrictEqual([{ text: "Very carefully", votes: 0 }]);
 });
 
 test("Allows no more than 4 upvotes on one post in one room", async () => {
-  expect(await testDB.upvote(testRoomID, testSolutionID)).toBe(true);
-  expect(await testDB.upvote(testRoomID, testSolutionID)).toBe(true);
-  expect(await testDB.upvote(testRoomID, testSolutionID)).toBe(true);
-  expect(await testDB.upvote(testRoomID, testSolutionID)).toBe(true);
+  for (let i = 0; i < maxVotes; i++) {
+    expect(await testDB.upvote(testRoomID, testSolutionID)).toBe(true);
+  }
   expect(await testDB.upvote(testRoomID, testSolutionID)).toBe(false);
 });
 
@@ -47,10 +49,20 @@ test("Should forbid starting room with unsufficient participants", async () => {
 });
 
 test("Should allow starting room with sufficient participants", async () => {
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < minParticipants; i++) {
     testDB.joinRoom(testRoomID);
   }
   expect(await testDB.startRoom(testRoomID)).toBe(true);
+});
+
+test("Should allow starting a room and notify listeners", async (done) => {
+  first = true;
+  testDB.watchRoom(testRoomID, (room) => {
+    if (first) expect(room.status).toBe(roomState.ACTIVE);
+    first = false;
+    done();
+  });
+  testDB.startRoom(testRoomID);
 });
 
 test("Closes a room", async () => {
@@ -58,14 +70,22 @@ test("Closes a room", async () => {
 });
 
 test("Shows new solutions in real time", async (done) => {
+  let first = true;
   let newRoomID = await testDB.createRoom("Test");
   let expectedNewSolution = "Asynchronously";
-  testDB.watchRoomSolutions(newRoomID, (solutions) => {
-    expect(solutions).toStrictEqual([{ text: expectedNewSolution }]);
-    done();
+  await testDB.watchRoomSolutions(newRoomID, (solutions) => {
+    if (first) {
+      expect(solutions[0].text).toBe(expectedNewSolution);
+      expect(solutions[0].votes).toBe(0);
+      first = false;
+    } else {
+      expect(solutions[0].votes).toBe(1);
+      done();
+    }
   });
-  await testDB.createSolution(newRoomID, expectedNewSolution);
-}, 1000);
+  let newID = await testDB.createSolution(newRoomID, expectedNewSolution);
+  await testDB.upvote(newRoomID, newID);
+}, 10000);
 
 test("Shows new participants in real time", async (done) => {
   let newRoomID = await testDB.createRoom("Test");

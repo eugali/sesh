@@ -74,6 +74,7 @@ const db = (
       .collection(solutionsSubCollectionName)
       .add({
         text: solutionText,
+        votes: 0,
       });
     return solutionRef.id;
   },
@@ -92,8 +93,7 @@ const db = (
         .doc(roomID)
         .collection(solutionsSubCollectionName)
         .doc(solutionID)
-        .collection(votesSubCollectionName)
-        .add({});
+        .update("votes", firebase.firestore.FieldValue.increment(1));
       this.votes[roomID] += 1;
       return true;
     }
@@ -107,7 +107,38 @@ const db = (
       return null;
     }
 
-    return room.exists ? room.data() : null;
+    return room.exists ? this.buildRoom(room) : null;
+  },
+
+  buildRoom(room) {
+    let data = room.data();
+    data.id = room.id;
+    return data;
+  },
+
+  watchRoom(roomID: string, callback) {
+    firestore
+      .collection(collection)
+      .doc(roomID)
+      .onSnapshot(
+        (snapshot) => {
+          callback(this.buildRoom(snapshot));
+        },
+        (error) => {
+          callback(error);
+        }
+      );
+  },
+
+  watchRooms(callback, error) {
+    firestore.collection(collection).onSnapshot(
+      (snapshot) => {
+        callback(snapshot.docs.map((s) => this.buildRoom(s)));
+      },
+      (error) => {
+        error(error);
+      }
+    );
   },
 
   async getPublicRooms() {
@@ -144,12 +175,19 @@ const db = (
       .collection(solutionsSubCollectionName)
       .onSnapshot(
         (snapshot) => {
-          callback(snapshot.docs.map((s) => s.data()));
+          callback(snapshot.docs.map((s) => this.buildSolution(s)));
         },
         (error) => {
+          console.log(error);
           callback(error);
         }
       );
+  },
+
+  buildSolution(solution, roomID) {
+    let data = solution.data();
+    data.id = solution.id;
+    return data;
   },
 
   async getParticipants(roomID: string) {

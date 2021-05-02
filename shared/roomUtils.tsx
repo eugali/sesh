@@ -12,7 +12,7 @@ export const isRoomInIdeaSubmissionPhase = async (roomID: string) => {
   )
     return false;
 
-  return room.startedAt + SubmissionDuration > Date.now();
+  return room.startedAt.seconds + SubmissionDuration > (Date.now()/1000);
 };
 
 export const isRoomInIdeaVotingPhase = async (roomID: string) => {
@@ -25,11 +25,11 @@ export const isRoomInIdeaVotingPhase = async (roomID: string) => {
   )
     return false;
 
-  const now = Date.now();
+  const now = (Date.now()) / 1000
 
   return (
-    now > room.startedAt + SubmissionDuration &&
-    now < room.startedAt + SubmissionDuration + VotingDuration
+    now > (room.startedAt.seconds + SubmissionDuration) &&
+    now < (room.startedAt.seconds + SubmissionDuration + VotingDuration)
   );
 };
 

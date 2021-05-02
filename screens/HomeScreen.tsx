@@ -38,27 +38,10 @@ import {
   isRoomInIdeaVotingPhase,
 } from "../shared/roomUtils";
 
-const mockData = [
-  {
-    title: "How might we ...",
-    roomID: "yJEBZxgLYO86RFblJuLC",
-  },
-  {
-    title: "How might we ...",
-    roomID: "yJEBZxgLYO86RFblJuLC",
-  },
-  {
-    title: "How might we ...",
-    roomID: "yJEBZxgLYO86RFblJuLC",
-  },
-];
-
 export default function HomeScreen({
   route,
   navigation,
 }: StackScreenProps<RootStackParamList, "Home">) {
-  //yJEBZxgLYO86RFblJuLC room id to test
-
   const [joinRoomID, setJoinRoomID] = useState<string>("");
 
   useFocusEffect(
@@ -67,25 +50,47 @@ export default function HomeScreen({
     }, [])
   );
 
+
+  const [error, setError] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [rooms, setRooms] = useState([]);
+
+  useEffect(() => {
+    dbInstance.watchRooms(
+      (rooms) => {
+        setIsLoaded(true);
+        setRooms(rooms);
+      },
+      (error) => {
+        setIsLoaded(true);
+        setError(error);
+      }
+    );
+  }, []);
+
   const joinRoom = async (roomID: string) => {
     const room = await dbInstance.getRoom(roomID);
+
+    console.log('A')
 
     if (room === null) {
       // TODO - alert
       return;
     }
 
-    if (room.status === roomState.CLOSED) {
-      navigation.navigate("IdeaVoteResults", { roomID });
-      return;
-    }
+    console.log('B')
 
     if (room.status === roomState.WAITING) {
+      console.log('C')
       await dbInstance.joinRoom(roomID);
       navigation.navigate("WaitingRoom", { roomID });
+      return
     }
 
+    console.log('W')
+
     if (room.status === roomState.ACTIVE) {
+      console.log('D')
       // idea submission phase
       const roomInIdeaSubmissionPhase = await isRoomInIdeaSubmissionPhase(
         roomID
@@ -93,19 +98,34 @@ export default function HomeScreen({
 
       if (roomInIdeaSubmissionPhase) {
         await dbInstance.joinRoom(roomID);
+        console.log('E')
         navigation.navigate("IdeaSubmissionRoom", { roomID });
         return;
       }
+
+      console.log('Z')
 
       const roomInIdeaVotingPhase = await isRoomInIdeaVotingPhase(roomID);
 
       // idea voting phase
       if (roomInIdeaVotingPhase) {
+        console.log('F')
         await dbInstance.joinRoom(roomID);
         navigation.navigate("IdeaVotingRoom", { roomID });
         return;
       }
+
+      console.log('G')
     }
+
+      if (room.status !== roomState.CLOSED) {
+        console.log('H')
+        await dbInstance.closeRoom(roomID)
+      }
+
+      console.log('I')
+      navigation.navigate("IdeaVoteResults", { roomID });
+    
   };
 
   useEffect(() => {
@@ -119,9 +139,6 @@ export default function HomeScreen({
         joinRoom(roomID);
         return;
       }
-
-      const rooms = await dbInstance.getPublicRooms();
-      console.log(rooms);
     })();
   }, []);
 
@@ -129,10 +146,10 @@ export default function HomeScreen({
 
   const renderAvailableRoom = ({ item }) => {
     return (
-      <Pressable onPress={() => joinRoom(item.roomID)}>
+      <Pressable onPress={() => joinRoom(item.id)}>
         <View style={styles.availableRoomRowContainer}>
           <View style={styles.availableRoomRowInnerContainer}>
-            <Text style={styles.availableRoomRowTitle}>{item.title}</Text>
+            <Text style={styles.availableRoomRowTitle}>{item.question}</Text>
           </View>
         </View>
       </Pressable>
@@ -189,7 +206,7 @@ export default function HomeScreen({
           </View>
 
           <FlatList
-            data={mockData}
+            data={isLoaded ? rooms : []}
             renderItem={renderAvailableRoom}
             style={styles.availableRoomsFlatList}
           />
@@ -295,6 +312,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
+    cursor: "pointer",
   },
   availableRoomsFlatList: {
     width: "100%",
