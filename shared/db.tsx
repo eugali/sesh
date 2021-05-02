@@ -140,7 +140,7 @@ const db = (
   },
 
   watchRoom(roomID: string, callback) {
-    firestore
+    return firestore
       .collection(collection)
       .doc(roomID)
       .onSnapshot(
@@ -154,7 +154,7 @@ const db = (
   },
 
   watchRooms(callback, error) {
-    firestore.collection(collection).onSnapshot(
+    return firestore.collection(collection).onSnapshot(
       (snapshot) => {
         callback(snapshot.docs.map((s) => this.buildRoom(s)));
       },
@@ -165,7 +165,7 @@ const db = (
   },
 
   watchRoomParticipants(roomID: string, callback) {
-    firestore
+    return firestore
       .collection(collection)
       .doc(roomID)
       .collection(participantsSubCollectionName)
@@ -180,7 +180,7 @@ const db = (
   },
 
   watchRoomSolutions(roomID: string, callback) {
-    firestore
+    return firestore
       .collection(collection)
       .doc(roomID)
       .collection(solutionsSubCollectionName)
