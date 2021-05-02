@@ -7,7 +7,7 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "test": "jest --watchAll -i",
-    "ci": "yarn install --frozen-lockfile && jest --ci",
+    "ci": "yarn install --frozen-lockfile && jest --ci -i",
     "predeploy": "expo build:web",
     "deploy-hosting": "yarn run predeploy && firebase deploy --only hosting"
   },
