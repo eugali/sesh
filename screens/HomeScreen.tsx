@@ -86,54 +86,38 @@ export default function HomeScreen({
   const joinRoom = async (roomID: string) => {
     const room = await dbInstance.getRoom(roomID);
 
-    console.log("A");
-
     if (room === null) {
       // TODO - alert
       return;
     }
 
-    console.log("B");
-
     if (isRoomInWaitingPhase(room)) {
-      console.log("C");
       await dbInstance.joinRoom(roomID);
       navigation.navigate("WaitingRoom", { roomID });
       return;
     }
 
-    console.log("W");
-
     if (room.status === roomState.ACTIVE) {
-      console.log("D");
       // idea submission phase
 
       if (isRoomInIdeaSubmissionPhase(room)) {
         await dbInstance.joinRoom(roomID);
-        console.log("E");
         navigation.navigate("IdeaSubmissionRoom", { roomID });
         return;
       }
 
-      console.log("Z");
-
       // idea voting phase
       if (isRoomInIdeaVotingPhase(room)) {
-        console.log("F");
         await dbInstance.joinRoom(roomID);
         navigation.navigate("IdeaVotingRoom", { roomID });
         return;
       }
-
-      console.log("G");
     }
 
     if (room.status !== roomState.CLOSED) {
-      console.log("H");
       await dbInstance.closeRoom(roomID);
     }
 
-    console.log("I");
     navigation.navigate("IdeaVoteResults", { roomID });
   };
 

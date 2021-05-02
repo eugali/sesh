@@ -37,7 +37,7 @@ import {
   lighterWhite,
 } from "../constants/Colors";
 import Shared from "../constants/Shared";
-import { VotingDuration } from "../constants/Config";
+import { VotingDuration, SubmissionDuration } from "../constants/Config";
 import dbInstance from "../shared/dbInstance";
 import { Solution } from "../types";
 
@@ -172,7 +172,7 @@ export default function IdeaVotingRoomScreen({
       setParticipantsCount(participants.length.toString());
 
       const roomStartedAt = new Date(
-        (room.startedAt.seconds + VotingDuration) * 1000
+        (room.startedAt.seconds + SubmissionDuration + VotingDuration) * 1000
       );
 
       restart(roomStartedAt);
