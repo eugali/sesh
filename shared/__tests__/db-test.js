@@ -5,6 +5,8 @@ import { roomState } from "../../constants/Enums";
 import "firebase/firestore";
 
 const testCollection = "HMWsTest";
+const minParticipants = 20;
+const maxVotes = 4;
 let testFirestore;
 let testDB;
 let testRoomID;
@@ -13,7 +15,7 @@ let testSolutionID;
 beforeAll(() => {
   firebase.initializeApp(firebaseConfig);
   testFirestore = firebase.firestore();
-  testDB = db(testFirestore, testCollection);
+  testDB = db(testFirestore, testCollection, maxVotes, minParticipants);
 });
 
 test("Creates new room given valid HMW", async () => {
@@ -35,10 +37,9 @@ test("Creates new solution for HMW given valid solution", async () => {
 });
 
 test("Allows no more than 4 upvotes on one post in one room", async () => {
-  expect(await testDB.upvote(testRoomID, testSolutionID)).toBe(true);
-  expect(await testDB.upvote(testRoomID, testSolutionID)).toBe(true);
-  expect(await testDB.upvote(testRoomID, testSolutionID)).toBe(true);
-  expect(await testDB.upvote(testRoomID, testSolutionID)).toBe(true);
+  for (let i = 0; i < maxVotes; i++) {
+    expect(await testDB.upvote(testRoomID, testSolutionID)).toBe(true);
+  }
   expect(await testDB.upvote(testRoomID, testSolutionID)).toBe(false);
 });
 
@@ -47,7 +48,7 @@ test("Should forbid starting room with unsufficient participants", async () => {
 });
 
 test("Should allow starting room with sufficient participants", async () => {
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < minParticipants; i++) {
     testDB.joinRoom(testRoomID);
   }
   expect(await testDB.startRoom(testRoomID)).toBe(true);
